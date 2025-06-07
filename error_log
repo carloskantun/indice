@@ -1,0 +1,28 @@
+[03-Jun-2025 15:06:20 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 31
+[03-Jun-2025 15:06:20 America/Mexico_City] PHP Warning:  Undefined variable $fecha_fin in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 34
+[03-Jun-2025 15:06:20 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 111
+[03-Jun-2025 15:06:20 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 146
+[03-Jun-2025 15:06:20 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 164
+[03-Jun-2025 15:06:20 America/Mexico_City] PHP Warning:  Undefined variable $fecha_fin in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 165
+[03-Jun-2025 15:06:22 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 31
+[03-Jun-2025 15:06:22 America/Mexico_City] PHP Warning:  Undefined variable $fecha_fin in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 34
+[03-Jun-2025 15:06:22 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 111
+[03-Jun-2025 15:06:22 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 146
+[03-Jun-2025 15:06:22 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 164
+[03-Jun-2025 15:06:22 America/Mexico_City] PHP Warning:  Undefined variable $fecha_fin in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 165
+[03-Jun-2025 15:06:29 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 31
+[03-Jun-2025 15:06:29 America/Mexico_City] PHP Warning:  Undefined variable $fecha_fin in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 34
+[03-Jun-2025 15:06:29 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 111
+[03-Jun-2025 15:06:29 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 146
+[03-Jun-2025 15:06:29 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 164
+[03-Jun-2025 15:06:29 America/Mexico_City] PHP Warning:  Undefined variable $fecha_fin in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 165
+[03-Jun-2025 15:06:31 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 31
+[03-Jun-2025 15:06:31 America/Mexico_City] PHP Warning:  Undefined variable $fecha_fin in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 34
+[03-Jun-2025 15:06:31 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 111
+[03-Jun-2025 15:06:31 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 146
+[03-Jun-2025 15:06:31 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 164
+[03-Jun-2025 15:06:31 America/Mexico_City] PHP Warning:  Undefined variable $fecha_fin in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 165
+[05-Jun-2025 15:09:37 America/Mexico_City] PHP Warning:  include(header.php): Failed to open stream: No such file or directory in /home1/corazon/public_html/indice/alojamientos.php on line 41
+[05-Jun-2025 15:09:37 America/Mexico_City] PHP Warning:  include(): Failed opening 'header.php' for inclusion (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home1/corazon/public_html/indice/alojamientos.php on line 41
+[05-Jun-2025 15:09:37 America/Mexico_City] PHP Warning:  include(footer.php): Failed to open stream: No such file or directory in /home1/corazon/public_html/indice/alojamientos.php on line 80
+[05-Jun-2025 15:09:37 America/Mexico_City] PHP Warning:  include(): Failed opening 'footer.php' for inclusion (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home1/corazon/public_html/indice/alojamientos.php on line 80

@@ -1,0 +1,21 @@
+<?php
+// router_roles.php
+
+function redireccionar_por_puesto($puesto) {
+    $mapa = [
+        'camarista' => 'reporte_camarista.php',
+        'mantenimiento' => 'minipanel_mantenimiento.php',
+        'director'=> 'minipanel_mantenimiento.php',
+        'servicio al cliente'=> 'minipanel_mantenimiento.php',
+        'gerente'=> 'minipanel_mantenimiento.php',
+        'ceo'=> 'minipanel_mantenimiento.php',
+        // Agrega más puestos personalizados aquí si lo deseas:
+        // 'webmaster' => 'panel_webmaster.php',
+    ];
+
+    $clave = strtolower(trim($puesto));
+    if (isset($mapa[$clave])) {
+        header("Location: " . $mapa[$clave]);
+        exit;
+    }
+}
