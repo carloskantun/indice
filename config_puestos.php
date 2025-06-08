@@ -3,7 +3,11 @@
 
 return [
     'superadministrador' => [
-        'modulos' => ['compras', 'mantenimiento', 'usuarios', 'configuracion', 'reportes', 'kpis'],
+        'modulos' => ['compras', 'mantenimiento', 'servicio_cliente', 'usuarios', 'configuracion', 'reportes', 'kpis'],
+        'acceso_total' => true
+    ],
+    'admin' => [
+        'modulos' => ['compras', 'mantenimiento', 'servicio_cliente', 'usuarios', 'configuracion', 'kpis'],
         'acceso_total' => true
     ],
     'ceo' => [
@@ -15,7 +19,7 @@ return [
         'acceso_total' => true
     ],
     'servicio al cliente' => [
-        'modulos' => [],
+        'modulos' => ['servicio_cliente'],
         'acceso_total' => false
     ],
     'camarista' => [
@@ -31,7 +35,7 @@ return [
         'acceso_total' => false
     ],
     'gerente' => [
-        'modulos' => ['kpis', 'compras', 'mantenimiento'],
+        'modulos' => ['kpis', 'compras', 'mantenimiento', 'servicio_cliente'],
         'acceso_total' => false
     ],
     'jefa de ama de llaves' => [
