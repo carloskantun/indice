@@ -6,8 +6,8 @@ function redireccionar_por_puesto($puesto) {
         'camarista' => 'reporte_camarista.php',
         'mantenimiento' => 'minipanel_mantenimiento.php',
         'director'=> 'minipanel_mantenimiento.php',
-        'servicio al cliente'=> 'minipanel_mantenimiento.php',
-        'gerente'=> 'minipanel_mantenimiento.php',
+        'servicio al cliente'=> 'minipanel_servicio_cliente.php',
+        'gerente'=> 'minipanel_servicio_cliente.php',
         'ceo'=> 'minipanel_mantenimiento.php',
         // Agrega más puestos personalizados aquí si lo deseas:
         // 'webmaster' => 'panel_webmaster.php',

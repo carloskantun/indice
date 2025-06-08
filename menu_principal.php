@@ -61,12 +61,23 @@ redireccionar_por_puesto(obtener_puesto());
                 </div>
             <?php endif; ?>
 
-            <?php if (puede_ver_modulo('mantenimiento') || puede_ver_modulo('mantenimiento_listado')): ?>
+<?php if (puede_ver_modulo('mantenimiento') || puede_ver_modulo('mantenimiento_listado')): ?>
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="minipanel_mantenimiento.php">
                             <span class="modulo-icon">🛠️</span>
                             Mantenimiento
+                        </a>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <?php if (puede_ver_modulo('servicio_cliente')): ?>
+                <div class="col-12 col-md-4">
+                    <div class="modulo-box">
+                        <a href="minipanel_servicio_cliente.php">
+                            <span class="modulo-icon">📞</span>
+                            Servicio al Cliente
                         </a>
                     </div>
                 </div>
