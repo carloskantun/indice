@@ -136,6 +136,31 @@ $meta_diaria = 5;
 $esperadas = $usuarios_ativos * $dias_periodo * $meta_diaria;
 $productividad = ($esperadas > 0) ? round(($total_completadas / $esperadas) * 100, 1) : 0;
 
+// Top alojamientos
+$top_general = [];
+$res = $conn->query("SELECT a.nombre, COUNT(*) AS total FROM ordenes_servicio_cliente o JOIN alojamientos a ON o.alojamiento_id = a.id $where GROUP BY o.alojamiento_id ORDER BY total DESC LIMIT 5");
+while ($row = $res->fetch_assoc()) {
+    $top_general[] = ['nombre' => $row['nombre'], 'total' => (int)$row['total']];
+}
+
+$top_pendientes = [];
+$res = $conn->query("SELECT a.nombre, COUNT(*) AS total FROM ordenes_servicio_cliente o JOIN alojamientos a ON o.alojamiento_id = a.id $where AND (o.estatus = 'Pendiente' OR o.estatus IS NULL OR TRIM(o.estatus) = '') GROUP BY o.alojamiento_id ORDER BY total DESC LIMIT 5");
+while ($row = $res->fetch_assoc()) {
+    $top_pendientes[] = ['nombre' => $row['nombre'], 'total' => (int)$row['total']];
+}
+
+$top_terminados = [];
+$res = $conn->query("SELECT a.nombre, COUNT(*) AS total FROM ordenes_servicio_cliente o JOIN alojamientos a ON o.alojamiento_id = a.id $where AND o.estatus = 'Terminado' GROUP BY o.alojamiento_id ORDER BY total DESC LIMIT 5");
+while ($row = $res->fetch_assoc()) {
+    $top_terminados[] = ['nombre' => $row['nombre'], 'total' => (int)$row['total']];
+}
+
+$sin_reportes = [];
+$res = $conn->query("SELECT nombre FROM alojamientos WHERE id NOT IN (SELECT alojamiento_id FROM ordenes_servicio_cliente)");
+while ($row = $res->fetch_assoc()) {
+    $sin_reportes[] = $row['nombre'];
+}
+
 // 👉 Retornar todos los KPIs
 $kpis = [
     'total' => (int)$total,
@@ -155,6 +180,10 @@ $kpis = [
     'estatus' => ['labels' => $estatus_labels, 'valores' => $estatus_valores],
     'completadas_dia' => ['labels' => $labels_completadas, 'valores' => $valores_completadas],
     'completadas_usuario' => ['labels' => $labels_usuarios, 'valores' => $valores_usuarios],
+    'top_general' => $top_general,
+    'top_pendientes' => $top_pendientes,
+    'top_terminados' => $top_terminados,
+    'sin_reportes' => $sin_reportes,
 ];
 
 return $kpis;
