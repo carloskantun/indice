@@ -30,7 +30,8 @@ CREATE TABLE IF NOT EXISTS usuarios (
     nombre VARCHAR(255) NOT NULL,
     telefono VARCHAR(20),
     email VARCHAR(255),
-    puesto VARCHAR(100)
+    -- Permitir guardar multiples puestos separados por coma
+    puesto TEXT
 );
 ");
 

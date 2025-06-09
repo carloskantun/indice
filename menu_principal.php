@@ -6,6 +6,26 @@ include 'verificar_acceso.php'; // << Reemplaza config y funciones auxiliares
 
 // Redirección automática según el puesto (si aplica)
 redireccionar_por_puesto(obtener_puesto());
+
+// Combina permisos por rol o por puesto
+function puedeVerModulo($modulo) {
+    $rol = trim($_SESSION['rol'] ?? '');
+    $puesto = trim($_SESSION['puesto'] ?? '');
+
+    $permisos_roles = ['Administrador', 'Gerente', 'Superadmin', 'CEO', 'Webmaster'];
+
+    // acceso completo si es un rol de alto nivel
+    if (in_array($rol, $permisos_roles)) return true;
+
+    // checar coincidencias de puesto de manera sencilla
+    if ($modulo === 'mantenimiento' && strpos($puesto, 'Mantenimiento') !== false) {
+        return true;
+    }
+    if ($modulo === 'servicio_cliente' && strpos($puesto, 'Servicio al Cliente') !== false) {
+        return true;
+    }
+    return false;
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -61,7 +81,7 @@ redireccionar_por_puesto(obtener_puesto());
                 </div>
             <?php endif; ?>
 
-<?php if (puede_ver_modulo('mantenimiento') || puede_ver_modulo('mantenimiento_listado')): ?>
+            <?php if (puedeVerModulo('mantenimiento')): ?>
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="minipanel_mantenimiento.php">
@@ -72,7 +92,7 @@ redireccionar_por_puesto(obtener_puesto());
                 </div>
             <?php endif; ?>
 
-            <?php if (puede_ver_modulo('servicio_cliente')): ?>
+            <?php if (puedeVerModulo('servicio_cliente')): ?>
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="minipanel_servicio_cliente.php">
