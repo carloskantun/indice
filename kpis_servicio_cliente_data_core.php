@@ -27,21 +27,21 @@ function obtener($sql, $conn) {
 }
 
 // KPIs básicos
-$total      = obtener("SELECT COUNT(*) FROM ordenes_servicio_cliente $where", $conn);
-$pendientes = obtener("SELECT COUNT(*) FROM ordenes_servicio_cliente $where AND (estatus = 'Pendiente' OR estatus IS NULL OR TRIM(estatus) = '')", $conn);
-$proceso    = obtener("SELECT COUNT(*) FROM ordenes_servicio_cliente $where AND estatus = 'En proceso'", $conn);
-$terminados = obtener("SELECT COUNT(*) FROM ordenes_servicio_cliente $where AND estatus = 'Terminado'", $conn);
-$cancelados = obtener("SELECT COUNT(*) FROM ordenes_servicio_cliente $where AND estatus = 'Cancelado'", $conn);
-$vencidos   = obtener("SELECT COUNT(*) FROM ordenes_servicio_cliente $where AND estatus = 'Vencido'", $conn);
+$total      = obtener("SELECT COUNT(*) AS total FROM ordenes_servicio_cliente $where", $conn);
+$pendientes = obtener("SELECT COUNT(*) AS total FROM ordenes_servicio_cliente $where AND (estatus = 'Pendiente' OR estatus IS NULL OR TRIM(estatus) = '')", $conn);
+$proceso    = obtener("SELECT COUNT(*) AS total FROM ordenes_servicio_cliente $where AND estatus = 'En proceso'", $conn);
+$terminados = obtener("SELECT COUNT(*) AS total FROM ordenes_servicio_cliente $where AND estatus = 'Terminado'", $conn);
+$cancelados = obtener("SELECT COUNT(*) AS total FROM ordenes_servicio_cliente $where AND estatus = 'Cancelado'", $conn);
+$vencidos   = obtener("SELECT COUNT(*) AS total FROM ordenes_servicio_cliente $where AND estatus = 'Vencido'", $conn);
 
-$costo_total = obtener("SELECT SUM(costo_final) FROM ordenes_servicio_cliente $where", $conn);
-$costo_prom  = obtener("SELECT AVG(costo_final) FROM ordenes_servicio_cliente $where AND costo_final IS NOT NULL", $conn);
-$prom_dias   = obtener("SELECT AVG(DATEDIFF(fecha_completado, fecha_reporte)) FROM ordenes_servicio_cliente $where AND fecha_completado IS NOT NULL", $conn);
+$costo_total = obtener("SELECT SUM(costo_final) AS total FROM ordenes_servicio_cliente $where", $conn);
+$costo_prom  = obtener("SELECT AVG(costo_final) AS total FROM ordenes_servicio_cliente $where AND costo_final IS NOT NULL", $conn);
+$prom_dias   = obtener("SELECT AVG(DATEDIFF(fecha_completado, fecha_reporte)) AS total FROM ordenes_servicio_cliente $where AND fecha_completado IS NOT NULL", $conn);
 
 // Cumplimiento mensual
 $mes = date('Y-m');
-$mes_total     = obtener("SELECT COUNT(*) FROM ordenes_servicio_cliente $where AND DATE_FORMAT(fecha_reporte, '%Y-%m') = '$mes'", $conn);
-$mes_terminado = obtener("SELECT COUNT(*) FROM ordenes_servicio_cliente $where AND estatus = 'Terminado' AND DATE_FORMAT(fecha_reporte, '%Y-%m') = '$mes'", $conn);
+$mes_total     = obtener("SELECT COUNT(*) AS total FROM ordenes_servicio_cliente $where AND DATE_FORMAT(fecha_reporte, '%Y-%m') = '$mes'", $conn);
+$mes_terminado = obtener("SELECT COUNT(*) AS total FROM ordenes_servicio_cliente $where AND estatus = 'Terminado' AND DATE_FORMAT(fecha_reporte, '%Y-%m') = '$mes'", $conn);
 $cumplimiento_mes = $mes_total > 0 ? round(($mes_terminado / $mes_total) * 100, 1) : 0;
 
 // Órdenes por mes
@@ -72,7 +72,7 @@ while ($r = $q3->fetch_assoc()) {
 $estatus_labels = ['Pendiente', 'En proceso', 'Terminado', 'Cancelado', 'Vencido'];
 $estatus_valores = [];
 foreach ($estatus_labels as $e) {
-    $estatus_valores[] = obtener("SELECT COUNT(*) FROM ordenes_servicio_cliente $where AND estatus = '$e'", $conn);
+    $estatus_valores[] = obtener("SELECT COUNT(*) AS total FROM ordenes_servicio_cliente $where AND estatus = '$e'", $conn);
 }
 
 // Completadas por día
@@ -125,7 +125,7 @@ while ($r = $q_users->fetch_assoc()) {
 
 // Productividad
 $total_completadas = array_sum($valores_completadas);
-$usuarios_ativos = obtener("SELECT COUNT(*) FROM usuarios WHERE puesto LIKE '%servicio_cliente%'", $conn);
+$usuarios_ativos = obtener("SELECT COUNT(*) AS total FROM usuarios WHERE puesto LIKE '%servicio_cliente%'", $conn);
 $dias_periodo = 0;
 if ($fecha_inicio && $fecha_fin) {
     $start = new DateTime($fecha_inicio);
