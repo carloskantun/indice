@@ -32,9 +32,10 @@ if (isset($_GET['modal'])) {
         <input type="date" name="fecha_reporte" class="form-control" required>
     </div>
 
-    <!-- Descripci¨®n -->
+            <option value="Cancelado">Cancelado</option>
+    <!-- DescripciÂ¨Â®n -->
     <div class="mb-3">
-        <label for="descripcion_reporte" class="form-label">Descripci¨®n del mantenimiento</label>
+        <label for="descripcion_reporte" class="form-label">DescripciÂ¨Â®n del mantenimiento</label>
         <textarea name="descripcion_reporte" class="form-control" required></textarea>
     </div>
 
@@ -87,7 +88,7 @@ if (isset($_GET['modal'])) {
     <textarea name="notas" class="form-control"></textarea>
 </div>
 
-    <!-- Bot¨®n -->
+    <!-- BotÂ¨Â®n -->
     <button type="submit" class="btn btn-success w-100">Guardar Reporte</button>
 </form>
 <?php
@@ -95,5 +96,5 @@ if (isset($_GET['modal'])) {
 }
 
 // Vista completa (opcional o redirigir)
-echo "<p class='text-danger'>Este archivo est¨¢ pensado para cargarse como modal.</p>";
+echo "<p class='text-danger'>Este archivo estÂ¨Â¢ pensado para cargarse como modal.</p>";
 ?>

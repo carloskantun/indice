@@ -43,11 +43,7 @@ if (!empty($_GET['alojamiento']) && is_array($_GET['alojamiento'])) {
 
 if (!empty($_GET['estatus'])) {
     $estatus = trim($conn->real_escape_string($_GET['estatus']));
-    if ($estatus === 'Pendiente') {
-        $query .= " AND (estatus = 'Pendiente' OR estatus IS NULL OR TRIM(estatus) = '')";
-    } else {
-        $query .= " AND estatus = '$estatus'";
-    }
+    $query .= " AND COALESCE(NULLIF(TRIM(estatus), ''), 'Pendiente') = '$estatus'";
 }
 if (!empty($_GET['usuario'])) {
     $usuarios = is_array($_GET['usuario']) ? $_GET['usuario'] : [$_GET['usuario']];
@@ -438,18 +434,22 @@ foreach ($columnas_ordenables as $col => $label):
 
                     <!-- Estatus -->
                     <td class="col-estatus text-center">
+                        <?php
+                        $estatus_actual = $orden['estatus'] ?? 'Pendiente';
+                        if ($estatus_actual === '') $estatus_actual = 'Pendiente';
+                        ?>
                         <?php if ($_SESSION['user_role'] === 'superadmin' || $_SESSION['user_role'] === 'admin'): ?>
                             <form method="POST" class="estatus-form">
                                 <input type="hidden" name="orden_id" value="<?php echo $orden['folio']; ?>">
                                 <select name="estatus" class="form-select estatus-select" data-id="<?php echo $orden['folio']; ?>">
-                                    <option value="Pendiente" <?php echo ($orden['estatus'] == 'Pendiente') ? 'selected' : ''; ?>>Pendiente</option>
-                                    <option value="En proceso" <?php echo ($orden['estatus'] == 'En proceso') ? 'selected' : ''; ?>>En proceso</option>
-                                    <option value="Terminado" <?php echo ($orden['estatus'] == 'Terminado') ? 'selected' : ''; ?>>Terminado</option>
-                                    <option value="Cancelado" <?php echo ($orden['estatus'] == 'Cencelado') ? 'selected' : ''; ?>>Cancelado</option>
+                                    <option value="Pendiente" <?php echo ($estatus_actual == 'Pendiente') ? 'selected' : ''; ?>>Pendiente</option>
+                                    <option value="En proceso" <?php echo ($estatus_actual == 'En proceso') ? 'selected' : ''; ?>>En proceso</option>
+                                    <option value="Terminado" <?php echo ($estatus_actual == 'Terminado') ? 'selected' : ''; ?>>Terminado</option>
+                                    <option value="Cancelado" <?php echo ($estatus_actual == 'Cancelado') ? 'selected' : ''; ?>>Cancelado</option>
                                 </select>
                             </form>
                         <?php else: ?>
-                            <?php echo htmlspecialchars($orden['estatus']); ?>
+                            <?php echo htmlspecialchars($estatus_actual); ?>
                         <?php endif; ?>
                     </td>
 

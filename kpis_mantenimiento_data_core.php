@@ -28,11 +28,11 @@ function obtener($sql, $conn) {
 
 // KPIs básicos
 $total      = obtener("SELECT COUNT(*) AS total FROM ordenes_mantenimiento $where", $conn);
-$pendientes = obtener("SELECT COUNT(*) AS total FROM ordenes_mantenimiento $where AND (estatus = 'Pendiente' OR estatus IS NULL OR TRIM(estatus) = '')", $conn);
-$proceso    = obtener("SELECT COUNT(*) AS total FROM ordenes_mantenimiento $where AND estatus = 'En proceso'", $conn);
-$terminados = obtener("SELECT COUNT(*) AS total FROM ordenes_mantenimiento $where AND estatus = 'Terminado'", $conn);
-$cancelados = obtener("SELECT COUNT(*) AS total FROM ordenes_mantenimiento $where AND estatus = 'Cancelado'", $conn);
-$vencidos   = obtener("SELECT COUNT(*) AS total FROM ordenes_mantenimiento $where AND estatus = 'Vencido'", $conn);
+$pendientes = obtener("SELECT COUNT(*) AS total FROM ordenes_mantenimiento $where AND COALESCE(NULLIF(TRIM(estatus), ''), 'Pendiente') = 'Pendiente'", $conn);
+$proceso    = obtener("SELECT COUNT(*) AS total FROM ordenes_mantenimiento $where AND COALESCE(NULLIF(TRIM(estatus), ''), 'Pendiente') = 'En proceso'", $conn);
+$terminados = obtener("SELECT COUNT(*) AS total FROM ordenes_mantenimiento $where AND COALESCE(NULLIF(TRIM(estatus), ''), 'Pendiente') = 'Terminado'", $conn);
+$cancelados = obtener("SELECT COUNT(*) AS total FROM ordenes_mantenimiento $where AND COALESCE(NULLIF(TRIM(estatus), ''), 'Pendiente') = 'Cancelado'", $conn);
+$vencidos   = obtener("SELECT COUNT(*) AS total FROM ordenes_mantenimiento $where AND COALESCE(NULLIF(TRIM(estatus), ''), 'Pendiente') = 'Vencido'", $conn);
 
 $costo_total = obtener("SELECT SUM(costo_final) AS total FROM ordenes_mantenimiento $where", $conn);
 $costo_prom  = obtener("SELECT AVG(costo_final) AS total FROM ordenes_mantenimiento $where AND costo_final IS NOT NULL", $conn);
@@ -72,11 +72,11 @@ while ($r = $q3->fetch_assoc()) {
 $estatus_labels = ['Pendiente', 'En proceso', 'Terminado', 'Cancelado', 'Vencido'];
 $estatus_valores = [];
 foreach ($estatus_labels as $e) {
-    $estatus_valores[] = obtener("SELECT COUNT(*) AS total FROM ordenes_mantenimiento $where AND estatus = '$e'", $conn);
+    $estatus_valores[] = obtener("SELECT COUNT(*) AS total FROM ordenes_mantenimiento $where AND COALESCE(NULLIF(TRIM(estatus), ''), 'Pendiente') = '$e'", $conn);
 }
 
 // Completadas por día
-$where_completadas = ["estatus = 'Terminado'", "fecha_completado IS NOT NULL"];
+$where_completadas = ["COALESCE(NULLIF(TRIM(estatus), ''), 'Pendiente') = 'Terminado'", "fecha_completado IS NOT NULL"];
 if (!empty($_GET['alojamiento'])) {
     $ids = implode(',', array_map('intval', $_GET['alojamiento']));
     $where_completadas[] = "alojamiento_id IN ($ids)";
@@ -145,13 +145,13 @@ while ($row = $res->fetch_assoc()) {
 }
 
 $top_pendientes = [];
-$res = $conn->query("SELECT a.nombre, COUNT(*) AS total FROM ordenes_mantenimiento o JOIN alojamientos a ON o.alojamiento_id = a.id $where AND (o.estatus = 'Pendiente' OR o.estatus IS NULL OR TRIM(o.estatus) = '') GROUP BY o.alojamiento_id ORDER BY total DESC LIMIT 5");
+$res = $conn->query("SELECT a.nombre, COUNT(*) AS total FROM ordenes_mantenimiento o JOIN alojamientos a ON o.alojamiento_id = a.id $where AND COALESCE(NULLIF(TRIM(o.estatus), ''), 'Pendiente') = 'Pendiente' GROUP BY o.alojamiento_id ORDER BY total DESC LIMIT 5");
 while ($row = $res->fetch_assoc()) {
     $top_pendientes[] = ['nombre' => $row['nombre'], 'total' => (int)$row['total']];
 }
 
 $top_terminados = [];
-$res = $conn->query("SELECT a.nombre, COUNT(*) AS total FROM ordenes_mantenimiento o JOIN alojamientos a ON o.alojamiento_id = a.id $where AND o.estatus = 'Terminado' GROUP BY o.alojamiento_id ORDER BY total DESC LIMIT 5");
+$res = $conn->query("SELECT a.nombre, COUNT(*) AS total FROM ordenes_mantenimiento o JOIN alojamientos a ON o.alojamiento_id = a.id $where AND COALESCE(NULLIF(TRIM(o.estatus), ''), 'Pendiente') = 'Terminado' GROUP BY o.alojamiento_id ORDER BY total DESC LIMIT 5");
 while ($row = $res->fetch_assoc()) {
     $top_terminados[] = ['nombre' => $row['nombre'], 'total' => (int)$row['total']];
 }
