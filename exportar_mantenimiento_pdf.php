@@ -6,48 +6,52 @@ include 'conexion.php';
 
 $dompdf = new Dompdf();
 
-// Construcción de consulta (igual que en el CSV)
-$query = "SELECT folio, fecha_reporte, descripcion_reporte, estatus, nivel, fecha_completado, detalle_completado, costo_final,
-                 (SELECT nombre FROM alojamientos WHERE id = alojamiento_id) AS alojamiento, 
-                 (SELECT nombre FROM usuarios WHERE id = usuario_solicitante_id) AS usuario,
-                 (SELECT nombre FROM unidades_negocio WHERE id = unidad_negocio_id) AS unidad_negocio,
-                 (SELECT nombre FROM usuarios WHERE id = quien_realizo_id) AS quien_realizo
-          FROM ordenes_mantenimiento WHERE 1=1";
 
-// Aplicar filtros como en minipanel
-if (!empty($_GET['alojamiento']) && is_array($_GET['alojamiento'])) {
-    $ids = array_map('intval', $_GET['alojamiento']);
-    $query .= " AND alojamiento_id IN (" . implode(',', $ids) . ")";
+// ---- Construcción de la consulta respetando filtros activos ----
+$sql = "SELECT folio, fecha_reporte, descripcion_reporte, estatus, nivel, fecha_completado, detalle_completado, costo_final,
+               (SELECT nombre FROM alojamientos WHERE id = alojamiento_id) AS alojamiento,
+               (SELECT nombre FROM usuarios WHERE id = usuario_solicitante_id) AS usuario,
+               (SELECT nombre FROM unidades_negocio WHERE id = unidad_negocio_id) AS unidad_negocio,
+               (SELECT nombre FROM usuarios WHERE id = quien_realizo_id) AS quien_realizo
+        FROM ordenes_mantenimiento";
+
+$condiciones = [];
+if (!empty($_GET['estatus'])) {
+    $estatus = mysqli_real_escape_string($conn, trim($_GET['estatus']));
+    $condiciones[] = "COALESCE(estatus, 'Pendiente') = '$estatus'";
 }
 
-if (!empty($_GET['estatus'])) {
-    $estatus = $conn->real_escape_string($_GET['estatus']);
-    $query .= " AND estatus = '$estatus'";
+if (!empty($_GET['alojamiento']) && is_array($_GET['alojamiento'])) {
+    $ids = array_map('intval', $_GET['alojamiento']);
+    $condiciones[] = "alojamiento_id IN (" . implode(',', $ids) . ")";
 }
 
 if (!empty($_GET['usuario']) && is_array($_GET['usuario'])) {
     $ids = array_map('intval', $_GET['usuario']);
-    $query .= " AND usuario_solicitante_id IN (" . implode(',', $ids) . ")";
+    $condiciones[] = "usuario_solicitante_id IN (" . implode(',', $ids) . ")";
 }
 
 if (!empty($_GET['unidad_negocio']) && is_array($_GET['unidad_negocio'])) {
     $ids = array_map('intval', $_GET['unidad_negocio']);
-    $query .= " AND unidad_negocio_id IN (" . implode(',', $ids) . ")";
+    $condiciones[] = "unidad_negocio_id IN (" . implode(',', $ids) . ")";
 }
 
-if (!empty($_GET['fecha_inicio'])) {
-    $fecha_inicio = $conn->real_escape_string($_GET['fecha_inicio']);
-    $query .= " AND fecha_reporte >= '$fecha_inicio'";
+if (!empty($_GET['fecha_inicio']) && !empty($_GET['fecha_fin'])) {
+    $fi = $conn->real_escape_string($_GET['fecha_inicio']);
+    $ff = $conn->real_escape_string($_GET['fecha_fin']);
+    $condiciones[] = "fecha_reporte BETWEEN '$fi' AND '$ff'";
+} elseif (!empty($_GET['fecha_inicio'])) {
+    $fi = $conn->real_escape_string($_GET['fecha_inicio']);
+    $condiciones[] = "fecha_reporte >= '$fi'";
+} elseif (!empty($_GET['fecha_fin'])) {
+    $ff = $conn->real_escape_string($_GET['fecha_fin']);
+    $condiciones[] = "fecha_reporte <= '$ff'";
 }
 
-if (!empty($_GET['fecha_fin'])) {
-    $fecha_fin = $conn->real_escape_string($_GET['fecha_fin']);
-    $query .= " AND fecha_reporte <= '$fecha_fin'";
-}
+$where = count($condiciones) ? ' WHERE ' . implode(' AND ', $condiciones) : '';
+$sql .= $where . ' ORDER BY id ASC';
 
-$query .= " ORDER BY id ASC";
-
-$resultado = $conn->query($query);
+$resultado = $conn->query($sql);
 
 // Generar HTML
 $html = '<html><head><meta charset="UTF-8"></head><body>';
