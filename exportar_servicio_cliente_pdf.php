@@ -50,7 +50,8 @@ $query .= " ORDER BY id ASC";
 $resultado = $conn->query($query);
 
 // Generar HTML
-$html = '<h2 style="text-align:center;">Reporte de Servicio al Cliente</h2>';
+$html = '<html><head><meta charset="UTF-8"></head><body>';
+$html .= '<h2 style="text-align:center;">Reporte de Servicio al Cliente</h2>';
 $html .= '<table border="1" cellspacing="0" cellpadding="4" style="width:100%; font-size:10px;">';
 $html .= '<thead>
 <tr>
@@ -86,7 +87,7 @@ while ($row = $resultado->fetch_assoc()) {
     $html .= '</tr>';
 }
 
-$html .= '</tbody></table>';
+$html .= '</tbody></table></body></html>';
 
 // Renderizar PDF
 $dompdf->loadHtml($html);
