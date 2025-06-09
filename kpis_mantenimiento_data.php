@@ -7,4 +7,4 @@ header('Content-Type: application/json');
 $kpis = include 'kpis_mantenimiento_data_core.php';
 
 echo json_encode($kpis);
-// var_dump($kpis); // Descomenta para depurar resultados
+
