@@ -6,6 +6,12 @@ include 'verificar_acceso.php'; // << Reemplaza config y funciones auxiliares
 
 // Redirección automática según el puesto (si aplica)
 redireccionar_por_puesto(obtener_puesto());
+
+// Permite evaluar varios puestos separados por coma
+function tienePuesto($puesto) {
+    $lista = array_map('trim', explode(',', strtolower($_SESSION['puesto'] ?? '')));
+    return in_array(strtolower($puesto), $lista);
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -61,7 +67,7 @@ redireccionar_por_puesto(obtener_puesto());
                 </div>
             <?php endif; ?>
 
-<?php if (puede_ver_modulo('mantenimiento') || puede_ver_modulo('mantenimiento_listado')): ?>
+            <?php if (tienePuesto('mantenimiento')): ?>
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="minipanel_mantenimiento.php">
@@ -72,7 +78,7 @@ redireccionar_por_puesto(obtener_puesto());
                 </div>
             <?php endif; ?>
 
-            <?php if (puede_ver_modulo('servicio_cliente')): ?>
+            <?php if (tienePuesto('servicio al cliente')): ?>
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="minipanel_servicio_cliente.php">

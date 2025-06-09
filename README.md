@@ -21,6 +21,10 @@ The application expects a MySQL database configured in `conexion.php`. Tables su
 - **Mantenimiento**: existing module for maintenance requests.
 - **Servicio al Cliente**: duplicated from maintenance, adjusted for customer service requests. Only roles *servicio al cliente*, *gerente* and *admin* can use it.
 
+## Puestos Múltiples
+`editar_usuario.php` permite ingresar más de un puesto separado por comas (por ejemplo: `"Servicio al Cliente, Mantenimiento"`).
+En `menu_principal.php` se evalúan esos puestos para mostrar los módulos correspondientes.
+
 ## KPIs
 Each module has export options to CSV/PDF and printable views. Charts are generated with Chart.js.
 
