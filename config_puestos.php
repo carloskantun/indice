@@ -19,7 +19,8 @@ return [
         'acceso_total' => true
     ],
     'servicio al cliente' => [
-        'modulos' => ['servicio_cliente'],
+        // Permite también ingresar órdenes en el módulo de mantenimiento
+        'modulos' => ['servicio_cliente', 'mantenimiento'],
         'acceso_total' => false
     ],
     'camarista' => [
