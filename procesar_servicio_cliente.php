@@ -5,7 +5,7 @@ include 'conexion.php'; // Conexión centralizada
 $alojamiento_id = $_POST['alojamiento_id'] ?? '';
 $descripcion = $_POST['descripcion_reporte'] ?? '';
 $fecha_reporte = $_POST['fecha_reporte'] ?? '';
-$estatus = $_POST['estatus'] ?? 'Pendiente';
+$estatus = isset($_POST['estatus']) && trim($_POST['estatus']) !== '' ? $_POST['estatus'] : 'Pendiente';
 $usuario_id = $_POST['usuario_solicitante_id'] ?? '';
 $unidad_id = $_POST['unidad_negocio_id'] ?? '';
 $notas = $_POST['notas'] ?? '';
