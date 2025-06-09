@@ -16,9 +16,12 @@ $sql = "SELECT folio, fecha_reporte, descripcion_reporte, estatus, nivel, fecha_
         FROM ordenes_mantenimiento";
 
 $condiciones = [];
-if (!empty($_GET['estatus'])) {
-    $estatus = mysqli_real_escape_string($conn, trim($_GET['estatus']));
-    $condiciones[] = "COALESCE(estatus, 'Pendiente') = '$estatus'";
+$estatus = $_GET['estatus'] ?? '';
+if ($estatus === 'Pendiente') {
+    $condiciones[] = "(COALESCE(TRIM(estatus), 'Pendiente') = 'Pendiente')";
+} elseif ($estatus !== '') {
+    $estatus = mysqli_real_escape_string($conn, $estatus);
+    $condiciones[] = "estatus = '$estatus'";
 }
 
 if (!empty($_GET['alojamiento']) && is_array($_GET['alojamiento'])) {
@@ -49,7 +52,11 @@ if (!empty($_GET['fecha_inicio']) && !empty($_GET['fecha_fin'])) {
 }
 
 $where = count($condiciones) ? ' WHERE ' . implode(' AND ', $condiciones) : '';
+
 $sql .= $where . ' ORDER BY id ASC';
+
+// Registrar consulta para depurar
+file_put_contents('debug_completado.log', "[" . date('Y-m-d H:i:s') . "] $sql\n", FILE_APPEND);
 
 $resultado = $conn->query($sql);
 
