@@ -148,7 +148,7 @@ $(function () {
       $("#kpi-calidad").html(`
   ${crearCard('Promedio de Días', res.promedio_dias + ' días', 'info')}
   ${crearCard('% Cumplimiento Mes', res.cumplimiento_mes + '%', 'success')}
-  ${crearCard('Coef. Productividad', res.coef_productividad + '%', 'primary')}
+  ${crearCard('Coef. Productividad', res.productividad + '%', 'primary')}
 `);
 
       // Alojamientos
