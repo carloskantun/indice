@@ -64,6 +64,8 @@ if ($result->num_rows === 0) {
     die("No se encontró la orden.");
 }
 $orden = $result->fetch_assoc();
+$estatus = $estatus ?? 'Pendiente';
+if ($estatus === '') $estatus = 'Pendiente';
 
 // Preparar DOMPDF
 $dompdf = new Dompdf();
@@ -92,7 +94,7 @@ $html = '
     <tr><th>Unidad de Negocio</th><td>' . $orden['unidad_negocio'] . '</td></tr>
     <tr><th>Usuario Solicitante</th><td>' . $orden['usuario'] . '</td></tr>
     <tr><th>Descripción</th><td>' . $orden['descripcion_reporte'] . '</td></tr>
-    <tr><th>Estatus</th><td>' . $orden['estatus'] . '</td></tr>
+    <tr><th>Estatus</th><td>' . $estatus . '</td></tr>
     <tr><th>Nivel</th><td>' . $orden['nivel'] . '</td></tr>';
 
 // ✅ Imagen del reporte como link

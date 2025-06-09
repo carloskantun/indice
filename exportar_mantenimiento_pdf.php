@@ -75,7 +75,9 @@ while ($row = $resultado->fetch_assoc()) {
     $html .= '<td>' . htmlspecialchars($row['folio']) . '</td>';
     $html .= '<td>' . htmlspecialchars($row['fecha_reporte']) . '</td>';
     $html .= '<td>' . htmlspecialchars($row['descripcion_reporte']) . '</td>';
-    $html .= '<td>' . htmlspecialchars($row['estatus']) . '</td>';
+    $estatus = $row['estatus'] ?? 'Pendiente';
+    if ($estatus === '') $estatus = 'Pendiente';
+    $html .= '<td>' . htmlspecialchars($estatus) . '</td>';
     $html .= '<td>' . htmlspecialchars($row['nivel']) . '</td>';
     $html .= '<td>' . htmlspecialchars($row['fecha_completado']) . '</td>';
     $html .= '<td>' . htmlspecialchars($row['detalle_completado']) . '</td>';

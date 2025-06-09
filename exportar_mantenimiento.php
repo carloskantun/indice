@@ -72,11 +72,7 @@ if (!empty($_GET['alojamiento']) && is_array($_GET['alojamiento'])) {
 
 if (!empty($_GET['estatus'])) {
     $estatus = trim($conn->real_escape_string($_GET['estatus']));
-    if ($estatus === 'Pendiente') {
-        $query .= " AND (estatus = 'Pendiente' OR estatus IS NULL OR TRIM(estatus) = '')";
-    } else {
-        $query .= " AND estatus = '$estatus'";
-    }
+    $query .= " AND COALESCE(NULLIF(TRIM(estatus), ''), 'Pendiente') = '$estatus'";
 }
 
 if (!empty($_GET['usuario']) && is_array($_GET['usuario'])) {

@@ -45,6 +45,7 @@ if (isset($_GET['modal'])) {
             <option value="Pendiente">Pendiente</option>
             <option value="En proceso">En proceso</option>
             <option value="Terminado">Terminado</option>
+            <option value="Cancelado">Cancelado</option>
         </select>
     </div>
 

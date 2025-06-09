@@ -32,11 +32,11 @@ function obtener($query, $conn) {
 }
 
 $total         = obtener("SELECT COUNT(*) AS total FROM ordenes_servicio_cliente $where", $conn);
-$pendientes    = obtener("SELECT COUNT(*) AS total FROM ordenes_servicio_cliente $where AND (estatus = 'Pendiente' OR estatus IS NULL OR TRIM(estatus) = '')", $conn);
-$proceso       = obtener("SELECT COUNT(*) AS total FROM ordenes_servicio_cliente $where AND estatus = 'En proceso'", $conn);
-$terminados    = obtener("SELECT COUNT(*) AS total FROM ordenes_servicio_cliente $where AND estatus = 'Terminado'", $conn);
-$cancelados    = obtener("SELECT COUNT(*) AS total FROM ordenes_servicio_cliente $where AND estatus = 'Cancelado'", $conn);
-$vencidos      = obtener("SELECT COUNT(*) AS total FROM ordenes_servicio_cliente $where AND estatus = 'Vencido'", $conn);
+$pendientes    = obtener("SELECT COUNT(*) AS total FROM ordenes_servicio_cliente $where AND COALESCE(NULLIF(TRIM(estatus), ''), 'Pendiente') = 'Pendiente'", $conn);
+$proceso       = obtener("SELECT COUNT(*) AS total FROM ordenes_servicio_cliente $where AND COALESCE(NULLIF(TRIM(estatus), ''), 'Pendiente') = 'En proceso'", $conn);
+$terminados    = obtener("SELECT COUNT(*) AS total FROM ordenes_servicio_cliente $where AND COALESCE(NULLIF(TRIM(estatus), ''), 'Pendiente') = 'Terminado'", $conn);
+$cancelados    = obtener("SELECT COUNT(*) AS total FROM ordenes_servicio_cliente $where AND COALESCE(NULLIF(TRIM(estatus), ''), 'Pendiente') = 'Cancelado'", $conn);
+$vencidos      = obtener("SELECT COUNT(*) AS total FROM ordenes_servicio_cliente $where AND COALESCE(NULLIF(TRIM(estatus), ''), 'Pendiente') = 'Vencido'", $conn);
 $costo_total   = obtener("SELECT SUM(costo_final) AS total FROM ordenes_servicio_cliente $where", $conn);
 $costo_prom    = obtener("SELECT AVG(costo_final) AS total FROM ordenes_servicio_cliente $where AND costo_final IS NOT NULL", $conn);
 $prom_dias     = obtener("SELECT AVG(DATEDIFF(fecha_completado, fecha_reporte)) AS total FROM ordenes_servicio_cliente $where AND fecha_completado IS NOT NULL", $conn);
