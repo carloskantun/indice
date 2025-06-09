@@ -54,7 +54,7 @@ include 'conexion.php';
             <div class="mb-3">
                 <label for="estatus" class="form-label">Estatus</label>
                 <select name="estatus" class="form-control" required>
-                    <option value="Pendiente">Pendiente</option>
+                    <option value="Pendiente" selected>Pendiente</option>
                     <option value="En proceso">En proceso</option>
                     <option value="Terminado">Terminado</option>
                     <option value="Cancelado">Cancelado</option>
