@@ -7,6 +7,25 @@ include 'auth.php'; // Proteccin de sesin
 include 'conexion.php'; // Ahora usa el archivo de conexin
 header('Content-Type: text/html; charset=utf-8');
 
+// --- Control de acceso dinámico por rol/puesto ---
+session_start();
+
+$rol = $_SESSION['rol'] ?? ($_SESSION['user_role'] ?? '');
+$puesto = $_SESSION['puesto'] ?? '';
+
+$acceso_total = ['Administrador', 'Gerente', 'Superadmin', 'CEO', 'Webmaster'];
+
+$tiene_acceso_mantenimiento = (
+    in_array($rol, $acceso_total) ||
+    $rol === 'Servicio al Cliente' ||
+    in_array($rol, ['Camarista', 'Ama de Llaves'])
+);
+
+if (!$tiene_acceso_mantenimiento) {
+    header('Location: acceso_denegado.php');
+    exit;
+}
+
 
 // 98 KPIs
 $ordenes_totales = $conn->query("SELECT COUNT(*) AS total FROM ordenes_mantenimiento")->fetch_assoc()['total'];

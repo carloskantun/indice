@@ -3,8 +3,9 @@ include 'auth.php';
 session_start();
 
 $puesto = strtolower(trim($_SESSION['puesto'] ?? ''));
+$rol = $_SESSION['rol'] ?? ($_SESSION['user_role'] ?? '');
 
-if ($puesto !== 'camarista') {
+if (!in_array($rol, ['Camarista', 'Ama de Llaves'])) {
     header('Location: minipanel_mantenimiento.php');
     exit;
 }
