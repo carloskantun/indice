@@ -1,16 +1,15 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 include 'auth.php';
 include 'conexion.php';
 
 if (!isset($_SESSION['user_role']) || !in_array($_SESSION['user_role'], ['admin', 'superadmin'])) {
     die("Acceso no autorizado.");
-}
-
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $orden_id = $_POST['orden_id'] ?? '';
     $nivel = $_POST['nivel'] ?? '';
-
     if (!empty($orden_id) && !empty($nivel)) {
         $stmt = $conn->prepare("UPDATE ordenes_servicio_cliente SET nivel = ? WHERE folio = ?");
         $stmt->bind_param("ss", $nivel, $orden_id);
@@ -22,5 +21,4 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } else {
         echo "error";
     }
-}
 ?>

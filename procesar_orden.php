@@ -1,24 +1,15 @@
 <?php
-session_start();
-include 'conexion.php'; // Conexión centralizada
-
-// Validar sesión
-if (!isset($_SESSION['user_id'])) {
-    die("Acceso no autorizado.");
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
-
-// Obtener datos del formulario
-$proveedor = $_POST['proveedor_id'] ?? null;
-$monto = $_POST['monto'] ?? 0;
-$vencimiento = $_POST['vencimiento_pago'] ?? '';
 $concepto = $_POST['concepto_pago'] ?? '';
 $tipo_pago = $_POST['tipo_pago'] ?? '';
 $factura = $_POST['genera_factura'] ?? 'No';
 $usuario = $_POST['usuario_solicitante_id'] ?? null;
 $unidad_negocio = $_POST['unidad_negocio_id'] ?? null;
 
-// Generar folio único basado en la fecha y un número incremental
-$fecha = date("Ymd"); // AñoMesDía
+// Generar folio Ãºnico basado en la fecha y un nÃºmero incremental
+$fecha = date("Ymd"); // AÃ±oMesDÃ­a
 $result = $conn->query("SELECT COUNT(*) AS total FROM ordenes_compra WHERE DATE(fecha_creacion) = CURDATE()");
 $conteo = $result->fetch_assoc()['total'] + 1;
 $folio = "OC-$fecha-$conteo"; // Ejemplo: OC-20250205-3

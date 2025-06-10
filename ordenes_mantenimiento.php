@@ -6,28 +6,19 @@ if (session_status() === PHP_SESSION_NONE) {
 
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
-
 include 'conexion.php';
-
 // --- Control de acceso dinámico por rol/puesto ---
-session_start();
-
-$rol = $_SESSION['rol'] ?? ($_SESSION['user_role'] ?? '');
+$rol = isset($_SESSION['rol']) ? trim(ucwords(strtolower($_SESSION['rol']))) : '';
 $puesto = $_SESSION['puesto'] ?? '';
-
 $acceso_total = ['Administrador', 'Gerente', 'Superadmin', 'CEO', 'Webmaster'];
-
 $tiene_acceso_mantenimiento = (
     in_array($rol, $acceso_total) ||
     $rol === 'Servicio al Cliente' ||
     in_array($rol, ['Camarista', 'Ama de Llaves'])
 );
-
 if (!$tiene_acceso_mantenimiento) {
     header('Location: acceso_denegado.php');
     exit;
-}
-
 if (isset($_GET['modal'])) {
 ?>
 <form action="procesar_mantenimiento.php" method="POST" enctype="multipart/form-data">
@@ -44,76 +35,41 @@ if (isset($_GET['modal'])) {
             <?php endwhile; ?>
         </select>
     </div>
-
     <!-- Fecha del reporte -->
-    <div class="mb-3">
         <label for="fecha_reporte" class="form-label">Fecha del reporte</label>
         <input type="date" name="fecha_reporte" class="form-control" required>
-    </div>
-
             <option value="Cancelado">Cancelado</option>
     <!-- Descripci¨®n -->
-    <div class="mb-3">
         <label for="descripcion_reporte" class="form-label">Descripci¨®n del mantenimiento</label>
         <textarea name="descripcion_reporte" class="form-control" required></textarea>
-    </div>
-
     <!-- Estatus -->
-    <div class="mb-3">
         <label for="estatus" class="form-label">Estatus</label>
         <select name="estatus" class="form-control" required>
             <option value="Pendiente" selected>Pendiente</option>
             <option value="En proceso">En proceso</option>
             <option value="Terminado">Terminado</option>
-        </select>
-    </div>
-
     <!-- Subir foto -->
-    <div class="mb-3">
         <label for="foto" class="form-label">Subir foto del mantenimiento</label>
         <input type="file" name="foto" class="form-control">
-    </div>
-
     <!-- Usuario solicitante -->
-    <div class="mb-3">
         <label for="usuario_solicitante_id" class="form-label">Usuario solicitante</label>
         <select name="usuario_solicitante_id" class="form-control" required>
-            <option value="">Seleccionar</option>
-            <?php
             $usuarios = $conn->query("SELECT id, nombre FROM usuarios");
             while ($usuario = $usuarios->fetch_assoc()):
-            ?>
                 <option value="<?php echo $usuario['id']; ?>"><?php echo htmlspecialchars($usuario['nombre']); ?></option>
-            <?php endwhile; ?>
-        </select>
-    </div>
-
     <!-- Unidad de negocio -->
-    <div class="mb-3">
         <label for="unidad_negocio_id" class="form-label">Unidad de Negocio</label>
         <select name="unidad_negocio_id" class="form-control" required>
-            <option value="">Seleccionar</option>
-            <?php
             $unidades = $conn->query("SELECT id, nombre FROM unidades_negocio");
             while ($unidad = $unidades->fetch_assoc()):
-            ?>
                 <option value="<?php echo $unidad['id']; ?>"><?php echo htmlspecialchars($unidad['nombre']); ?></option>
-            <?php endwhile; ?>
-        </select>
-    </div>
 <!-- Notas (opcional) -->
 <div class="mb-3">
     <label for="notas" class="form-label">Notas adicionales</label>
     <textarea name="notas" class="form-control"></textarea>
 </div>
-
     <!-- Bot¨®n -->
     <button type="submit" class="btn btn-success w-100">Guardar Reporte</button>
 </form>
-<?php
-    exit;
-}
-
 // Vista completa (opcional o redirigir)
 echo "<p class='text-danger'>Este archivo est¨¢ pensado para cargarse como modal.</p>";
-?>

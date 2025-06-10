@@ -1,12 +1,13 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 include 'auth.php';
 include 'conexion.php';
 
 $registros_por_pagina = 100;
 $pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $offset = ($pagina_actual - 1) * $registros_por_pagina;
-
 $query = "SELECT folio, monto, vencimiento_pago, concepto_pago, tipo_pago, genera_factura, estatus_pago, quien_pago_id, nivel,
                  (SELECT nombre FROM proveedores WHERE id = proveedor_id) AS proveedor, 
                  (SELECT nombre FROM usuarios WHERE id = usuario_solicitante_id) AS usuario,
@@ -14,9 +15,7 @@ $query = "SELECT folio, monto, vencimiento_pago, concepto_pago, tipo_pago, gener
           FROM ordenes_compra 
           ORDER BY fecha_creacion DESC 
           LIMIT $registros_por_pagina OFFSET $offset";
-
 $ordenes = $conn->query($query);
-
 while ($orden = $ordenes->fetch_assoc()): ?>
     <tr>
         <td><?php echo htmlspecialchars($orden['folio']); ?></td>
