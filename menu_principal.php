@@ -5,7 +5,17 @@ include 'router_roles.php';
 include 'verificar_acceso.php';
 
 redireccionar_por_puesto(obtener_puesto());
+$rol    = strtolower(trim($_SESSION['user_role'] ?? $_SESSION['rol'] ?? ''));
+$puesto = strtolower(trim($_SESSION['puesto'] ?? ''));
 
+function verModulo($modulo) {
+    global $rol, $puesto;
+    $altos = ['superadmin', 'administrador', 'gerente', 'ceo', 'webmaster'];
+
+    // Roles privilegiados ven todo
+    if (in_array($rol, $altos)) {
+        return true;
+    }
 $rol = isset($_SESSION['rol']) ? trim(ucwords(strtolower($_SESSION['rol']))) : '';
 
 function verModulo($modulo) {
@@ -13,24 +23,27 @@ function verModulo($modulo) {
     $ver_todo = ['Administrador', 'Gerente', 'Superadmin', 'CEO', 'Webmaster'];
     $ver_mantenimiento = ['Servicio al Cliente', 'Camarista', 'Ama de Llaves'];
 
+
     switch ($modulo) {
         case 'mantenimiento':
-            return in_array($rol, array_merge($ver_todo, $ver_mantenimiento));
+            return str_contains($puesto, 'mantenimiento') || str_contains($puesto, 'servicio al cliente');
         case 'servicio_cliente':
-            return in_array($rol, array_merge(['Servicio al Cliente'], $ver_todo));
-        case 'kpis':
-        case 'ordenes_compra':
-        case 'configuracion':
-        case 'usuarios':
-            return in_array($rol, $ver_todo);
+            return str_contains($puesto, 'servicio al cliente');
         case 'camarista':
-            return in_array($rol, ['Camarista', 'Ama de Llaves']);
+            return str_contains($puesto, 'camarista') || str_contains($puesto, 'ama de llaves');
         default:
             return false;
     }
-function tienePuesto($puesto) {
-    $lista = array_map('trim', explode(',', strtolower($_SESSION['puesto'] ?? '')));
-    return in_array(strtolower($puesto), $lista);
+
+
+$modulos_disponibles = ['ordenes_compra', 'mantenimiento', 'servicio_cliente', 'usuarios', 'kpis', 'configuracion', 'camarista'];
+$puede_ver_algo = false;
+foreach ($modulos_disponibles as $m) {
+    if (verModulo($m)) {
+        $puede_ver_algo = true;
+        break;
+    }
+
 }
 ?>
 <!DOCTYPE html>
@@ -78,8 +91,7 @@ function tienePuesto($puesto) {
 
             <?php if (verModulo('ordenes_compra')): ?>
 
-            <?php if (puede_ver_modulo('compras')): ?>
-                <div class="col-12 col-md-4">
+          <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="minipanel.php">
                             <span class="modulo-icon">📦</span>
@@ -91,7 +103,6 @@ function tienePuesto($puesto) {
 
             <?php if (verModulo('mantenimiento')): ?>
 
-            <?php if (tienePuesto('mantenimiento')): ?>
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="minipanel_mantenimiento.php">
@@ -103,7 +114,7 @@ function tienePuesto($puesto) {
             <?php endif; ?>
 
             <?php if (verModulo('servicio_cliente')): ?>
-            <?php if (tienePuesto('servicio al cliente')): ?>
+
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="minipanel_servicio_cliente.php">
@@ -115,7 +126,7 @@ function tienePuesto($puesto) {
             <?php endif; ?>
 
             <?php if (verModulo('usuarios')): ?>
-            <?php if (puede_ver_modulo('usuarios')): ?>
+
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="usuarios.php">
@@ -127,7 +138,7 @@ function tienePuesto($puesto) {
             <?php endif; ?>
 
             <?php if (verModulo('kpis')): ?>
-            <?php if (puede_ver_modulo('kpis')): ?>
+
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="kpis_mantenimiento.php">
@@ -139,7 +150,7 @@ function tienePuesto($puesto) {
             <?php endif; ?>
 
             <?php if (verModulo('configuracion')): ?>
-            <?php if (puede_ver_modulo('configuracion')): ?>
+
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="panel_config.php">
@@ -157,6 +168,14 @@ function tienePuesto($puesto) {
                             <span class="modulo-icon">🧹</span>
                             Reporte Camarista
                         </a>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <?php if (!$puede_ver_algo): ?>
+                <div class="col-12">
+                    <div class="alert alert-warning text-center">
+                        Acceso restringido. Consulta con el administrador.
                     </div>
                 </div>
             <?php endif; ?>

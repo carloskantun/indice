@@ -4,10 +4,17 @@ session_start();
 
 $puesto = strtolower(trim($_SESSION['puesto'] ?? ''));
 
+$rol    = strtolower(trim($_SESSION['user_role'] ?? $_SESSION['rol'] ?? ''));
+if (!in_array($rol, ['camarista', 'ama de llaves'])) {
+    header('Location: minipanel_mantenimiento.php');
+    exit;
+}
+
 if ($puesto !== 'camarista') {
     header('Location: minipanel_mantenimiento.php');
     exit;
 }
+
 
 include 'conexion.php';
 ?>

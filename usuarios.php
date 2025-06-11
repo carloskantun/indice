@@ -50,7 +50,6 @@ if (isset($_GET['modal'])) {
         </select>
     </div>
 
-    <!-- Botón -->
     <button type="submit" class="btn btn-primary w-100">Registrar Usuario</button>
 </form>
 <?php

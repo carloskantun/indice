@@ -1,6 +1,20 @@
 <?php
 include 'conexion.php'; // Conexión centralizada
 
+// --- Control de acceso dinámico por rol/puesto ---
+$rol    = strtolower(trim($_SESSION['user_role'] ?? $_SESSION['rol'] ?? ''));
+$puesto = strtolower(trim($_SESSION['puesto'] ?? ''));
+$acceso_total = ['administrador', 'gerente', 'superadmin', 'ceo', 'webmaster'];
+$tiene_acceso_mantenimiento = (
+    in_array($rol, $acceso_total) ||
+    $rol === 'servicio al cliente' ||
+    in_array($rol, ['camarista', 'ama de llaves'])
+);
+if (!$tiene_acceso_mantenimiento) {
+    header('Location: acceso_denegado.php');
+    exit;
+}
+
 // Validar datos del formulario
 $alojamiento_id = $_POST['alojamiento_id'] ?? '';
 $descripcion = $_POST['descripcion_reporte'] ?? '';
