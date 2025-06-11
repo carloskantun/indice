@@ -2,12 +2,32 @@
 session_start();
 include 'auth.php';
 include 'router_roles.php';
-include 'verificar_acceso.php'; // << Reemplaza config y funciones auxiliares
+include 'verificar_acceso.php';
 
-// Redirección automática según el puesto (si aplica)
 redireccionar_por_puesto(obtener_puesto());
 
-// Permite evaluar varios puestos separados por coma
+$rol = isset($_SESSION['rol']) ? trim(ucwords(strtolower($_SESSION['rol']))) : '';
+
+function verModulo($modulo) {
+    global $rol;
+    $ver_todo = ['Administrador', 'Gerente', 'Superadmin', 'CEO', 'Webmaster'];
+    $ver_mantenimiento = ['Servicio al Cliente', 'Camarista', 'Ama de Llaves'];
+
+    switch ($modulo) {
+        case 'mantenimiento':
+            return in_array($rol, array_merge($ver_todo, $ver_mantenimiento));
+        case 'servicio_cliente':
+            return in_array($rol, array_merge(['Servicio al Cliente'], $ver_todo));
+        case 'kpis':
+        case 'ordenes_compra':
+        case 'configuracion':
+        case 'usuarios':
+            return in_array($rol, $ver_todo);
+        case 'camarista':
+            return in_array($rol, ['Camarista', 'Ama de Llaves']);
+        default:
+            return false;
+    }
 function tienePuesto($puesto) {
     $lista = array_map('trim', explode(',', strtolower($_SESSION['puesto'] ?? '')));
     return in_array(strtolower($puesto), $lista);
@@ -56,6 +76,8 @@ function tienePuesto($puesto) {
 
         <div class="row justify-content-center g-4">
 
+            <?php if (verModulo('ordenes_compra')): ?>
+
             <?php if (puede_ver_modulo('compras')): ?>
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
@@ -66,6 +88,8 @@ function tienePuesto($puesto) {
                     </div>
                 </div>
             <?php endif; ?>
+
+            <?php if (verModulo('mantenimiento')): ?>
 
             <?php if (tienePuesto('mantenimiento')): ?>
                 <div class="col-12 col-md-4">
@@ -78,6 +102,7 @@ function tienePuesto($puesto) {
                 </div>
             <?php endif; ?>
 
+            <?php if (verModulo('servicio_cliente')): ?>
             <?php if (tienePuesto('servicio al cliente')): ?>
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
@@ -89,6 +114,7 @@ function tienePuesto($puesto) {
                 </div>
             <?php endif; ?>
 
+            <?php if (verModulo('usuarios')): ?>
             <?php if (puede_ver_modulo('usuarios')): ?>
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
@@ -100,6 +126,7 @@ function tienePuesto($puesto) {
                 </div>
             <?php endif; ?>
 
+            <?php if (verModulo('kpis')): ?>
             <?php if (puede_ver_modulo('kpis')): ?>
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
@@ -111,6 +138,7 @@ function tienePuesto($puesto) {
                 </div>
             <?php endif; ?>
 
+            <?php if (verModulo('configuracion')): ?>
             <?php if (puede_ver_modulo('configuracion')): ?>
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
@@ -122,6 +150,16 @@ function tienePuesto($puesto) {
                 </div>
             <?php endif; ?>
 
+            <?php if (verModulo('camarista')): ?>
+                <div class="col-12 col-md-4">
+                    <div class="modulo-box">
+                        <a href="reporte_camarista.php">
+                            <span class="modulo-icon">🧹</span>
+                            Reporte Camarista
+                        </a>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </body>

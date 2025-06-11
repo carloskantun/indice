@@ -23,13 +23,11 @@ if (isset($_GET['modal'])) {
         <label for="telefono" class="form-label">Teléfono</label>
         <input type="text" class="form-control" id="telefono" name="telefono" required>
     </div>
-
     <!-- Email -->
     <div class="mb-3">
         <label for="email" class="form-label">Correo Electrónico</label>
         <input type="email" class="form-control" id="email" name="email" required>
     </div>
-
     <!-- Puesto -->
     <div class="mb-3">
         <label for="puesto" class="form-label">Puesto</label>
@@ -62,7 +60,6 @@ if (isset($_GET['modal'])) {
 // Página completa
 include 'header.php';
 ?>
-
 <div class="container mt-5">
     <h2 class="mb-4">Lista de Usuarios</h2>
     <table class="table table-striped">

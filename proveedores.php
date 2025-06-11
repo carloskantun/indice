@@ -1,9 +1,39 @@
 <?php
 session_start();
 include 'auth.php';
-include 'conexion.php'; // Ahora usamos conexion.php
+include 'conexion.php';
 
-// �9�8 Si la petici��n viene del modal (`proveedores.php?modal=1`), solo devuelve el formulario
+if (isset($_GET['modal'])) {
+?>
+<form action="procesar_proveedor.php" method="POST">
+    <div class="mb-3">
+        <label>No. Cuenta</label>
+        <input type="text" name="numero_cuenta" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label>Banco</label>
+        <input type="text" name="banco" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label>DirecciÃ³n</label>
+        <textarea name="direccion" class="form-control"></textarea>
+    </div>
+    <div class="mb-3">
+        <label>RFC (Opcional)</label>
+        <input type="text" name="rfc" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label>DescripciÃ³n del Servicio</label>
+        <textarea name="descripcion_servicio" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-warning w-100">Guardar</button>
+</form>
+<?php
+    exit;
+}
+
+// Si no es un modal, cargar la vista completa
+// ”9Ý8 Si la petici¨®n viene del modal (`proveedores.php?modal=1`), solo devuelve el formulario
 if (isset($_GET['modal'])) {
 ?>
     <form action="procesar_proveedor.php" method="POST">
@@ -16,7 +46,7 @@ if (isset($_GET['modal'])) {
             <input type="text" name="persona_responsable" class="form-control">
         </div>
         <div class="mb-3">
-            <label>Tel��fono</label>
+            <label>Tel¨¦fono</label>
             <input type="text" name="telefono" class="form-control" required>
         </div>
         <div class="mb-3">
@@ -36,7 +66,7 @@ if (isset($_GET['modal'])) {
             <input type="text" name="banco" class="form-control">
         </div>
         <div class="mb-3">
-            <label>Direcci��n</label>
+            <label>Direcci¨®n</label>
             <textarea name="direccion" class="form-control"></textarea>
         </div>
         <div class="mb-3">
@@ -44,26 +74,26 @@ if (isset($_GET['modal'])) {
             <input type="text" name="rfc" class="form-control">
         </div>
         <div class="mb-3">
-            <label>Descripci��n del Servicio</label>
+            <label>Descripci¨®n del Servicio</label>
             <textarea name="descripcion_servicio" class="form-control"></textarea>
         </div>
         <button type="submit" class="btn btn-warning w-100">Guardar</button>
     </form>
 <?php
-    exit; // Evita que se cargue toda la p��gina si se usa en un modal
+    exit; // Evita que se cargue toda la p¨¢gina si se usa en un modal
 }
 
-// �9�8 Si no es un modal, cargar la vista completa
+// ”9Ý8 Si no es un modal, cargar la vista completa
 include 'header.php';
 ?>
-
 <div class="container mt-5">
     <h2 class="mb-4">Lista de Proveedores</h2>
     <table class="table table-striped">
         <thead>
             <tr>
                 <th>Nombre</th>
-                <th>Tel��fono</th>
+                <th>TelÃ©fono</th>
+                <th>Telefono</th>
                 <th>Email</th>
                 <th>Banco</th>
                 <th>Acciones</th>
@@ -81,12 +111,12 @@ include 'header.php';
                     <td><?php echo htmlspecialchars($proveedor['banco']); ?></td>
                     <td>
                         <a href="editar_proveedor.php?id=<?php echo $proveedor['id']; ?>" class="btn btn-sm btn-warning">Editar</a>
-                        <a href="eliminar_proveedor.php?id=<?php echo $proveedor['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('�0�7Seguro que deseas eliminar este proveedor?')">Eliminar</a>
+                        <a href="eliminar_proveedor.php?id=<?php echo $proveedor['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Â¿Seguro que deseas eliminar este proveedor?')">Eliminar</a>
+                        <a href="eliminar_proveedor.php?id=<?php echo $proveedor['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('0†7Seguro que deseas eliminar este proveedor?')">Eliminar</a>
                     </td>
                 </tr>
             <?php endwhile; ?>
         </tbody>
     </table>
 </div>
-
 <?php include 'footer.php'; ?>
