@@ -5,17 +5,18 @@ if (session_status() === PHP_SESSION_NONE) {
 include 'conexion.php'; // Conexión centralizada
 
 // --- Control de acceso dinámico por rol/puesto ---
-$rol = isset($_SESSION['rol']) ? trim(ucwords(strtolower($_SESSION['rol']))) : '';
-$puesto = $_SESSION['puesto'] ?? '';
-$acceso_total = ['Administrador', 'Gerente', 'Superadmin', 'CEO', 'Webmaster'];
+$rol    = strtolower(trim($_SESSION['user_role'] ?? $_SESSION['rol'] ?? ''));
+$puesto = strtolower(trim($_SESSION['puesto'] ?? ''));
+$acceso_total = ['administrador', 'gerente', 'superadmin', 'ceo', 'webmaster'];
 $tiene_acceso_mantenimiento = (
     in_array($rol, $acceso_total) ||
-    $rol === 'Servicio al Cliente' ||
-    in_array($rol, ['Camarista', 'Ama de Llaves'])
+    $rol === 'servicio al cliente' ||
+    in_array($rol, ['camarista', 'ama de llaves'])
 );
 if (!$tiene_acceso_mantenimiento) {
     header('Location: acceso_denegado.php');
     exit;
+}
 // Validar datos del formulario
 $alojamiento_id = $_POST['alojamiento_id'] ?? '';
 $descripcion = $_POST['descripcion_reporte'] ?? '';
@@ -28,6 +29,7 @@ $foto_url = null;
 // Validar campos obligatorios
 if (empty($alojamiento_id) || empty($descripcion) || empty($fecha_reporte)) {
     die("Error: Todos los campos obligatorios deben completarse.");
+}
 // Procesar imagen si se subió
 if (!empty($_FILES['foto']['name'])) {
     $targetDir = "uploads/"; // Asegúrate de que esta carpeta exista y tenga permisos
@@ -38,6 +40,7 @@ if (!empty($_FILES['foto']['name'])) {
     } else {
         die("Error al subir la foto.");
     }
+}
 // Paso 1: Insertar SIN folio
 $sql = "INSERT INTO ordenes_mantenimiento 
     (alojamiento_id, descripcion_reporte, foto, fecha_reporte, estatus, usuario_solicitante_id, unidad_negocio_id, notas) 
@@ -55,6 +58,7 @@ if ($stmt->execute()) {
     echo "✅ Reporte registrado con folio <strong>$folio</strong>. <a href='minipanel_mantenimiento.php'>Regresar</a>";
 } else {
     echo "❌ Error al registrar el reporte: " . $stmt->error;
+}
 $stmt->close();
 $conn->close();
 ?>

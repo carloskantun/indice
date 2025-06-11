@@ -14,6 +14,7 @@ $filtro = ($rol === 'superadmin' || $rol === 'admin') ? "1=1" : "usuario_solicit
 // Contar órdenes propias o del negocio
 $total_ordenes = $conn->query("SELECT COUNT(*) AS total FROM ordenes_compra WHERE $filtro")->fetch_assoc()['total'];
 $total_proveedores = $conn->query("SELECT COUNT(*) AS total FROM proveedores")->fetch_assoc()['total'];
+$total_usuarios = $conn->query("SELECT COUNT(*) AS total FROM usuarios")->fetch_assoc()['total'];
 ?>
 <!DOCTYPE html>
 <html lang="es">

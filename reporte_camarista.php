@@ -5,10 +5,11 @@ if (session_status() === PHP_SESSION_NONE) {
 include 'auth.php';
 
 $puesto = strtolower(trim($_SESSION['puesto'] ?? ''));
-$rol = isset($_SESSION['rol']) ? trim(ucwords(strtolower($_SESSION['rol']))) : '';
-if (!in_array($rol, ['Camarista', 'Ama de Llaves'])) {
+$rol    = strtolower(trim($_SESSION['user_role'] ?? $_SESSION['rol'] ?? ''));
+if (!in_array($rol, ['camarista', 'ama de llaves'])) {
     header('Location: minipanel_mantenimiento.php');
     exit;
+}
 include 'conexion.php';
 ?>
 <!DOCTYPE html>
