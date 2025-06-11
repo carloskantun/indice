@@ -1,7 +1,5 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+session_start();
 include 'auth.php';
 include 'conexion.php';
 
@@ -19,6 +17,7 @@ if (isset($_GET['modal'])) {
         <label for="nombre" class="form-label">Nombre Completo</label>
         <input type="text" class="form-control" id="nombre" name="nombre" required>
     </div>
+
     <!-- Teléfono -->
     <div class="mb-3">
         <label for="telefono" class="form-label">Teléfono</label>
@@ -34,11 +33,13 @@ if (isset($_GET['modal'])) {
         <label for="puesto" class="form-label">Puesto</label>
         <input type="text" class="form-control" id="puesto" name="puesto" required>
     </div>
+
     <!-- Contraseña -->
     <div class="mb-3">
         <label for="password" class="form-label">Contraseña</label>
         <input type="password" class="form-control" id="password" name="password" required>
     </div>
+
     <!-- Rol -->
     <div class="mb-3">
         <label for="rol" class="form-label">Rol</label>
@@ -48,6 +49,7 @@ if (isset($_GET['modal'])) {
             <option value="superadmin">Superadministrador</option>
         </select>
     </div>
+
     <button type="submit" class="btn btn-primary w-100">Registrar Usuario</button>
 </form>
 <?php
@@ -76,6 +78,7 @@ include 'header.php';
             while ($usuario = $usuarios->fetch_assoc()):
                 $puede_editar = false;
                 $puede_eliminar = false;
+
                 if ($_SESSION['user_role'] === 'superadmin') {
                     $puede_editar = $puede_eliminar = true;
                 } elseif ($_SESSION['user_role'] === 'admin' && $usuario['rol'] !== 'superadmin') {
@@ -101,4 +104,5 @@ include 'header.php';
         </tbody>
     </table>
 </div>
+
 <?php include 'footer.php'; ?>

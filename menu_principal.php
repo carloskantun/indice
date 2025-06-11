@@ -1,13 +1,10 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+session_start();
 include 'auth.php';
 include 'router_roles.php';
 include 'verificar_acceso.php';
 
 redireccionar_por_puesto(obtener_puesto());
-
 $rol    = strtolower(trim($_SESSION['user_role'] ?? $_SESSION['rol'] ?? ''));
 $puesto = strtolower(trim($_SESSION['puesto'] ?? ''));
 
@@ -19,6 +16,13 @@ function verModulo($modulo) {
     if (in_array($rol, $altos)) {
         return true;
     }
+$rol = isset($_SESSION['rol']) ? trim(ucwords(strtolower($_SESSION['rol']))) : '';
+
+function verModulo($modulo) {
+    global $rol;
+    $ver_todo = ['Administrador', 'Gerente', 'Superadmin', 'CEO', 'Webmaster'];
+    $ver_mantenimiento = ['Servicio al Cliente', 'Camarista', 'Ama de Llaves'];
+
 
     switch ($modulo) {
         case 'mantenimiento':
@@ -30,7 +34,7 @@ function verModulo($modulo) {
         default:
             return false;
     }
-}
+
 
 $modulos_disponibles = ['ordenes_compra', 'mantenimiento', 'servicio_cliente', 'usuarios', 'kpis', 'configuracion', 'camarista'];
 $puede_ver_algo = false;
@@ -39,6 +43,7 @@ foreach ($modulos_disponibles as $m) {
         $puede_ver_algo = true;
         break;
     }
+
 }
 ?>
 <!DOCTYPE html>
@@ -81,10 +86,12 @@ foreach ($modulos_disponibles as $m) {
     <div class="container mt-5">
         <h2 class="mb-4 text-center">Bienvenido, <?php echo htmlspecialchars($_SESSION['user_name']); ?></h2>
         <h4 class="mb-4 text-center">Selecciona un módulo</h4>
+
         <div class="row justify-content-center g-4">
 
             <?php if (verModulo('ordenes_compra')): ?>
-                <div class="col-12 col-md-4">
+
+          <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="minipanel.php">
                             <span class="modulo-icon">📦</span>
@@ -95,6 +102,7 @@ foreach ($modulos_disponibles as $m) {
             <?php endif; ?>
 
             <?php if (verModulo('mantenimiento')): ?>
+
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="minipanel_mantenimiento.php">
@@ -106,6 +114,7 @@ foreach ($modulos_disponibles as $m) {
             <?php endif; ?>
 
             <?php if (verModulo('servicio_cliente')): ?>
+
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="minipanel_servicio_cliente.php">
@@ -117,6 +126,7 @@ foreach ($modulos_disponibles as $m) {
             <?php endif; ?>
 
             <?php if (verModulo('usuarios')): ?>
+
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="usuarios.php">
@@ -128,6 +138,7 @@ foreach ($modulos_disponibles as $m) {
             <?php endif; ?>
 
             <?php if (verModulo('kpis')): ?>
+
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="kpis_mantenimiento.php">
@@ -139,6 +150,7 @@ foreach ($modulos_disponibles as $m) {
             <?php endif; ?>
 
             <?php if (verModulo('configuracion')): ?>
+
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="panel_config.php">
@@ -167,7 +179,6 @@ foreach ($modulos_disponibles as $m) {
                     </div>
                 </div>
             <?php endif; ?>
-
         </div>
     </div>
 </body>
