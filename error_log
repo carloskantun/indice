@@ -1,28 +1,45 @@
-[03-Jun-2025 15:06:20 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 31
-[03-Jun-2025 15:06:20 America/Mexico_City] PHP Warning:  Undefined variable $fecha_fin in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 34
-[03-Jun-2025 15:06:20 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 111
-[03-Jun-2025 15:06:20 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 146
-[03-Jun-2025 15:06:20 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 164
-[03-Jun-2025 15:06:20 America/Mexico_City] PHP Warning:  Undefined variable $fecha_fin in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 165
-[03-Jun-2025 15:06:22 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 31
-[03-Jun-2025 15:06:22 America/Mexico_City] PHP Warning:  Undefined variable $fecha_fin in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 34
-[03-Jun-2025 15:06:22 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 111
-[03-Jun-2025 15:06:22 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 146
-[03-Jun-2025 15:06:22 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 164
-[03-Jun-2025 15:06:22 America/Mexico_City] PHP Warning:  Undefined variable $fecha_fin in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 165
-[03-Jun-2025 15:06:29 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 31
-[03-Jun-2025 15:06:29 America/Mexico_City] PHP Warning:  Undefined variable $fecha_fin in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 34
-[03-Jun-2025 15:06:29 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 111
-[03-Jun-2025 15:06:29 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 146
-[03-Jun-2025 15:06:29 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 164
-[03-Jun-2025 15:06:29 America/Mexico_City] PHP Warning:  Undefined variable $fecha_fin in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 165
-[03-Jun-2025 15:06:31 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 31
-[03-Jun-2025 15:06:31 America/Mexico_City] PHP Warning:  Undefined variable $fecha_fin in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 34
-[03-Jun-2025 15:06:31 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 111
-[03-Jun-2025 15:06:31 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 146
-[03-Jun-2025 15:06:31 America/Mexico_City] PHP Warning:  Undefined variable $fecha_inicio in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 164
-[03-Jun-2025 15:06:31 America/Mexico_City] PHP Warning:  Undefined variable $fecha_fin in /home1/corazon/public_html/indice/kpis_mantenimiento_data.php on line 165
-[05-Jun-2025 15:09:37 America/Mexico_City] PHP Warning:  include(header.php): Failed to open stream: No such file or directory in /home1/corazon/public_html/indice/alojamientos.php on line 41
-[05-Jun-2025 15:09:37 America/Mexico_City] PHP Warning:  include(): Failed opening 'header.php' for inclusion (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home1/corazon/public_html/indice/alojamientos.php on line 41
-[05-Jun-2025 15:09:37 America/Mexico_City] PHP Warning:  include(footer.php): Failed to open stream: No such file or directory in /home1/corazon/public_html/indice/alojamientos.php on line 80
-[05-Jun-2025 15:09:37 America/Mexico_City] PHP Warning:  include(): Failed opening 'footer.php' for inclusion (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home1/corazon/public_html/indice/alojamientos.php on line 80
+[09-Jun-2025 10:16:55 America/Mexico_City] PHP Warning:  include(header.php): Failed to open stream: No such file or directory in /home1/corazon/public_html/indice/usuarios.php on line 63
+[09-Jun-2025 10:16:55 America/Mexico_City] PHP Warning:  include(): Failed opening 'header.php' for inclusion (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home1/corazon/public_html/indice/usuarios.php on line 63
+[09-Jun-2025 10:16:55 America/Mexico_City] PHP Warning:  include(footer.php): Failed to open stream: No such file or directory in /home1/corazon/public_html/indice/usuarios.php on line 112
+[09-Jun-2025 10:16:55 America/Mexico_City] PHP Warning:  include(): Failed opening 'footer.php' for inclusion (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home1/corazon/public_html/indice/usuarios.php on line 112
+[09-Jun-2025 10:17:03 America/Mexico_City] PHP Warning:  Undefined variable $total_usuarios in /home1/corazon/public_html/indice/panel_config.php on line 57
+[09-Jun-2025 11:10:03 America/Mexico_City] PHP Warning:  include(header.php): Failed to open stream: No such file or directory in /home1/corazon/public_html/indice/proveedores.php on line 57
+[09-Jun-2025 11:10:03 America/Mexico_City] PHP Warning:  include(): Failed opening 'header.php' for inclusion (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home1/corazon/public_html/indice/proveedores.php on line 57
+[09-Jun-2025 11:10:03 America/Mexico_City] PHP Warning:  include(footer.php): Failed to open stream: No such file or directory in /home1/corazon/public_html/indice/proveedores.php on line 92
+[09-Jun-2025 11:10:03 America/Mexico_City] PHP Warning:  include(): Failed opening 'footer.php' for inclusion (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home1/corazon/public_html/indice/proveedores.php on line 92
+[09-Jun-2025 11:11:07 America/Mexico_City] PHP Warning:  Undefined variable $total_usuarios in /home1/corazon/public_html/indice/panel_config.php on line 57
+[09-Jun-2025 12:38:34 America/Mexico_City] PHP Warning:  include(header.php): Failed to open stream: No such file or directory in /home1/corazon/public_html/indice/usuarios.php on line 63
+[09-Jun-2025 12:38:34 America/Mexico_City] PHP Warning:  include(): Failed opening 'header.php' for inclusion (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home1/corazon/public_html/indice/usuarios.php on line 63
+[09-Jun-2025 12:38:34 America/Mexico_City] PHP Warning:  include(footer.php): Failed to open stream: No such file or directory in /home1/corazon/public_html/indice/usuarios.php on line 112
+[09-Jun-2025 12:38:34 America/Mexico_City] PHP Warning:  include(): Failed opening 'footer.php' for inclusion (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home1/corazon/public_html/indice/usuarios.php on line 112
+[09-Jun-2025 12:39:54 America/Mexico_City] PHP Warning:  include(header.php): Failed to open stream: No such file or directory in /home1/corazon/public_html/indice/usuarios.php on line 63
+[09-Jun-2025 12:39:54 America/Mexico_City] PHP Warning:  include(): Failed opening 'header.php' for inclusion (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home1/corazon/public_html/indice/usuarios.php on line 63
+[09-Jun-2025 12:39:54 America/Mexico_City] PHP Warning:  include(footer.php): Failed to open stream: No such file or directory in /home1/corazon/public_html/indice/usuarios.php on line 112
+[09-Jun-2025 12:39:54 America/Mexico_City] PHP Warning:  include(): Failed opening 'footer.php' for inclusion (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home1/corazon/public_html/indice/usuarios.php on line 112
+[10-Jun-2025 10:18:34 America/Mexico_City] PHP Warning:  Undefined variable $total_usuarios in /home1/corazon/public_html/indice/panel_config.php on line 57
+[10-Jun-2025 10:18:36 America/Mexico_City] PHP Warning:  include(header.php): Failed to open stream: No such file or directory in /home1/corazon/public_html/indice/usuarios.php on line 63
+[10-Jun-2025 10:18:36 America/Mexico_City] PHP Warning:  include(): Failed opening 'header.php' for inclusion (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home1/corazon/public_html/indice/usuarios.php on line 63
+[10-Jun-2025 10:18:36 America/Mexico_City] PHP Warning:  include(footer.php): Failed to open stream: No such file or directory in /home1/corazon/public_html/indice/usuarios.php on line 112
+[10-Jun-2025 10:18:36 America/Mexico_City] PHP Warning:  include(): Failed opening 'footer.php' for inclusion (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home1/corazon/public_html/indice/usuarios.php on line 112
+[10-Jun-2025 10:18:54 America/Mexico_City] PHP Warning:  include(header.php): Failed to open stream: No such file or directory in /home1/corazon/public_html/indice/usuarios.php on line 63
+[10-Jun-2025 10:18:54 America/Mexico_City] PHP Warning:  include(): Failed opening 'header.php' for inclusion (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home1/corazon/public_html/indice/usuarios.php on line 63
+[10-Jun-2025 10:18:54 America/Mexico_City] PHP Warning:  include(footer.php): Failed to open stream: No such file or directory in /home1/corazon/public_html/indice/usuarios.php on line 112
+[10-Jun-2025 10:18:54 America/Mexico_City] PHP Warning:  include(): Failed opening 'footer.php' for inclusion (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home1/corazon/public_html/indice/usuarios.php on line 112
+[10-Jun-2025 10:23:22 America/Mexico_City] PHP Warning:  Undefined variable $user in /home1/corazon/public_html/indice/login.php on line 12
+[10-Jun-2025 10:23:22 America/Mexico_City] PHP Warning:  Trying to access array offset on value of type null in /home1/corazon/public_html/indice/login.php on line 12
+[10-Jun-2025 10:23:31 America/Mexico_City] PHP Warning:  Undefined variable $user in /home1/corazon/public_html/indice/login.php on line 12
+[10-Jun-2025 10:23:31 America/Mexico_City] PHP Warning:  Trying to access array offset on value of type null in /home1/corazon/public_html/indice/login.php on line 12
+[10-Jun-2025 10:23:46 America/Mexico_City] PHP Warning:  Undefined variable $user in /home1/corazon/public_html/indice/login.php on line 12
+[10-Jun-2025 10:23:46 America/Mexico_City] PHP Warning:  Trying to access array offset on value of type null in /home1/corazon/public_html/indice/login.php on line 12
+[10-Jun-2025 10:23:47 America/Mexico_City] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home1/corazon/public_html/indice/minipanel_mantenimiento.php on line 11
+[10-Jun-2025 10:23:47 America/Mexico_City] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home1/corazon/public_html/indice/minipanel_mantenimiento.php:11) in /home1/corazon/public_html/indice/minipanel_mantenimiento.php on line 25
+[10-Jun-2025 14:54:04 America/Mexico_City] PHP Warning:  Undefined variable $total_usuarios in /home1/corazon/public_html/indice/panel_config.php on line 57
+[10-Jun-2025 14:54:06 America/Mexico_City] PHP Warning:  include(header.php): Failed to open stream: No such file or directory in /home1/corazon/public_html/indice/usuarios.php on line 63
+[10-Jun-2025 14:54:06 America/Mexico_City] PHP Warning:  include(): Failed opening 'header.php' for inclusion (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home1/corazon/public_html/indice/usuarios.php on line 63
+[10-Jun-2025 14:54:06 America/Mexico_City] PHP Warning:  include(footer.php): Failed to open stream: No such file or directory in /home1/corazon/public_html/indice/usuarios.php on line 112
+[10-Jun-2025 14:54:06 America/Mexico_City] PHP Warning:  include(): Failed opening 'footer.php' for inclusion (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home1/corazon/public_html/indice/usuarios.php on line 112
+[11-Jun-2025 05:39:28 America/Mexico_City] PHP Warning:  include(header.php): Failed to open stream: No such file or directory in /home1/corazon/public_html/indice/usuarios.php on line 63
+[11-Jun-2025 05:39:28 America/Mexico_City] PHP Warning:  include(): Failed opening 'header.php' for inclusion (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home1/corazon/public_html/indice/usuarios.php on line 63
+[11-Jun-2025 05:39:28 America/Mexico_City] PHP Warning:  include(footer.php): Failed to open stream: No such file or directory in /home1/corazon/public_html/indice/usuarios.php on line 112
+[11-Jun-2025 05:39:28 America/Mexico_City] PHP Warning:  include(): Failed opening 'footer.php' for inclusion (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home1/corazon/public_html/indice/usuarios.php on line 112
+[11-Jun-2025 05:42:34 America/Mexico_City] PHP Warning:  Undefined variable $total_usuarios in /home1/corazon/public_html/indice/panel_config.php on line 57

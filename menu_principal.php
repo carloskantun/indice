@@ -1,7 +1,5 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+session_start();
 include 'auth.php';
 include 'router_roles.php';
 include 'verificar_acceso.php';
@@ -30,6 +28,9 @@ function verModulo($modulo) {
         default:
             return false;
     }
+function tienePuesto($puesto) {
+    $lista = array_map('trim', explode(',', strtolower($_SESSION['puesto'] ?? '')));
+    return in_array(strtolower($puesto), $lista);
 }
 ?>
 <!DOCTYPE html>
@@ -72,9 +73,12 @@ function verModulo($modulo) {
     <div class="container mt-5">
         <h2 class="mb-4 text-center">Bienvenido, <?php echo htmlspecialchars($_SESSION['user_name']); ?></h2>
         <h4 class="mb-4 text-center">Selecciona un módulo</h4>
+
         <div class="row justify-content-center g-4">
 
             <?php if (verModulo('ordenes_compra')): ?>
+
+            <?php if (puede_ver_modulo('compras')): ?>
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="minipanel.php">
@@ -86,6 +90,8 @@ function verModulo($modulo) {
             <?php endif; ?>
 
             <?php if (verModulo('mantenimiento')): ?>
+
+            <?php if (tienePuesto('mantenimiento')): ?>
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="minipanel_mantenimiento.php">
@@ -97,6 +103,7 @@ function verModulo($modulo) {
             <?php endif; ?>
 
             <?php if (verModulo('servicio_cliente')): ?>
+            <?php if (tienePuesto('servicio al cliente')): ?>
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="minipanel_servicio_cliente.php">
@@ -108,6 +115,7 @@ function verModulo($modulo) {
             <?php endif; ?>
 
             <?php if (verModulo('usuarios')): ?>
+            <?php if (puede_ver_modulo('usuarios')): ?>
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="usuarios.php">
@@ -119,6 +127,7 @@ function verModulo($modulo) {
             <?php endif; ?>
 
             <?php if (verModulo('kpis')): ?>
+            <?php if (puede_ver_modulo('kpis')): ?>
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="kpis_mantenimiento.php">
@@ -130,6 +139,7 @@ function verModulo($modulo) {
             <?php endif; ?>
 
             <?php if (verModulo('configuracion')): ?>
+            <?php if (puede_ver_modulo('configuracion')): ?>
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="panel_config.php">
@@ -150,7 +160,6 @@ function verModulo($modulo) {
                     </div>
                 </div>
             <?php endif; ?>
-
         </div>
     </div>
 </body>
