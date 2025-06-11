@@ -5,6 +5,7 @@ include 'router_roles.php';
 include 'verificar_acceso.php';
 
 redireccionar_por_puesto(obtener_puesto());
+
 $rol    = strtolower(trim($_SESSION['user_role'] ?? $_SESSION['rol'] ?? ''));
 $puesto = strtolower(trim($_SESSION['puesto'] ?? ''));
 
@@ -12,17 +13,9 @@ function verModulo($modulo) {
     global $rol, $puesto;
     $altos = ['superadmin', 'administrador', 'gerente', 'ceo', 'webmaster'];
 
-    // Roles privilegiados ven todo
     if (in_array($rol, $altos)) {
         return true;
     }
-$rol = isset($_SESSION['rol']) ? trim(ucwords(strtolower($_SESSION['rol']))) : '';
-
-function verModulo($modulo) {
-    global $rol;
-    $ver_todo = ['Administrador', 'Gerente', 'Superadmin', 'CEO', 'Webmaster'];
-    $ver_mantenimiento = ['Servicio al Cliente', 'Camarista', 'Ama de Llaves'];
-
 
     switch ($modulo) {
         case 'mantenimiento':
@@ -34,8 +27,9 @@ function verModulo($modulo) {
         default:
             return false;
     }
+}
 
-
+// Evaluar si tiene acceso a algo
 $modulos_disponibles = ['ordenes_compra', 'mantenimiento', 'servicio_cliente', 'usuarios', 'kpis', 'configuracion', 'camarista'];
 $puede_ver_algo = false;
 foreach ($modulos_disponibles as $m) {
@@ -43,7 +37,6 @@ foreach ($modulos_disponibles as $m) {
         $puede_ver_algo = true;
         break;
     }
-
 }
 ?>
 <!DOCTYPE html>
