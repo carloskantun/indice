@@ -3638,3 +3638,264 @@ FILES: Array
 
 )
 ✅ Actualización exitosa en la base de datos.
+
+[2025-06-09 09:15:48] Intento de completar orden 2506-0281
+POST: Array
+(
+    [folio] => 2506-0281
+    [fecha_completado] => 2025-06-07
+    [detalle_completado] => se paso a checar posible fuga ,se revisaron idrosaitarios,monomando y mescladora ,no se encontro fuga 
+    [costo_final] => 500
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-09 09:16:59] Intento de completar orden 2506-0271
+POST: Array
+(
+    [folio] => 2506-0271
+    [fecha_completado] => 2025-06-09
+    [detalle_completado] => se limpio el desague
+    [costo_final] => 450
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-09 09:23:17] Intento de completar orden 2506-0249
+POST: Array
+(
+    [folio] => 2506-0249
+    [fecha_completado] => 2025-06-06
+    [detalle_completado] => secambiaron tapas de quemadores
+    [costo_final] => 480
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-09 09:25:32] Intento de completar orden 2506-0224
+POST: Array
+(
+    [folio] => 2506-0224
+    [fecha_completado] => 2025-06-06
+    [detalle_completado] => se le dio retoques de pintura
+    [costo_final] => 200
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-09 09:26:35] Intento de completar orden 2506-0223
+POST: Array
+(
+    [folio] => 2506-0223
+    [fecha_completado] => 2025-06-06
+    [detalle_completado] => se le dio retoque de pintura 
+    [costo_final] => 200
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-09 09:37:22] Intento de completar orden 2506-0307
+POST: Array
+(
+    [folio] => 2506-0307
+    [fecha_completado] => 2025-06-06
+    [detalle_completado] => se paso arevisar aire acondicionado fayando, se aseguro ventilador suelto
+    [costo_final] => 700
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+[2025-06-09 12:09:36] SELECT folio, fecha_reporte, descripcion_reporte, estatus, nivel, fecha_completado, detalle_completado, costo_final,
+               (SELECT nombre FROM alojamientos WHERE id = alojamiento_id) AS alojamiento,
+               (SELECT nombre FROM usuarios WHERE id = usuario_solicitante_id) AS usuario,
+               (SELECT nombre FROM unidades_negocio WHERE id = unidad_negocio_id) AS unidad_negocio,
+               (SELECT nombre FROM usuarios WHERE id = quien_realizo_id) AS quien_realizo
+        FROM ordenes_mantenimiento WHERE (COALESCE(TRIM(estatus), 'Pendiente') = 'Pendiente') AND fecha_reporte BETWEEN '2025-06-01' AND '2025-06-09' ORDER BY id ASC
+[2025-06-09 12:09:59] SELECT folio, fecha_reporte, descripcion_reporte, estatus, nivel, fecha_completado, detalle_completado, costo_final,
+               (SELECT nombre FROM alojamientos WHERE id = alojamiento_id) AS alojamiento,
+               (SELECT nombre FROM usuarios WHERE id = usuario_solicitante_id) AS usuario,
+               (SELECT nombre FROM unidades_negocio WHERE id = unidad_negocio_id) AS unidad_negocio,
+               (SELECT nombre FROM usuarios WHERE id = quien_realizo_id) AS quien_realizo
+        FROM ordenes_mantenimiento WHERE estatus = 'pendiente' AND fecha_reporte BETWEEN '2025-06-01' AND '2025-06-09' ORDER BY id ASC
+[2025-06-09 12:11:24] SELECT folio, fecha_reporte, descripcion_reporte, estatus, nivel, fecha_completado, detalle_completado, costo_final,
+               (SELECT nombre FROM alojamientos WHERE id = alojamiento_id) AS alojamiento,
+               (SELECT nombre FROM usuarios WHERE id = usuario_solicitante_id) AS usuario,
+               (SELECT nombre FROM unidades_negocio WHERE id = unidad_negocio_id) AS unidad_negocio,
+               (SELECT nombre FROM usuarios WHERE id = quien_realizo_id) AS quien_realizo
+        FROM ordenes_mantenimiento WHERE (COALESCE(TRIM(estatus), 'Pendiente') = 'Pendiente') AND fecha_reporte BETWEEN '2025-06-01' AND '2025-06-09' ORDER BY id ASC
+[2025-06-09 12:34:31] SELECT folio, fecha_reporte, descripcion_reporte, estatus, nivel, fecha_completado, detalle_completado, costo_final,
+               (SELECT nombre FROM alojamientos WHERE id = alojamiento_id) AS alojamiento,
+               (SELECT nombre FROM usuarios WHERE id = usuario_solicitante_id) AS usuario,
+               (SELECT nombre FROM unidades_negocio WHERE id = unidad_negocio_id) AS unidad_negocio,
+               (SELECT nombre FROM usuarios WHERE id = quien_realizo_id) AS quien_realizo
+        FROM ordenes_mantenimiento WHERE (COALESCE(TRIM(estatus), 'Pendiente') = 'Pendiente') AND fecha_reporte BETWEEN '2025-06-01' AND '2025-06-09' ORDER BY id ASC
+[2025-06-09 12:44:20] SELECT folio, fecha_reporte, descripcion_reporte, estatus, nivel, fecha_completado, detalle_completado, costo_final,
+               (SELECT nombre FROM alojamientos WHERE id = alojamiento_id) AS alojamiento,
+               (SELECT nombre FROM usuarios WHERE id = usuario_solicitante_id) AS usuario,
+               (SELECT nombre FROM unidades_negocio WHERE id = unidad_negocio_id) AS unidad_negocio,
+               (SELECT nombre FROM usuarios WHERE id = quien_realizo_id) AS quien_realizo
+        FROM ordenes_mantenimiento WHERE (COALESCE(TRIM(estatus), 'Pendiente') = 'Pendiente') ORDER BY id ASC
+[2025-06-09 13:14:49] SELECT folio, fecha_reporte, descripcion_reporte, estatus, nivel, fecha_completado, detalle_completado, costo_final,
+               (SELECT nombre FROM alojamientos WHERE id = alojamiento_id) AS alojamiento,
+               (SELECT nombre FROM usuarios WHERE id = usuario_solicitante_id) AS usuario,
+               (SELECT nombre FROM unidades_negocio WHERE id = unidad_negocio_id) AS unidad_negocio,
+               (SELECT nombre FROM usuarios WHERE id = quien_realizo_id) AS quien_realizo
+        FROM ordenes_mantenimiento WHERE (COALESCE(TRIM(estatus), 'Pendiente') = 'Pendiente') ORDER BY id ASC
+
+[2025-06-10 08:50:44] Intento de completar orden 2506-0270
+POST: Array
+(
+    [folio] => 2506-0270
+    [fecha_completado] => 2025-06-09
+    [detalle_completado] => se instalo repisa en la oficina
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+[2025-06-10 08:56:18] SELECT folio, fecha_reporte, descripcion_reporte, estatus, nivel, fecha_completado, detalle_completado, costo_final,
+               (SELECT nombre FROM alojamientos WHERE id = alojamiento_id) AS alojamiento,
+               (SELECT nombre FROM usuarios WHERE id = usuario_solicitante_id) AS usuario,
+               (SELECT nombre FROM unidades_negocio WHERE id = unidad_negocio_id) AS unidad_negocio,
+               (SELECT nombre FROM usuarios WHERE id = quien_realizo_id) AS quien_realizo
+        FROM ordenes_mantenimiento ORDER BY id ASC
+[2025-06-10 09:54:17] SELECT folio, fecha_reporte, descripcion_reporte, estatus, nivel, fecha_completado, detalle_completado, costo_final,
+               (SELECT nombre FROM alojamientos WHERE id = alojamiento_id) AS alojamiento,
+               (SELECT nombre FROM usuarios WHERE id = usuario_solicitante_id) AS usuario,
+               (SELECT nombre FROM unidades_negocio WHERE id = unidad_negocio_id) AS unidad_negocio,
+               (SELECT nombre FROM usuarios WHERE id = quien_realizo_id) AS quien_realizo
+        FROM ordenes_mantenimiento ORDER BY id ASC
+[2025-06-10 09:55:02] SELECT folio, fecha_reporte, descripcion_reporte, estatus, nivel, fecha_completado, detalle_completado, costo_final,
+               (SELECT nombre FROM alojamientos WHERE id = alojamiento_id) AS alojamiento,
+               (SELECT nombre FROM usuarios WHERE id = usuario_solicitante_id) AS usuario,
+               (SELECT nombre FROM unidades_negocio WHERE id = unidad_negocio_id) AS unidad_negocio,
+               (SELECT nombre FROM usuarios WHERE id = quien_realizo_id) AS quien_realizo
+        FROM ordenes_mantenimiento WHERE (COALESCE(TRIM(estatus), 'Pendiente') = 'Pendiente') ORDER BY id ASC
+
+[2025-06-10 10:17:04] Intento de completar orden MTTO-2504-0026
+POST: Array
+(
+    [folio] => MTTO-2504-0026
+    [fecha_completado] => 2025-06-09
+    [detalle_completado] => se dio retoque de pintura
+    [costo_final] => 1200
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-11 08:54:11] Intento de completar orden 2506-0280
+POST: Array
+(
+    [folio] => 2506-0280
+    [fecha_completado] => 2025-06-10
+    [detalle_completado] => se reparo escalera momentaneamente y se dejo funcional
+    [costo_final] => 4000
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.

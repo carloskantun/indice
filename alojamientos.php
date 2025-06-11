@@ -1,10 +1,20 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+session_start();
 include 'auth.php';
 include 'conexion.php';
 
+// 📌 Si es modal, solo carga el formulario
+if (isset($_GET['modal'])) {
+?>
+    <form action="procesar_alojamiento.php" method="POST">
+        <div class="mb-3">
+            <label>Nombre del Alojamiento</label>
+            <input type="text" name="nombre" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label>Dirección</label>
+            <textarea name="direccion" class="form-control"></textarea>
+        </div>
         <div class="mb-3">
             <label>Unidad de Negocio</label>
             <select name="unidad_negocio_id" class="form-control">
@@ -27,7 +37,7 @@ include 'conexion.php';
     exit;
 }
 
-// 鈥�9脻8 Vista completa si no es modal
+// 📌 Vista completa si no es modal
 include 'header.php';
 ?>
 
@@ -37,7 +47,7 @@ include 'header.php';
         <thead>
             <tr>
                 <th>Nombre</th>
-                <th>Direcci篓庐n</th>
+                <th>Dirección</th>
                 <th>Unidad de Negocio</th>
                 <th>Notas</th>
                 <th>Acciones</th>
@@ -59,7 +69,7 @@ include 'header.php';
                     <td><?php echo htmlspecialchars($a['notas']); ?></td>
                     <td>
                         <a href="editar_alojamiento.php?id=<?php echo $a['id']; ?>" class="btn btn-sm btn-warning">Editar</a>
-                        <a href="eliminar_alojamiento.php?id=<?php echo $a['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('聛0鈥�7Seguro que deseas eliminar este alojamiento?')">Eliminar</a>
+                        <a href="eliminar_alojamiento.php?id=<?php echo $a['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro que deseas eliminar este alojamiento?')">Eliminar</a>
                     </td>
                 </tr>
             <?php endwhile; ?>
