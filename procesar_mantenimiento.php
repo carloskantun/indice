@@ -1,16 +1,9 @@
 <?php
 include 'conexion.php'; // Conexión centralizada
+include 'includes/permisos.php'; // ✅ línea que importa la función
 
-// --- Control de acceso dinámico por rol/puesto ---
-$rol    = strtolower(trim($_SESSION['user_role'] ?? $_SESSION['rol'] ?? ''));
-$puesto = strtolower(trim($_SESSION['puesto'] ?? ''));
-$acceso_total = ['administrador', 'gerente', 'superadmin', 'ceo', 'webmaster'];
-$tiene_acceso_mantenimiento = (
-    in_array($rol, $acceso_total) ||
-    $rol === 'servicio al cliente' ||
-    in_array($rol, ['camarista', 'ama de llaves'])
-);
-if (!$tiene_acceso_mantenimiento) {
+// --- Control de acceso dinámico por módulo ---
+if (!verificaAccesoModulo('mantenimiento')) {
     header('Location: acceso_denegado.php');
     exit;
 }

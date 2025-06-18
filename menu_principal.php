@@ -39,6 +39,7 @@ foreach ($modulos_disponibles as $m) {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>

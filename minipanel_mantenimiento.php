@@ -15,12 +15,12 @@ $ordenes_por_liquidar = $conn->query("SELECT COUNT(*) AS total FROM ordenes_mant
 $ordenes_vencidas = $conn->query("SELECT COUNT(*) AS total FROM ordenes_mantenimiento WHERE estatus = 'Vencido'")->fetch_assoc()['total'];
 
 // 98 Paginacin
-$registros_por_pagina = 500;
+$registros_por_pagina = 1500;
 $pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $offset = ($pagina_actual - 1) * $registros_por_pagina;
 
 // 98 Construccin de la consulta con filtros dinmicos
-$query = "SELECT folio, fecha_reporte, descripcion_reporte, foto, estatus, nivel, quien_realizo_id, fecha_completado, detalle_completado, foto_completado, costo_final,
+$query = "SELECT folio, fecha_reporte, descripcion_reporte, foto, estatus, nivel, quien_realizo_id, fecha_completado, detalle_completado, foto_completado, costo_final, ponderacion,
                  (SELECT nombre FROM alojamientos WHERE id = alojamiento_id) AS alojamiento, 
                  (SELECT nombre FROM usuarios WHERE id = usuario_solicitante_id) AS usuario,
                  (SELECT nombre FROM unidades_negocio WHERE id = unidad_negocio_id) AS unidad_negocio
@@ -350,6 +350,7 @@ function corregirCodificacion($cadena) {
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="detalle_completado"> Detalle</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="foto_completado"> Foto Final</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="costo_final"> Costo Final</label></li>
+    <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="ponderacion"> Ponderación</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="ver_pdf"> Ver PDF</label></li>
   </ul>
   <button id="btnFiltroPendientes" class="btn btn-outline-primary btn-custom" type="button">Pendientes</button>
@@ -380,6 +381,7 @@ $columnas_ordenables = [
   'detalle_completado' => 'Detalle',
   'foto_completado' => 'Foto Final',
   'costo_final' => 'Costo Final',
+  'ponderacion' => 'Ponderación',
   'ver_pdf' => 'PDF'
 ];
 
@@ -529,6 +531,23 @@ foreach ($columnas_ordenables as $col => $label):
         <span class="text-muted">Sin foto</span>
     <?php endif; ?>
 </td>
+<!-- Ponderación -->
+<td class="col-ponderacion">
+    <?php if ($_SESSION['user_role'] === 'superadmin' || $_SESSION['user_role'] === 'admin'): ?>
+        <form method="POST" class="ponderacion-form">
+            <input type="hidden" name="orden_id" value="<?php echo $orden['folio']; ?>">
+            <select name="ponderacion" class="form-select ponderacion-select" data-id="<?php echo $orden['folio']; ?>">
+                <?php for ($i = 1; $i <= 4; $i++): ?>
+                    <option value="<?php echo $i; ?>" <?php echo ($orden['ponderacion'] == $i) ? 'selected' : ''; ?>>
+                        <?php echo $i; ?>
+                    </option>
+                <?php endfor; ?>
+            </select>
+        </form>
+    <?php else: ?>
+        <?php echo htmlspecialchars($orden['ponderacion'] ?? 1); ?>
+    <?php endif; ?>
+</td>
 <td class="col-costo_final">
     <?php 
         echo isset($orden['costo_final']) && $orden['costo_final'] !== '' 
@@ -536,6 +555,7 @@ foreach ($columnas_ordenables as $col => $label):
             : '<span class="text-muted">—</span>'; 
     ?>
 </td>
+
 <td class="col-ver_pdf">
   <a href="generar_pdf_mantenimiento.php?folio=<?php echo $orden['folio']; ?>" target="_blank" class="btn btn-sm btn-outline-dark">Ver PDF</a>
 </td>
@@ -706,6 +726,28 @@ document.addEventListener("DOMContentLoaded", function () {
         select.addEventListener("change", function () {
             actualizarCampo("actualizar_nivel_mantenimiento.php", this.dataset.id, "nivel", this.value);
         });
+    });
+});
+// Ponderación
+document.querySelectorAll(".ponderacion-select").forEach(select => {
+    select.addEventListener("change", function () {
+        const ordenId = this.dataset.id;
+        const valor = this.value;
+
+        fetch("actualizar_ponderacion.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `orden_id=${encodeURIComponent(ordenId)}&ponderacion=${encodeURIComponent(valor)}`
+        })
+        .then(response => response.text())
+        .then(data => {
+            if (data === "ok") {
+                alert("Ponderación actualizada correctamente.");
+            } else {
+                alert("Error al actualizar la ponderación.");
+            }
+        })
+        .catch(error => alert("Error de conexión con el servidor."));
     });
 });
 </script>

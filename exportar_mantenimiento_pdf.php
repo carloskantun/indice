@@ -18,8 +18,13 @@ $sql = "SELECT folio, fecha_reporte, descripcion_reporte, estatus, nivel, fecha_
 $condiciones = [];
 if (!empty($_GET['estatus'])) {
     $estatus = mysqli_real_escape_string($conn, trim($_GET['estatus']));
-    $condiciones[] = "COALESCE(estatus, 'Pendiente') = '$estatus'";
+    if (strtolower($estatus) === 'pendiente') {
+        $condiciones[] = "(estatus = 'Pendiente' OR estatus IS NULL OR estatus = '')";
+    } else {
+        $condiciones[] = "estatus = '$estatus'";
+    }
 }
+
 
 if (!empty($_GET['alojamiento']) && is_array($_GET['alojamiento'])) {
     $ids = array_map('intval', $_GET['alojamiento']);
