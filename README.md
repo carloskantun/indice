@@ -21,7 +21,7 @@ The application expects a MySQL database configured in `conexion.php`. Tables su
 ## Modules
 - **Mantenimiento**: existing module for maintenance requests.
 - **Servicio al Cliente**: duplicated from maintenance, adjusted for customer service requests. Only roles *servicio al cliente*, *gerente* and *admin* can use it.
-- **Transfers**: simple panel to register airport-hotel transfers.
+- **Transfers**: module to manage private transfers between airport and hotels with filters, exports and KPIs.
 
 ## Puestos Múltiples
 `editar_usuario.php` permite ingresar más de un puesto separado por comas (por ejemplo: `"Servicio al Cliente, Mantenimiento"`).
