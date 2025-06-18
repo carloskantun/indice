@@ -18,6 +18,14 @@ return [
         'modulos' => ['usuarios', 'configuracion'],
         'acceso_total' => true
     ],
+    'operador' => [
+        'modulos' => ['transfers'],
+        'acceso_total' => false
+    ],
+    'supervisor operador' => [
+        'modulos' => ['transfers'],
+        'acceso_total' => false
+    ],
     'servicio al cliente' => [
         // Permite también ingresar órdenes en el módulo de mantenimiento
         'modulos' => ['servicio_cliente', 'mantenimiento'],

@@ -44,6 +44,11 @@ function verificaAccesoModulo(string $modulo): bool {
             return in_array($rol, ['superadmin', 'administrador', 'gerente']) ||
                    str_contains($puesto, 'compras');
 
+        case 'transfers':
+            return str_contains($puesto, 'operador') ||
+                   str_contains($puesto, 'supervisor operador') ||
+                   in_array($rol, ['admin', 'ceo', 'webmaster', 'superadmin']);
+
         default:
             return false;
     }
