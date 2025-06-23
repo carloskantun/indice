@@ -22,7 +22,10 @@ function verModulo($modulo) {
             return str_contains($puesto, 'mantenimiento') || str_contains($puesto, 'servicio al cliente');
         case 'servicio_cliente':
             return str_contains($puesto, 'servicio al cliente');
-        case 'camarista':
+        case 'transfers':
+            return in_array($rol, ['superadmin', 'webmaster', 'admin', 'ceo']) || 
+           str_contains($puesto, 'operador') || 
+           str_contains($puesto, 'supervisor operador');
             return str_contains($puesto, 'camarista') || str_contains($puesto, 'ama de llaves');
         default:
             return false;
@@ -30,7 +33,7 @@ function verModulo($modulo) {
 }
 
 // Evaluar si tiene acceso a algo
-$modulos_disponibles = ['ordenes_compra', 'mantenimiento', 'servicio_cliente', 'usuarios', 'kpis', 'configuracion', 'camarista'];
+$modulos_disponibles = ['ordenes_compra', 'mantenimiento', 'servicio_cliente', 'usuarios', 'kpis', 'configuracion', 'camarista', 'transfers'];
 $puede_ver_algo = false;
 foreach ($modulos_disponibles as $m) {
     if (verModulo($m)) {
@@ -118,6 +121,17 @@ foreach ($modulos_disponibles as $m) {
                     </div>
                 </div>
             <?php endif; ?>
+
+            <?php if (verModulo('transfers')): ?>
+    <div class="col-12 col-md-4">
+        <div class="modulo-box">
+            <a href="minipanel_transfers.php">
+                <span class="modulo-icon">🚐</span>
+                Transfers
+            </a>
+        </div>
+    </div>
+<?php endif; ?>
 
             <?php if (verModulo('usuarios')): ?>
 

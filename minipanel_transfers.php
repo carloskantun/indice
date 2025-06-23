@@ -1,11 +1,8 @@
 <?php
-session_start();
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
-
 include 'auth.php';
 include 'conexion.php';
-header('Content-Type: text/html; charset=utf-8');
 
 // Paginación
 $registros_por_pagina = 500;
@@ -55,7 +52,7 @@ $columna_orden = $mapa_orden_sql[$orden_key] ?? 'id';
 $direccion   = strtoupper($_GET['dir'] ?? 'ASC');
 $direccion   = ($direccion === 'DESC') ? 'DESC' : 'ASC';
 
-$query = "SELECT folio,tipo,fecha,pickup,hotel,pasajeros,numero_reserva,vehiculo,conductor,agencia,estatus FROM ordenes_transfers $where ORDER BY $columna_orden $direccion LIMIT $registros_por_pagina OFFSET $offset";
+$query = "SELECT folio, tipo_servicio AS tipo, fecha_servicio AS fecha, pickup, hotel_pickup AS hotel, nombre_pasajeros AS pasajeros, num_pasajeros AS numero_reserva, vehiculo, conductor, agencia, estatus FROM ordenes_transfers $where ORDER BY $columna_orden $direccion LIMIT $registros_por_pagina OFFSET $offset";
 $ordenes = $conn->query($query);
 $total   = $conn->query("SELECT COUNT(*) AS total FROM ordenes_transfers $where")->fetch_assoc()['total'];
 $total_paginas = ceil($total / $registros_por_pagina);
@@ -152,8 +149,11 @@ $rol = $_SESSION['user_role'] ?? '';
 </div>
 
 <div class="dropdown mb-3">
-  <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">Columnas</button>
-  <ul class="dropdown-menu">
+  <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownColumnas" data-bs-toggle="dropdown" aria-expanded="false">
+    Columnas
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownColumnas">
+
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="folio"> Folio</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="tipo"> Tipo</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="fecha"> Fecha</label></li>
@@ -272,7 +272,8 @@ foreach ($columnas_ordenables as $col => $label) {
   </div></div>
 </div>
 
-<?php include 'script_modales_transfers.js'; ?>
+<script src="script_modales_transfers.js"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded',function(){
   function guardar(){const c={};document.querySelectorAll('.col-toggle').forEach(cb=>{c[cb.dataset.col]=cb.checked;});localStorage.setItem('transfer_cols',JSON.stringify(c));}
@@ -286,12 +287,23 @@ document.addEventListener('DOMContentLoaded',function(){
   document.querySelectorAll('.vehiculo-input').forEach(inp=>inp.addEventListener('change',function(){$.post('actualizar_vehiculo_transfer.php',{orden_id:this.dataset.id,vehiculo:this.value});}));
   document.querySelectorAll('.conductor-input').forEach(inp=>inp.addEventListener('change',function(){$.post('actualizar_conductor_transfer.php',{orden_id:this.dataset.id,conductor:this.value});}));
 
-  document.getElementById('btnExportarPDF').addEventListener('click',function(){let cols=[];document.querySelectorAll('thead tr th').forEach(th=>{const c=th.className.trim();if(c&&th.offsetParent!==null)cols.push(c.replace('col-',''));});const f=new URLSearchParams(window.location.search);f.set('columnas',cols.join(','));const ord=document.querySelector('thead th a[href*="orden="]');if(ord){const u=new URL(ord.href);const o=u.searchParams.get('orden');const d=u.searchParams.get('dir');if(o)f.set('orden',o);if(d)f.set('dir',d);}window.open('generar_pdf_transfers.php?'+f.toString(),'_blank');});
+  document.getElementById('btnExportarPDF').addEventListener('click',function(){let cols=[];document.querySelectorAll('thead tr th').forEach(th=>{const c=th.className.trim();if(c&&th.offsetParent!==null)cols.push(c.replace('col-',''));});const f=new URLSearchParams(window.location.search);f.set('columnas',cols.join(','));const ord=document.querySelector('thead th a[href*="orden="]');if(ord){const u=new URL(ord.href);const o=u.searchParams.get('orden');const d=u.searchParams.get('dir');if(o)f.set('orden',o);if(d)f.set('dir',d);}window.open('exportar_transfers_pdf.php?'+f.toString(),'_blank');});
   document.getElementById('btnExportarCSV').addEventListener('click',function(){let cols=[];document.querySelectorAll('thead tr th').forEach(th=>{const c=th.className.trim();if(c&&th.offsetParent!==null)cols.push(c.replace('col-',''));});const f=new URLSearchParams(window.location.search);f.set('columnas',cols.join(','));const ord=document.querySelector('thead th a[href*="orden="]');if(ord){const u=new URL(ord.href);const o=u.searchParams.get('orden');const d=u.searchParams.get('dir');if(o)f.set('orden',o);if(d)f.set('dir',d);}window.open('exportar_transfers.php?'+f.toString(),'_blank');});
 
   $('.select2-single').select2({width:'100%',allowClear:true});
 });
+
+document.querySelectorAll('.vehiculo-input').forEach(inp =>
+  inp.addEventListener('change', function () {
+    $.post('actualizar_vehiculo_transfer.php', {
+      orden_id: this.dataset.id,
+      vehiculo: this.value
+    });
+  })
+);
+
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

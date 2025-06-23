@@ -1,24 +1,20 @@
 <?php
-session_start();
 include 'auth.php';
 include 'conexion.php';
 
-if (!isset($_SESSION['user_role']) || !in_array($_SESSION['user_role'], ['admin','superadmin','webmaster','ceo','supervisor operador'])) {
-    die("Acceso no autorizado.");
+$folio = $_POST['orden_id'] ?? '';
+$vehiculo = $_POST['vehiculo'] ?? '';
+
+if (!$folio || $vehiculo === null) {
+    http_response_code(400);
+    echo "Faltan datos.";
+    exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $orden_id = $_POST['orden_id'] ?? '';
-    $vehiculo = $_POST['vehiculo'] ?? '';
-    $placas = $_POST['placas'] ?? '';
-    $numero_economico = $_POST['numero_economico'] ?? '';
-    if (!empty($orden_id)) {
-        $stmt = $conn->prepare("UPDATE ordenes_transfers SET vehiculo=?, placas=?, numero_economico=? WHERE folio=?");
-        $stmt->bind_param('ssss', $vehiculo, $placas, $numero_economico, $orden_id);
-        echo $stmt->execute() ? 'ok' : 'error';
-    } else {
-        echo 'error';
-    }
-}
-?>
+$stmt = $conn->prepare("UPDATE ordenes_transfers SET vehiculo=? WHERE folio=?");
+$stmt->bind_param("ss", $vehiculo, $folio);
+$stmt->execute();
+$stmt->close();
+$conn->close();
 
+echo "Guardado";

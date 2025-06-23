@@ -137,6 +137,10 @@ $esperadas = $usuarios_ativos * $dias_periodo * $meta_diaria;
 
 $productividad = ($esperadas > 0) ? round(($total_completadas / $esperadas) * 100, 1) : 0;
 
+// Productividad ponderada
+$total_ponderacion_terminadas = obtener("SELECT SUM(ponderacion) AS total FROM ordenes_mantenimiento $where_comp_sql", $conn);
+$ponderado = ($esperadas > 0) ? round(($total_ponderacion_terminadas / $esperadas) * 100, 1) : 0;
+
 // Top alojamientos
 $top_general = [];
 $res = $conn->query("SELECT a.nombre, COUNT(*) AS total FROM ordenes_mantenimiento o JOIN alojamientos a ON o.alojamiento_id = a.id $where GROUP BY o.alojamiento_id ORDER BY total DESC LIMIT 5");
@@ -185,6 +189,8 @@ $kpis = [
     'top_pendientes' => $top_pendientes,
     'top_terminados' => $top_terminados,
     'sin_reportes' => $sin_reportes,
+    'ponderado' => $ponderado,
+
 ];
 
 return $kpis;

@@ -1,6 +1,4 @@
 <!-- Scripts requeridos para Bootstrap y funcionamiento de modales -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
 document.addEventListener("DOMContentLoaded", function () {
   const modales = [
     { id: "modalAgregarUsuario", url: "usuarios.php?modal=1", cont: "contenidoUsuario" },
@@ -31,5 +29,5 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
-</script>
+
 

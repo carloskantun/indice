@@ -4869,3 +4869,1140 @@ FILES: Array
 
 )
 ✅ Actualización exitosa en la base de datos.
+
+[2025-06-18 14:02:17] Intento de completar orden MTTO-2504-0006
+POST: Array
+(
+    [folio] => MTTO-2504-0006
+    [fecha_completado] => 2025-06-18
+    [detalle_completado] => tester
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-18 14:30:50] Intento de completar orden 2506-0015
+POST: Array
+(
+    [folio] => 2506-0015
+    [fecha_completado] => 2025-06-18
+    [detalle_completado] => se le entregaron al huesped 
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+73 Actualizacin exitosa en la base de datos.
+
+[2025-06-18 14:31:17] Intento de completar orden 2506-0014
+POST: Array
+(
+    [folio] => 2506-0014
+    [fecha_completado] => 2025-06-18
+    [detalle_completado] => mantenimiento ya fue y hay que compara una pieza nueva 
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+73 Actualizacin exitosa en la base de datos.
+
+[2025-06-19 09:00:36] Intento de completar orden 2506-0359
+POST: Array
+(
+    [folio] => 2506-0359
+    [fecha_completado] => 2025-06-18
+    [detalle_completado] => se cambio tv a 32pulgadas y se instalo roku
+    [costo_final] => 1100
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-19 09:02:27] Intento de completar orden 2506-0362
+POST: Array
+(
+    [folio] => 2506-0362
+    [fecha_completado] => 2025-06-18
+    [detalle_completado] => pintura general del depto
+    [costo_final] => 2200
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-19 09:03:05] Intento de completar orden 2506-0364
+POST: Array
+(
+    [folio] => 2506-0364
+    [fecha_completado] => 2025-06-18
+    [detalle_completado] => se limpio cebolleta de la regadera
+    [costo_final] => 450
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-19 09:03:35] Intento de completar orden 2506-0365
+POST: Array
+(
+    [folio] => 2506-0365
+    [fecha_completado] => 2025-06-18
+    [detalle_completado] => se limpio filtro de monomando
+    [costo_final] => 450
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-19 09:50:36] Intento de completar orden 2505-0142
+POST: Array
+(
+    [folio] => 2505-0142
+    [fecha_completado] => 2025-06-17
+    [detalle_completado] => se hicieron varios trabajos,se coloc tapa ciega, se instalo tv, se pinto
+    [costo_final] => 3500
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-19 09:55:59] Intento de completar orden 2506-0264
+POST: Array
+(
+    [folio] => 2506-0264
+    [fecha_completado] => 2025-06-18
+    [detalle_completado] => se corrijio falso en apagador
+    [costo_final] => 120
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-19 09:56:09] Intento de completar orden 2505-0172
+POST: Array
+(
+    [folio] => 2505-0172
+    [fecha_completado] => 2025-06-18
+    [detalle_completado] => se cambio foco
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-19 09:56:41] Intento de completar orden 2506-0265
+POST: Array
+(
+    [folio] => 2506-0265
+    [fecha_completado] => 2025-06-18
+    [detalle_completado] => se cambio foco 
+    [costo_final] => 90
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-19 11:31:25] Intento de completar orden 2506-0009
+POST: Array
+(
+    [folio] => 2506-0009
+    [fecha_completado] => 2025-06-19
+    [detalle_completado] => se dejaron brazaletes al huesped 
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+73 Actualizacin exitosa en la base de datos.
+
+[2025-06-19 11:33:00] Intento de completar orden 2506-0002
+POST: Array
+(
+    [folio] => 2506-0002
+    [fecha_completado] => 2025-06-19
+    [detalle_completado] => Mantenimiento cambio la TV 
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => IMG_4441.png
+            [full_path] => IMG_4441.png
+            [type] => image/png
+            [tmp_name] => /tmp/phpwamVbl
+            [error] => 0
+            [size] => 1562798
+        )
+
+)
+73 Imagen guardada en uploads/foto_2506_0002.png
+73 Actualizacin exitosa en la base de datos.
+
+[2025-06-19 11:35:05] Intento de completar orden 2506-0016
+POST: Array
+(
+    [folio] => 2506-0016
+    [fecha_completado] => 2025-06-19
+    [detalle_completado] => Se dej贸 el pendiente adentro del depa 
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => IMG_4439.jpeg
+            [full_path] => IMG_4439.jpeg
+            [type] => image/jpeg
+            [tmp_name] => /tmp/phpt9gn1P
+            [error] => 0
+            [size] => 3554584
+        )
+
+)
+73 Imagen guardada en uploads/foto_2506_0016.jpeg
+73 Actualizacin exitosa en la base de datos.
+
+[2025-06-19 11:35:06] Intento de completar orden 2506-0016
+POST: Array
+(
+    [folio] => 2506-0016
+    [fecha_completado] => 2025-06-19
+    [detalle_completado] => Se dej贸 el pendiente adentro del depa 
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => IMG_4439.jpeg
+            [full_path] => IMG_4439.jpeg
+            [type] => image/jpeg
+            [tmp_name] => /tmp/phpb35fHS
+            [error] => 0
+            [size] => 3554584
+        )
+
+)
+73 Imagen guardada en uploads/foto_2506_0016.jpeg
+73 Actualizacin exitosa en la base de datos.
+
+[2025-06-19 14:36:24] Intento de completar orden 2506-0017
+POST: Array
+(
+    [folio] => 2506-0017
+    [fecha_completado] => 2025-06-19
+    [detalle_completado] => Se llev贸 silla faltante 
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => IMG_4443.jpeg
+            [full_path] => IMG_4443.jpeg
+            [type] => image/jpeg
+            [tmp_name] => /tmp/php3rYvWE
+            [error] => 0
+            [size] => 2788410
+        )
+
+)
+73 Imagen guardada en uploads/foto_2506_0017.jpeg
+73 Actualizacin exitosa en la base de datos.
+
+[2025-06-19 14:36:54] Intento de completar orden 2506-0018
+POST: Array
+(
+    [folio] => 2506-0018
+    [fecha_completado] => 2025-06-19
+    [detalle_completado] => Se dejaron los 11 brazaletes 
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => IMG_4446.jpeg
+            [full_path] => IMG_4446.jpeg
+            [type] => image/jpeg
+            [tmp_name] => /tmp/phpy9XMLI
+            [error] => 0
+            [size] => 3191945
+        )
+
+)
+73 Imagen guardada en uploads/foto_2506_0018.jpeg
+73 Actualizacin exitosa en la base de datos.
+
+[2025-06-19 14:37:24] Intento de completar orden 2506-0019
+POST: Array
+(
+    [folio] => 2506-0019
+    [fecha_completado] => 2025-06-19
+    [detalle_completado] => Se dejaron los dos brazaletes 
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => FE7FA48D-F77F-4A74-B576-C52C02B4E3EB.jpeg
+            [full_path] => FE7FA48D-F77F-4A74-B576-C52C02B4E3EB.jpeg
+            [type] => image/jpeg
+            [tmp_name] => /tmp/phptenF4S
+            [error] => 0
+            [size] => 2228677
+        )
+
+)
+73 Imagen guardada en uploads/foto_2506_0019.jpeg
+73 Actualizacin exitosa en la base de datos.
+
+[2025-06-19 14:39:26] Intento de completar orden 2506-0020
+POST: Array
+(
+    [folio] => 2506-0020
+    [fecha_completado] => 2025-06-19
+    [detalle_completado] => Se recibieron correctamente 
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => E60EDAC0-DC6C-4AD9-8C60-6685CC969C94.jpeg
+            [full_path] => E60EDAC0-DC6C-4AD9-8C60-6685CC969C94.jpeg
+            [type] => image/jpeg
+            [tmp_name] => /tmp/phpj28luq
+            [error] => 0
+            [size] => 1268819
+        )
+
+)
+73 Imagen guardada en uploads/foto_2506_0020.jpeg
+73 Actualizacin exitosa en la base de datos.
+
+[2025-06-19 14:39:27] Intento de completar orden 2506-0020
+POST: Array
+(
+    [folio] => 2506-0020
+    [fecha_completado] => 2025-06-19
+    [detalle_completado] => Se recibieron correctamente 
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => E60EDAC0-DC6C-4AD9-8C60-6685CC969C94.jpeg
+            [full_path] => E60EDAC0-DC6C-4AD9-8C60-6685CC969C94.jpeg
+            [type] => image/jpeg
+            [tmp_name] => /tmp/phpE3Brmt
+            [error] => 0
+            [size] => 1268819
+        )
+
+)
+73 Imagen guardada en uploads/foto_2506_0020.jpeg
+73 Actualizacin exitosa en la base de datos.
+
+[2025-06-20 09:06:55] Intento de completar orden 2506-0349
+POST: Array
+(
+    [folio] => 2506-0349
+    [fecha_completado] => 2025-06-19
+    [detalle_completado] => se coloco manija faltante 
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-20 09:11:48] Intento de completar orden 2506-0243
+POST: Array
+(
+    [folio] => 2506-0243
+    [fecha_completado] => 2025-06-19
+    [detalle_completado] => se realizo pintado genral en sala cocina y recamara 
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-20 09:14:09] Intento de completar orden 2506-0371
+POST: Array
+(
+    [folio] => 2506-0371
+    [fecha_completado] => 2025-06-20
+    [detalle_completado] => se paso a revisar, si enfria pero no lo suficiente, hay que cambiarlo del lugar
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-20 09:16:08] Intento de completar orden 2506-0372
+POST: Array
+(
+    [folio] => 2506-0372
+    [fecha_completado] => 2025-06-19
+    [detalle_completado] => se pinto de color crema la pared
+    [costo_final] => 2100
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-20 09:17:38] Intento de completar orden 2506-0247
+POST: Array
+(
+    [folio] => 2506-0247
+    [fecha_completado] => 2025-06-19
+    [detalle_completado] => se pinto de blanco todo el depto.
+    [costo_final] => 2100
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-20 09:18:27] Intento de completar orden 2506-0251
+POST: Array
+(
+    [folio] => 2506-0251
+    [fecha_completado] => 2025-06-19
+    [detalle_completado] => se pinto de blanco el depto. ticket duplicado
+    [costo_final] => 2100
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-20 09:20:07] Intento de completar orden MTTO-2504-0037
+POST: Array
+(
+    [folio] => MTTO-2504-0037
+    [fecha_completado] => 2025-06-19
+    [detalle_completado] => se realizo cambio de tubo y se bolleta 
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-20 09:20:25] Intento de completar orden 2506-0363
+POST: Array
+(
+    [folio] => 2506-0363
+    [fecha_completado] => 2025-06-19
+    [detalle_completado] => se limpio los filtros del clima
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-20 10:42:21] Intento de completar orden MTTO-2504-0052
+POST: Array
+(
+    [folio] => MTTO-2504-0052
+    [fecha_completado] => 2025-06-19
+    [detalle_completado] => se cambio tv y se instalo roku..ticket duplicado
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-20 12:46:10] Intento de completar orden MTTO-2504-0053
+POST: Array
+(
+    [folio] => MTTO-2504-0053
+    [fecha_completado] => 2025-06-20
+    [detalle_completado] => se cambio tv y se puso roku
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-20 13:46:50] Intento de completar orden 2504-0093
+POST: Array
+(
+    [folio] => 2504-0093
+    [fecha_completado] => 2025-06-17
+    [detalle_completado] => se punbto closet de la reara de abajo
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-20 13:47:33] Intento de completar orden 2505-0127
+POST: Array
+(
+    [folio] => 2505-0127
+    [fecha_completado] => 2025-06-20
+    [detalle_completado] => la solucion es ca,biar todo el marmol
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-20 13:48:38] Intento de completar orden 2506-0199
+POST: Array
+(
+    [folio] => 2506-0199
+    [fecha_completado] => 2025-06-19
+    [detalle_completado] => se ajusto sapito del ba帽o
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-20 13:49:16] Intento de completar orden 2506-0227
+POST: Array
+(
+    [folio] => 2506-0227
+    [fecha_completado] => 2025-06-19
+    [detalle_completado] => se completo juego de sillas 
+    [costo_final] => 550
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-20 14:23:40] Intento de completar orden 2506-0256
+POST: Array
+(
+    [folio] => 2506-0256
+    [fecha_completado] => 2025-06-20
+    [detalle_completado] => se pinto todo el departamento de blanco
+    [costo_final] => 2500
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-20 14:25:35] Intento de completar orden 2506-0374
+POST: Array
+(
+    [folio] => 2506-0374
+    [fecha_completado] => 2025-06-20
+    [detalle_completado] => se ajusto contacto de cocina
+    [costo_final] => 150
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-20 14:26:05] Intento de completar orden 2506-0373
+POST: Array
+(
+    [folio] => 2506-0373
+    [fecha_completado] => 2025-06-20
+    [detalle_completado] => se pinto el depa de blanco
+    [costo_final] => 2500
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-20 15:13:39] Intento de completar orden 2504-0075
+POST: Array
+(
+    [folio] => 2504-0075
+    [fecha_completado] => 2025-06-20
+    [detalle_completado] => se instalo la manija en la puerta de la cocina
+    [costo_final] => 450
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-20 15:14:05] Intento de completar orden 2506-0214
+POST: Array
+(
+    [folio] => 2506-0214
+    [fecha_completado] => 2025-06-20
+    [detalle_completado] => se ajusto la chapa
+    [costo_final] => 350
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-20 15:26:51] Intento de completar orden 2505-0174
+POST: Array
+(
+    [folio] => 2505-0174
+    [fecha_completado] => 2025-06-19
+    [detalle_completado] => se realizo cambio de foco
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-20 15:33:19] Intento de completar orden 2506-0287
+POST: Array
+(
+    [folio] => 2506-0287
+    [fecha_completado] => 2025-06-20
+    [detalle_completado] => ticket duplicado
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-21 08:34:34] Intento de completar orden 2506-0337
+POST: Array
+(
+    [folio] => 2506-0337
+    [fecha_completado] => 2025-06-21
+    [detalle_completado] => tester
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-21 08:35:42] Intento de completar orden 2506-0316
+POST: Array
+(
+    [folio] => 2506-0316
+    [fecha_completado] => 2025-06-21
+    [detalle_completado] => duplicado
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-21 08:36:43] Intento de completar orden 2506-0279
+POST: Array
+(
+    [folio] => 2506-0279
+    [fecha_completado] => 2025-06-20
+    [detalle_completado] => esta funcionando al 100
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-21 09:20:05] Intento de completar orden 2505-0170
+POST: Array
+(
+    [folio] => 2505-0170
+    [fecha_completado] => 2025-06-19
+    [detalle_completado] => se pintaron cortineros de ambos cuartos 
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-21 14:50:01] Intento de completar orden 2506-0367
+POST: Array
+(
+    [folio] => 2506-0367
+    [fecha_completado] => 2025-06-21
+    [detalle_completado] => se realizo la limpieza de las regillas de ventilacion
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-21 14:50:43] Intento de completar orden 2506-0366
+POST: Array
+(
+    [folio] => 2506-0366
+    [fecha_completado] => 2025-06-21
+    [detalle_completado] => se realizo pintado genaral 
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+)
+✅ Actualización exitosa en la base de datos.
+
+[2025-06-22 11:57:01] Intento de completar orden 2506-0021
+POST: Array
+(
+    [folio] => 2506-0021
+    [fecha_completado] => 2025-06-22
+    [detalle_completado] => Se dej贸 el pendiente 
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => IMG_4484.jpeg
+            [full_path] => IMG_4484.jpeg
+            [type] => image/jpeg
+            [tmp_name] => /tmp/phpMhX6t3
+            [error] => 0
+            [size] => 2639079
+        )
+
+)
+73 Imagen guardada en uploads/foto_2506_0021.jpeg
+73 Actualizacin exitosa en la base de datos.
+
+[2025-06-22 11:57:27] Intento de completar orden 2506-0022
+POST: Array
+(
+    [folio] => 2506-0022
+    [fecha_completado] => 2025-06-22
+    [detalle_completado] => El pendiente se dej贸 en puerta 
+    [costo_final] => 
+)
+FILES: Array
+(
+    [foto_completado] => Array
+        (
+            [name] => IMG_4483.jpeg
+            [full_path] => IMG_4483.jpeg
+            [type] => image/jpeg
+            [tmp_name] => /tmp/phpd2oBS0
+            [error] => 0
+            [size] => 2560439
+        )
+
+)
+73 Imagen guardada en uploads/foto_2506_0022.jpeg
+73 Actualizacin exitosa en la base de datos.

@@ -76,6 +76,7 @@ include 'conexion.php';
   <div id="kpi-calidad" class="row g-4"></div>
 
   <div class="section-title"><strong>📍 Análisis por Alojamiento</strong></div>
+  
   <div class="row g-4" id="analisis-alojamientos">
     <div class="col-md-6">
       <h6>Top 5 con más Reportes</h6>
@@ -149,6 +150,8 @@ $(function () {
   ${crearCard('Promedio de Días', res.promedio_dias + ' días', 'info')}
   ${crearCard('% Cumplimiento Mes', res.cumplimiento_mes + '%', 'success')}
   ${crearCard('Coef. Productividad', res.productividad + '%', 'primary')}
+  ${crearCard('Coef. Productividad Ponderado', res.ponderado + '%', 'warning')}
+
 `);
 
       // Alojamientos

@@ -14,7 +14,7 @@ if (isset($_GET['modal'])) {
 <form action="procesar_transfers.php" method="POST">
     <div class="mb-3">
         <label class="form-label">Tipo de Servicio</label>
-        <select name="tipo" class="form-control" required>
+        <select name="tipo_servicio" class="form-control" required>
             <option value="Llegada">Llegada</option>
             <option value="Salida">Salida</option>
             <option value="Roundtrip">Roundtrip</option>
