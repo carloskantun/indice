@@ -1,8 +1,8 @@
 <?php
 session_start();
-include 'conexion.php'; // Conexión centralizada
+include 'conexion.php'; // ConexiÃ³n centralizada
 
-// Validar sesión
+// Validar sesiÃ³n
 if (!isset($_SESSION['user_id'])) {
     die("Acceso no autorizado.");
 }
@@ -17,9 +17,12 @@ $factura = $_POST['genera_factura'] ?? 'No';
 $usuario = $_POST['usuario_solicitante_id'] ?? null;
 $unidad_negocio = $_POST['unidad_negocio_id'] ?? null;
 
-// Generar folio único basado en la fecha y un número incremental
-$fecha = date("Ymd"); // AñoMesDía
-$result = $conn->query("SELECT COUNT(*) AS total FROM ordenes_compra WHERE DATE(fecha_creacion) = CURDATE()");
+// Determinar estatus inicial segun fecha de vencimiento
+$estatus_inicial = (strtotime($vencimiento) < strtotime(date("Y-m-d"))) ? "Vencido" : "Por pagar";
+
+$sql = "INSERT INTO ordenes_compra (folio, proveedor_id, monto, vencimiento_pago, concepto_pago, tipo_pago, genera_factura, usuario_solicitante_id, unidad_negocio_id, comprobante_path, estatus_pago)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+$stmt->bind_param("sidsississs", $folio, $proveedor, $monto, $vencimiento, $concepto, $tipo_pago, $factura, $usuario, $unidad_negocio, $comprobante_path, $estatus_inicial);
 $conteo = $result->fetch_assoc()['total'] + 1;
 $folio = "OC-$fecha-$conteo"; // Ejemplo: OC-20250205-3
 

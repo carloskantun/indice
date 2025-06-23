@@ -59,13 +59,41 @@
 	    $fecha_inicio = $conn->real_escape_string($_GET['fecha_inicio']);
 	    $query .= " AND vencimiento_pago >= '$fecha_inicio'";
 	}
-	if (!empty($_GET['fecha_fin'])) {
-	    $fecha_fin = $conn->real_escape_string($_GET['fecha_fin']);
-	    $query .= " AND vencimiento_pago <= '$fecha_fin'";
-	}
-	
-	$query .= " LIMIT $registros_por_pagina OFFSET $offset";
-	$ordenes = $conn->query($query);
+        if (!empty($_GET['fecha_fin'])) {
+            $fecha_fin = $conn->real_escape_string($_GET['fecha_fin']);
+            $query .= " AND vencimiento_pago <= '$fecha_fin'";
+        }
+
+        $mapa_orden_sql = [
+            'folio' => 'oc.folio',
+            'proveedor' => 'p.nombre',
+            'monto' => 'oc.monto',
+            'vencimiento' => 'oc.vencimiento_pago',
+            'concepto' => 'oc.concepto_pago',
+            'tipo' => 'oc.tipo_pago',
+            'factura' => 'oc.genera_factura',
+            'usuario' => 'u.nombre',
+            'unidad_negocio' => 'un.nombre',
+            'estatus' => 'oc.estatus_pago',
+            'quien_pago' => 'oc.quien_pago_id',
+            'nivel' => 'oc.nivel',
+            'compra' => 'c.id',
+            'nota' => 'nc.monto'
+        ];
+
+        $orden_key = $_GET['orden'] ?? 'folio';
+        $columna_orden = $mapa_orden_sql[$orden_key] ?? 'oc.folio';
+        $direccion = strtoupper($_GET['dir'] ?? 'ASC');
+        $direccion = ($direccion === 'DESC') ? 'DESC' : 'ASC';
+
+        $query .= " ORDER BY $columna_orden $direccion LIMIT $registros_por_pagina OFFSET $offset";
+        $resultado = $conn->query($query);
+        $ordenes = [];
+        $suma_monto = 0;
+        while ($row = $resultado->fetch_assoc()) {
+            $ordenes[] = $row;
+            $suma_monto += (float)$row['monto'];
+        }
 	
 	// ðŸ“Œ Obtener el total de registros para la paginaciÃ³n
 	$total_ordenes = $conn->query("SELECT COUNT(*) AS total FROM ordenes_compra WHERE 1=1")->fetch_assoc()['total'];
@@ -141,6 +169,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 	
 	
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 	
 	</head>
 	<body class="bg-light">
@@ -215,7 +244,7 @@
 	                        <option value="<?php echo htmlspecialchars($proveedor['id']); ?>" <?php echo $selected; ?>>
 	                       <?php echo htmlspecialchars($proveedor['nombre']); ?>
 	                      </option>
-	                       <?php endwhile; ?>
+	                       <?php endforeach; ?>
 	                       </select>
 	                    </div>
 	
@@ -245,7 +274,7 @@
 	                                        <?php echo (isset($_GET['usuario']) && is_array($_GET['usuario']) && in_array($usuario['id'], $_GET['usuario'])) ? 'selected' : ''; ?>>
 	                                        <?php echo htmlspecialchars($usuario['nombre']); ?>
 	                                    </option>
-	                                <?php endwhile; ?>
+	                                <?php endforeach; ?>
 	                            </select>
 	                        </div>
 	                    </div>
@@ -264,7 +293,7 @@
 	                                        <?php echo (isset($_GET['unidad_negocio']) && is_array($_GET['unidad_negocio']) && in_array($unidad['id'], $_GET['unidad_negocio'])) ? 'selected' : ''; ?>>
 	                                        <?php echo htmlspecialchars($unidad['nombre']); ?>
 	                                    </option>
-	                                <?php endwhile; ?>
+	                                <?php endforeach; ?>
 	                            </select>
 	                        </div>
 	
@@ -316,15 +345,22 @@
 	    </ul>
 	</div> 
 	
-	<div class="row g-2 mb-3">
+        <div class="row g-2 mb-3">
     <div class="col-12 col-md-auto">
-        <a href="minipanel.php?estatus=Por pagar" class="btn btn-outline-warning btn-custom w-100">Por pagar</a>
+        <a href="minipanel.php?estatus=Por pagar" class="btn btn-outline-warning btn-custom w-100">Órdenes de compra por pagar</a>
     </div>
     <div class="col-12 col-md-auto">
-        <a href="minipanel.php?estatus=Pagado" class="btn btn-outline-success btn-custom w-100">Pagadas</a>
+        <a href="minipanel.php?estatus=Pagado" class="btn btn-outline-success btn-custom w-100">Gastos</a>
     </div>
     <div class="col-12 col-md-auto">
-        <a href="minipanel.php?estatus=Vencido" class="btn btn-outline-danger btn-custom w-100">Vencidas</a>
+        <a href="minipanel.php?estatus=Vencido" class="btn btn-outline-danger btn-custom w-100">Órdenes de compra vencidas</a>
+    </div>
+    <div class="col-12 col-md-auto">
+        <a href="minipanel.php?estatus=Pago%20parcial" class="btn btn-outline-info btn-custom w-100">Órdenes en pago parcial</a>
+    </div>
+</div>
+    <div class="col-12 col-md-auto">
+        <a href="minipanel.php?estatus=Vencido" class="btn btn-outline-danger btn-custom w-100">Órdenes de compra vencidas</a>
     </div>
 </div>
 
@@ -353,10 +389,11 @@
                     <th class="col-compra">Gasto</th>
                     <th class="col-nc">NC</th>
                     <th class="col-abono">Pago | Abono</th>
+                        <th class="col-ver_pdf">PDF</th>
 	            </tr>
 	        </thead>
 <tbody id="tabla-ordenes">
-<?php while ($orden = $ordenes->fetch_assoc()): ?>
+<?php foreach ($ordenes as $orden): ?>
 <tr>
     <td class="col-folio"><?php echo htmlspecialchars($orden['folio']); ?></td>
     <td class="col-proveedor"><?php echo htmlspecialchars($orden['proveedor']); ?></td>
@@ -399,7 +436,7 @@
                         <option value="<?php echo $usuario['id']; ?>" <?php echo ($orden['quien_pago_id'] == $usuario['id']) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($usuario['nombre']); ?>
                         </option>
-                    <?php endwhile; ?>
+                    <?php endforeach; ?>
                 </select>
             </form>
         <?php else: ?>
@@ -471,9 +508,31 @@
     </button>
 </td>
 
+<td class="col-ver_pdf"><a href="generar_pdf_compra.php?folio=<?php echo $orden['folio']; ?>" target="_blank" class="btn btn-sm btn-outline-dark">Ver PDF</a></td>
 
 </tr>
-<?php endwhile; ?>
+<?php endforeach; ?>
+<tfoot><tr class="sum-row">
+<td class="col-folio"></td>
+<td class="col-proveedor"></td>
+<td class="col-monto"><strong>Total: $<?php echo number_format($suma_monto,2); ?></strong></td>
+<td class="col-vencimiento"></td>
+<td class="col-concepto"></td>
+<td class="col-tipo"></td>
+<td class="col-factura"></td>
+<td class="col-usuario"></td>
+<td class="col-unidad_negocio"></td>
+<td class="col-estatus"></td>
+<td class="col-quien_pago"></td>
+<td class="col-nivel"></td>
+<td class="col-compra"></td>
+<td class="col-nota"></td>
+<td class="col-oc"></td>
+<td class="col-compra"></td>
+<td class="col-nc"></td>
+<td class="col-abono"></td>
+<td class="col-ver_pdf"></td>
+</tr></tfoot>
 </tbody>	    </table>
 	    <!-- BotÃ³n para cargar mÃ¡s Ã³rdenes -->
 	        <?php if ($pagina_actual * $registros_por_pagina < $ordenes_totales): ?>
@@ -524,6 +583,14 @@
 	            </div>
 	            <div class="modal-body" id="contenidoOrden">
 	                <p class="text-center">Cargando...</p>
+<div class="row g-2 mb-4">
+    <div class="col-12 col-md-auto">
+    <button id="btnExportarCSV" class="btn btn-dark btn-custom w-100">Exportar Resultados</button>
+</div>
+<div class="col-12 col-md-auto">
+  <a id="btnExportarPDF" class="btn btn-danger btn-custom w-100" href="#">Exportar PDF</a>
+</div>
+</div>
 	            </div>
 	        </div>
 	    </div>
@@ -753,8 +820,8 @@ cargarContenidoModal("modalAgregarNota", "notas_credito.php?modal=1", "contenido
 	
 	</script>
 	    <script>
-	    document.addEventListener("DOMContentLoaded", function () {
-	        let botonVerMas = document.getElementById("ver-mas");
+document.addEventListener("DOMContentLoaded", function () {
+    let botonVerMas = document.getElementById("ver-mas");
 	
 	        if (botonVerMas) {
 	            botonVerMas.addEventListener("click", function () {
@@ -887,6 +954,130 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch(() => {
             alert("Error de conexión.");
         });
+    });
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const tabla = document.querySelector("table");
+    const columnas = document.getElementById("columnas-reordenables");
+
+    if (columnas) {
+        Sortable.create(columnas, {
+            animation: 150,
+            onEnd: function () {
+                let orden = [];
+                columnas.querySelectorAll("th").forEach(th => orden.push(th.className));
+                localStorage.setItem("orden_columnas", JSON.stringify(orden));
+
+                let filas = tabla.querySelectorAll("tbody tr");
+                filas.forEach(tr => {
+                    let celdas = Array.from(tr.children);
+                    let nuevoOrden = [];
+                    orden.forEach(cls => {
+                        let celda = celdas.find(td => td.classList.contains(cls));
+                        if (celda) nuevoOrden.push(celda);
+                    });
+                    nuevoOrden.forEach(td => tr.appendChild(td));
+                });
+
+                let pie = tabla.querySelector("tfoot tr");
+                if (pie) {
+                    let celdas = Array.from(pie.children);
+                    let nuevo = [];
+                    orden.forEach(cls => {
+                        let cel = celdas.find(td => td.classList.contains(cls));
+                        if (cel) nuevo.push(cel);
+                    });
+                    nuevo.forEach(td => pie.appendChild(td));
+                }
+            }
+        });
+
+        let guardado = JSON.parse(localStorage.getItem("orden_columnas"));
+        if (guardado && guardado.length > 0) {
+            let ths = Array.from(columnas.children);
+            let nuevoOrden = [];
+            guardado.forEach(cls => {
+                let th = ths.find(el => el.classList.contains(cls));
+                if (th) nuevoOrden.push(th);
+            });
+            nuevoOrden.forEach(th => columnas.appendChild(th));
+
+            let filas = tabla.querySelectorAll("tbody tr");
+            filas.forEach(tr => {
+                let celdas = Array.from(tr.children);
+                let nuevo = [];
+                guardado.forEach(cls => {
+                    let celda = celdas.find(td => td.classList.contains(cls));
+                    if (celda) nuevo.push(celda);
+                });
+                nuevo.forEach(td => tr.appendChild(td));
+            });
+
+            let pie = tabla.querySelector("tfoot tr");
+            if (pie) {
+                let celdas = Array.from(pie.children);
+                let nuevo = [];
+                guardado.forEach(cls => {
+                    let cel = celdas.find(td => td.classList.contains(cls));
+                    if (cel) nuevo.push(cel);
+                });
+                nuevo.forEach(td => pie.appendChild(td));
+            }
+        }
+    }
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const btnExportarPDF = document.getElementById("btnExportarPDF");
+    btnExportarPDF.addEventListener("click", function () {
+        let columnasVisibles = [];
+        document.querySelectorAll("thead tr th").forEach(th => {
+            const clase = th.className.trim();
+            if (clase && th.offsetParent !== null) {
+                columnasVisibles.push(clase.replace("col-", ""));
+            }
+        });
+
+        const filtros = new URLSearchParams(window.location.search);
+        filtros.set("columnas", columnasVisibles.join(","));
+
+        const thOrden = document.querySelector("thead th a[href*='orden=']");
+        if (thOrden) {
+            const urlOrden = new URL(thOrden.href);
+            const orden = urlOrden.searchParams.get("orden");
+            const dir = urlOrden.searchParams.get("dir");
+            if (orden) filtros.set("orden", orden);
+            if (dir) filtros.set("dir", dir);
+        }
+
+        window.open("exportar_compras_pdf.php?" + filtros.toString(), "_blank");
+    });
+    const btnExportarCSV = document.getElementById("btnExportarCSV");
+    btnExportarCSV.addEventListener("click", function () {
+        let columnasVisibles = [];
+        document.querySelectorAll("thead tr th").forEach(th => {
+            const clase = th.className.trim();
+            if (clase && th.offsetParent !== null) {
+                columnasVisibles.push(clase.replace("col-", ""));
+            }
+        });
+
+        const filtros = new URLSearchParams(window.location.search);
+        filtros.set("columnas", columnasVisibles.join(","));
+
+        const thOrden = document.querySelector("thead th a[href*='orden=']");
+        if (thOrden) {
+            const urlOrden = new URL(thOrden.href);
+            const orden = urlOrden.searchParams.get("orden");
+            const dir = urlOrden.searchParams.get("dir");
+            if (orden) filtros.set("orden", orden);
+            if (dir) filtros.set("dir", dir);
+        }
+
+        window.open("exportar_compras.php?" + filtros.toString(), "_blank");
     });
 });
 </script>
