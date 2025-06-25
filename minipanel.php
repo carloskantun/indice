@@ -674,6 +674,10 @@
             <label for="comentario" class="form-label">Comentario</label>
             <textarea class="form-control" name="comentario" rows="3"></textarea>
           </div>
+          <div class="mb-3">
+            <label for="comprobante" class="form-label">Comprobante</label>
+            <input type="file" class="form-control" name="comprobante" accept="image/*,application/pdf">
+          </div>
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-success">Guardar Abono</button>

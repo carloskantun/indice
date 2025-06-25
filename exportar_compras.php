@@ -9,16 +9,16 @@ include 'conexion.php';
 $output = fopen('php://output','w');
 
 $mapa_columnas = [
-    'folio' => 'oc.folio',
+    'folio' => 'oc.folio AS folio',
     'proveedor' => 'p.nombre AS proveedor',
-    'monto' => 'oc.monto',
-    'vencimiento' => 'oc.vencimiento_pago',
-    'concepto' => 'oc.concepto_pago',
-    'tipo' => 'oc.tipo_pago',
-    'factura' => 'oc.genera_factura',
+    'monto' => 'oc.monto AS monto',
+    'vencimiento' => 'oc.vencimiento_pago AS vencimiento',
+    'concepto' => 'oc.concepto_pago AS concepto',
+    'tipo' => 'oc.tipo_pago AS tipo',
+    'factura' => 'oc.genera_factura AS factura',
     'usuario' => 'u.nombre AS usuario',
     'unidad_negocio' => 'un.nombre AS unidad_negocio',
-    'estatus' => 'oc.estatus_pago'
+    'estatus' => 'oc.estatus_pago AS estatus'
 ];
 
 $mapa_titulos = [
@@ -87,7 +87,7 @@ $res = $conn->query($query);
 while($row = $res->fetch_assoc()){
     $fila=[];
     foreach($cols as $c){
-        $fila[]=$row[$c];
+        $fila[] = isset($row[$c]) ? $row[$c] : '';
     }
     fputcsv($output,$fila);
 }
