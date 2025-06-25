@@ -11,7 +11,7 @@ if (!isset($_GET['modal'])) {
 error_log("DEBUG: cargando formulario de compra correctamente");
 ?>
 
-<form id="formCompra" method="POST">
+<form id="formCompra" method="POST" action="guardar_compra.php" enctype="multipart/form-data">
     <!-- Orden de Compra Relacionada (opcional) -->
     <div class="mb-3">
         <label for="orden_folio" class="form-label">Orden de Compra Relacionada (opcional)</label>
@@ -48,14 +48,14 @@ error_log("DEBUG: cargando formulario de compra correctamente");
 
     <!-- Monto -->
     <div class="mb-3">
-        <label for="monto" class="form-label">Monto</label>
-        <input type="number" name="monto" id="monto" class="form-control" step="0.01" required>
+        <label for="monto_total" class="form-label">Monto</label>
+        <input type="number" name="monto_total" id="monto_total" class="form-control" step="0.01" required>
     </div>
 
     <!-- Nota de Crédito -->
     <div class="mb-3">
-        <label for="nota_credito_id" class="form-label">Aplicar Nota de Crédito (opcional)</label>
-        <select name="nota_credito_id" id="nota_credito_id" class="form-select">
+        <label for="nota_credito" class="form-label">Aplicar Nota de Crédito (opcional)</label>
+        <select name="nota_credito" id="nota_credito" class="form-select">
             <option value="">— Ninguna —</option>
             <?php
             $notas = $conn->query("SELECT id, folio, monto FROM notas_credito WHERE monto > 0 ORDER BY id DESC");
@@ -85,7 +85,6 @@ error_log("DEBUG: cargando formulario de compra correctamente");
         <button type="submit" class="btn btn-success">Guardar Compra</button>
     </div>
 </form>
-<?php exit; ?>
 <script>
 document.getElementById("formCompra").addEventListener("submit", function(e) {
     e.preventDefault();
@@ -107,3 +106,4 @@ document.getElementById("formCompra").addEventListener("submit", function(e) {
     });
 });
 </script>
+<?php exit; ?>
