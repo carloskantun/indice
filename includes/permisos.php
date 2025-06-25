@@ -49,6 +49,10 @@ function verificaAccesoModulo(string $modulo): bool {
                    str_contains($puesto, 'supervisor operador') ||
                    in_array($rol, ['admin', 'ceo', 'webmaster', 'superadmin']);
 
+        case 'lavanderia':
+            return in_array($rol, ['superadmin','administrador','gerente','admin']) ||
+                   str_contains($puesto, 'lavanderia');
+
         default:
             return false;
     }

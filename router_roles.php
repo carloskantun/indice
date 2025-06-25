@@ -11,6 +11,7 @@ function redireccionar_por_puesto($puesto) {
         'ceo'=> 'minipanel_mantenimiento.php',
         'operador'=> 'registrar_transfer.php',
         'supervisor operador'=> 'minipanel_transfers.php',
+        'lavanderia'=> 'minipanel_lavanderia.php',
         // Agrega más puestos personalizados aquí si lo deseas:
         // 'webmaster' => 'panel_webmaster.php',
     ];
