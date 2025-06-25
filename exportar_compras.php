@@ -1,10 +1,13 @@
 <?php
-ini_set('display_errors',1);
+// Evitar que los errores de PHP se envíen al CSV generado
+ini_set('display_errors', 0);
 error_reporting(E_ALL);
 header('Content-Type: text/csv; charset=utf-8');
 header('Content-Disposition: attachment; filename=export_compras.csv');
 
 include 'conexion.php';
+// Lanzar excepciones en caso de error de MySQL
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 $output = fopen('php://output','w');
 
@@ -83,13 +86,21 @@ $campo_orden = $mapa_columnas[$orden] ?? 'oc.folio';
 $dir = $dir==='DESC' ? 'DESC':'ASC';
 $query .= " ORDER BY $campo_orden $dir";
 
-$res = $conn->query($query);
-while($row = $res->fetch_assoc()){
-    $fila=[];
-    foreach($cols as $c){
-        $fila[] = isset($row[$c]) ? $row[$c] : '';
+$res = null;
+try {
+    $res = $conn->query($query);
+
+    while ($row = $res->fetch_assoc()) {
+        $fila = [];
+        foreach ($cols as $c) {
+            $fila[] = isset($row[$c]) ? $row[$c] : '';
+        }
+        fputcsv($output, $fila);
     }
-    fputcsv($output,$fila);
+} catch (Throwable $e) {
+    // Registrar el error en el log de PHP y enviar mensaje genérico
+    error_log('Error exportar_compras: ' . $e->getMessage());
+    fputcsv($output, ['Error al generar reporte']);
 }
 
 fclose($output);

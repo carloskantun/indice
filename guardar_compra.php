@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'conexion.php';
 
 $orden_id = $_POST['orden_folio'] ?? null;
@@ -39,10 +40,17 @@ $stmt = $conn->prepare("INSERT INTO compras
     (folio, orden_id, fecha_compra, proveedor_id, usuario_id, monto_total, comprobante, observaciones, nota_credito_id) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-$stmt->bind_param("sssii dssi", 
-    $folio, $orden_id, $fecha, 
-    $proveedor_id, $usuario_id, $monto, 
-    $comprobante, $observaciones, $nota_credito_id
+$stmt->bind_param(
+    "sssiidssi",
+    $folio,
+    $orden_id,
+    $fecha,
+    $proveedor_id,
+    $usuario_id,
+    $monto,
+    $comprobante,
+    $observaciones,
+    $nota_credito_id
 );
 
 if ($stmt->execute()) {
@@ -55,3 +63,4 @@ if ($stmt->execute()) {
 } else {
     echo "Error al guardar: " . $stmt->error;
 }
+

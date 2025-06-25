@@ -369,29 +369,49 @@
 	<!-- ðŸ“Œ Tabla de Ã“rdenes de Compra -->
 	    <div class="table-responsive">
 	            <table class="table table-striped table-sm">
-	        <thead>
-	            <tr>
-	                <th class="col-folio">Folio</th>
-	                <th class="col-proveedor">Proveedor</th>
-	                <th class="col-monto">Monto</th>
-	                <th class="col-vencimiento">Vencimiento</th>
-	                <th class="col-concepto">Concepto</th>
-	                <th class="col-tipo">Tipo</th>
-	                <th class="col-factura">Factura</th>
-	                <th class="col-usuario">Usuario</th>
-	                <th class="col-unidad_negocio">Unidad de Negocio</th>
-	                <th class="col-estatus text-center" style="min-width: 180px;">Estatus</th>
-	                <th class="col-quien_pago">Quién Pagá</th>
-	                <th class="col-nivel">Nivel</th>
-	                <th class="col-compra">Compra</th>
-                    <th class="col-nota">Nota de Crédito</th>
-                    <th class="col-oc">OC</th>
-                    <th class="col-compra">Gasto</th>
-                    <th class="col-nc">NC</th>
-                    <th class="col-abono">Pago | Abono</th>
+                <thead>
+                    <tr id="columnas-reordenables">
+<?php
+$columnas_ordenables = [
+    'folio' => 'Folio',
+    'proveedor' => 'Proveedor',
+    'monto' => 'Monto',
+    'vencimiento' => 'Vencimiento',
+    'concepto' => 'Concepto',
+    'tipo' => 'Tipo',
+    'factura' => 'Factura',
+    'usuario' => 'Usuario',
+    'unidad_negocio' => 'Unidad de Negocio',
+    'estatus' => 'Estatus',
+    'quien_pago' => 'Quién Pagó',
+    'nivel' => 'Nivel',
+    'compra' => 'Compra',
+    'nota' => 'Nota de Crédito'
+];
+
+$orden_actual = $_GET['orden'] ?? '';
+$dir_actual = $_GET['dir'] ?? 'ASC';
+
+foreach ($columnas_ordenables as $col => $label):
+    $params = $_GET;
+    $params['orden'] = $col;
+    $params['dir'] = ($orden_actual === $col && $dir_actual === 'ASC') ? 'DESC' : 'ASC';
+    $url = '?' . http_build_query($params);
+    $icon = ($orden_actual === $col) ? ($dir_actual === 'DESC' ? '▼' : '▲') : '';
+?>
+                        <th class="col-<?php echo $col; ?>">
+                            <a href="<?php echo htmlspecialchars($url); ?>" style="text-decoration:none;color:inherit;">
+                                <?php echo $label . ' ' . $icon; ?>
+                            </a>
+                        </th>
+<?php endforeach; ?>
+                        <th class="col-oc">OC</th>
+                        <th class="col-compra">Gasto</th>
+                        <th class="col-nc">NC</th>
+                        <th class="col-abono">Pago | Abono</th>
                         <th class="col-ver_pdf">PDF</th>
-	            </tr>
-	        </thead>
+                    </tr>
+                </thead>
 <tbody id="tabla-ordenes">
 <?php foreach ($ordenes as $orden): ?>
 <tr>
