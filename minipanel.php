@@ -244,7 +244,7 @@
 	                        <option value="<?php echo htmlspecialchars($proveedor['id']); ?>" <?php echo $selected; ?>>
 	                       <?php echo htmlspecialchars($proveedor['nombre']); ?>
 	                      </option>
-	                       <?php endforeach; ?>
+	                       <?php endwhile; ?>
 	                       </select>
 	                    </div>
 	
@@ -274,7 +274,7 @@
 	                                        <?php echo (isset($_GET['usuario']) && is_array($_GET['usuario']) && in_array($usuario['id'], $_GET['usuario'])) ? 'selected' : ''; ?>>
 	                                        <?php echo htmlspecialchars($usuario['nombre']); ?>
 	                                    </option>
-	                                <?php endforeach; ?>
+	                                <?php endwhile; ?>
 	                            </select>
 	                        </div>
 	                    </div>
@@ -293,7 +293,7 @@
 	                                        <?php echo (isset($_GET['unidad_negocio']) && is_array($_GET['unidad_negocio']) && in_array($unidad['id'], $_GET['unidad_negocio'])) ? 'selected' : ''; ?>>
 	                                        <?php echo htmlspecialchars($unidad['nombre']); ?>
 	                                    </option>
-	                                <?php endforeach; ?>
+	                                <?php endwhile; ?>
 	                            </select>
 	                        </div>
 	
@@ -341,7 +341,7 @@
 	        <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="quien_pago"> Quien Pago</label></li>
 	        <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="nivel"> Nivel</label></li>
 	        <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="compra"> Compra</label></li>
-            <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="nota"> Nota de CrÃ©dito</label></li>
+            <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="nota"> Nota de Crédito</label></li>
 	    </ul>
 	</div> 
 	
@@ -359,9 +359,6 @@
         <a href="minipanel.php?estatus=Pago%20parcial" class="btn btn-outline-info btn-custom w-100">Órdenes en pago parcial</a>
     </div>
 </div>
-    <div class="col-12 col-md-auto">
-        <a href="minipanel.php?estatus=Vencido" class="btn btn-outline-danger btn-custom w-100">Órdenes de compra vencidas</a>
-    </div>
 </div>
 
 	
@@ -456,7 +453,7 @@ foreach ($columnas_ordenables as $col => $label):
                         <option value="<?php echo $usuario['id']; ?>" <?php echo ($orden['quien_pago_id'] == $usuario['id']) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($usuario['nombre']); ?>
                         </option>
-                    <?php endforeach; ?>
+                    <?php endwhile; ?>
                 </select>
             </form>
         <?php else: ?>
@@ -603,14 +600,7 @@ foreach ($columnas_ordenables as $col => $label):
 	            </div>
 	            <div class="modal-body" id="contenidoOrden">
 	                <p class="text-center">Cargando...</p>
-<div class="row g-2 mb-4">
-    <div class="col-12 col-md-auto">
-    <button id="btnExportarCSV" class="btn btn-dark btn-custom w-100">Exportar Resultados</button>
-</div>
-<div class="col-12 col-md-auto">
-  <a id="btnExportarPDF" class="btn btn-danger btn-custom w-100" href="#">Exportar PDF</a>
-</div>
-</div>
+
 	            </div>
 	        </div>
 	    </div>
@@ -622,6 +612,12 @@ foreach ($columnas_ordenables as $col => $label):
 	    <div class="col-12 col-md-auto">
 	        <a href="kpis.php" class="btn btn-primary btn-custom w-100">Ver Detalles de KPIs</a>
 	    </div>
+	    <div class="col-12 col-md-auto">
+        <button id="btnExportarCSV" class="btn btn-dark btn-custom w-100">Exportar Resultados</button>
+    </div>
+    <div class="col-12 col-md-auto">
+      <a id="btnExportarPDF" class="btn btn-danger btn-custom w-100" href="#">Exportar PDF</a>
+    </div>
 	</div>
 	
 	<!-- Modal de Resumen -->
