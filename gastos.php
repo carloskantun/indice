@@ -7,6 +7,8 @@ $proveedor = $_GET['proveedor'] ?? '';
 $unidad = $_GET['unidad'] ?? '';
 $fecha_inicio = $_GET['fecha_inicio'] ?? '';
 $fecha_fin = $_GET['fecha_fin'] ?? '';
+$orden = $_GET['orden'] ?? 'fecha';
+$dir = strtoupper($_GET['dir'] ?? 'DESC');
 
 $cond = [];
 if ($proveedor !== '') {
@@ -23,7 +25,21 @@ if ($fecha_fin !== '') {
 }
 $where = $cond ? 'WHERE '.implode(' AND ',$cond) : '';
 
-$sql = "SELECT g.folio, p.nombre AS proveedor, g.monto, g.fecha_pago, un.nombre AS unidad, g.tipo_gasto, g.medio_pago, g.cuenta_bancaria, g.estatus FROM gastos g LEFT JOIN proveedores p ON g.proveedor_id=p.id LEFT JOIN unidades_negocio un ON g.unidad_negocio_id=un.id $where ORDER BY g.fecha_pago DESC";
+$mapa_orden_sql = [
+    'folio'    => 'g.folio',
+    'proveedor'=> 'p.nombre',
+    'monto'    => 'g.monto',
+    'fecha'    => 'g.fecha_pago',
+    'unidad'   => 'un.nombre',
+    'tipo'     => 'g.tipo_gasto',
+    'medio'    => 'g.medio_pago',
+    'cuenta'   => 'g.cuenta_bancaria',
+    'estatus'  => 'g.estatus'
+];
+$columna_orden = $mapa_orden_sql[$orden] ?? 'g.fecha_pago';
+$dir = $dir === 'ASC' ? 'ASC' : 'DESC';
+
+$sql = "SELECT g.folio, p.nombre AS proveedor, g.monto, g.fecha_pago, un.nombre AS unidad, g.tipo_gasto, g.medio_pago, g.cuenta_bancaria, g.estatus FROM gastos g LEFT JOIN proveedores p ON g.proveedor_id=p.id LEFT JOIN unidades_negocio un ON g.unidad_negocio_id=un.id $where ORDER BY $columna_orden $dir";
 $res = $conn->query($sql);
 $gastos = $res->fetch_all(MYSQLI_ASSOC);
 
@@ -39,6 +55,7 @@ $kpi_anio = $conn->query("SELECT SUM(monto) AS total FROM gastos WHERE YEAR(fech
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
 <body class="bg-light">
 <nav class="navbar navbar-light bg-white shadow-sm">
@@ -100,35 +117,69 @@ $kpi_anio = $conn->query("SELECT SUM(monto) AS total FROM gastos WHERE YEAR(fech
         <a href="exportar_gastos_pdf.php?<?php echo http_build_query($_GET); ?>" target="_blank" class="btn btn-outline-danger btn-sm">PDF</a>
         <a href="exportar_gastos.php?<?php echo http_build_query($_GET); ?>" target="_blank" class="btn btn-outline-success btn-sm">CSV</a>
     </div>
+    <div class="dropdown mb-3">
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            Columnas
+        </button>
+        <ul class="dropdown-menu">
+            <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="folio" checked> Folio</label></li>
+            <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="proveedor" checked> Proveedor</label></li>
+            <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="monto" checked> Monto</label></li>
+            <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="fecha" checked> Fecha de pago</label></li>
+            <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="unidad" checked> Unidad</label></li>
+            <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="tipo" checked> Tipo</label></li>
+            <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="medio" checked> Medio de pago</label></li>
+            <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="cuenta" checked> Cuenta</label></li>
+            <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="estatus" checked> Estatus</label></li>
+        </ul>
+    </div>
     <div class="table-responsive">
     <table class="table table-striped">
         <thead>
-            <tr>
-                <th>Folio</th>
-                <th>Proveedor</th>
-                <th>Monto</th>
-                <th>Fecha de pago</th>
-                <th>Unidad</th>
-                <th>Tipo</th>
-                <th>Medio de pago</th>
-                <th>Cuenta</th>
-                <th>Estatus</th>
-                <th>PDF</th>
+            <tr id="columnas-reordenables">
+<?php
+$cols = [
+    'folio'     => 'Folio',
+    'proveedor' => 'Proveedor',
+    'monto'     => 'Monto',
+    'fecha'     => 'Fecha de pago',
+    'unidad'    => 'Unidad',
+    'tipo'      => 'Tipo',
+    'medio'     => 'Medio de pago',
+    'cuenta'    => 'Cuenta',
+    'estatus'   => 'Estatus'
+];
+$orden_actual = $_GET['orden'] ?? '';
+$dir_actual = $_GET['dir'] ?? 'ASC';
+foreach ($cols as $c => $label):
+    $params = $_GET;
+    $params['orden'] = $c;
+    $params['dir'] = ($orden_actual === $c && $dir_actual === 'ASC') ? 'DESC' : 'ASC';
+    $url = '?' . http_build_query($params);
+    $icon = ($orden_actual === $c) ? ($dir_actual === 'DESC' ? '▼' : '▲') : '';
+?>
+                <th class="col-<?php echo $c; ?>">
+                    <a href="<?php echo htmlspecialchars($url); ?>" style="text-decoration:none;color:inherit;">
+                        <?php echo $label . ' ' . $icon; ?>
+                    </a>
+                </th>
+<?php endforeach; ?>
+                <th class="col-pdf">PDF</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach($gastos as $g): ?>
             <tr>
-                <td><?php echo htmlspecialchars($g['folio']); ?></td>
-                <td><?php echo htmlspecialchars($g['proveedor']); ?></td>
-                <td>$<?php echo number_format($g['monto'],2); ?></td>
-                <td><?php echo htmlspecialchars($g['fecha_pago']); ?></td>
-                <td><?php echo htmlspecialchars($g['unidad']); ?></td>
-                <td><?php echo htmlspecialchars($g['tipo_gasto']); ?></td>
-                <td><?php echo htmlspecialchars($g['medio_pago']); ?></td>
-                <td><?php echo htmlspecialchars($g['cuenta_bancaria']); ?></td>
-                <td><?php echo htmlspecialchars($g['estatus']); ?></td>
-                <td><a class="btn btn-sm btn-outline-dark" target="_blank" href="generar_pdf_gasto.php?folio=<?php echo $g['folio']; ?>">PDF</a></td>
+                <td class="col-folio"><?php echo htmlspecialchars($g['folio']); ?></td>
+                <td class="col-proveedor"><?php echo htmlspecialchars($g['proveedor']); ?></td>
+                <td class="col-monto">$<?php echo number_format($g['monto'],2); ?></td>
+                <td class="col-fecha"><?php echo htmlspecialchars($g['fecha_pago']); ?></td>
+                <td class="col-unidad"><?php echo htmlspecialchars($g['unidad']); ?></td>
+                <td class="col-tipo"><?php echo htmlspecialchars($g['tipo_gasto']); ?></td>
+                <td class="col-medio"><?php echo htmlspecialchars($g['medio_pago']); ?></td>
+                <td class="col-cuenta"><?php echo htmlspecialchars($g['cuenta_bancaria']); ?></td>
+                <td class="col-estatus"><?php echo htmlspecialchars($g['estatus']); ?></td>
+                <td class="col-pdf"><a class="btn btn-sm btn-outline-dark" target="_blank" href="generar_pdf_gasto.php?folio=<?php echo $g['folio']; ?>">PDF</a></td>
             </tr>
             <?php endforeach; ?>
         </tbody>
@@ -147,6 +198,26 @@ $(function(){
     $('#modalGasto').on('show.bs.modal', function(){
         $('#contenidoGasto').load('modal_gasto.php?modal=1');
     });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  const KEY='gastos_columnas';
+  function save(){const c={};document.querySelectorAll('.col-toggle').forEach(cb=>{c[cb.dataset.col]=cb.checked;});localStorage.setItem(KEY,JSON.stringify(c));}
+  function restore(){const c=JSON.parse(localStorage.getItem(KEY)||'{}');document.querySelectorAll('.col-toggle').forEach(cb=>{if(c.hasOwnProperty(cb.dataset.col)){cb.checked=c[cb.dataset.col];}document.querySelectorAll('.col-'+cb.dataset.col).forEach(el=>{el.style.display=cb.checked?'':'none';if(c.hasOwnProperty(cb.dataset.col))el.style.display=c[cb.dataset.col]?'':'none';});});}
+  restore();
+  document.querySelectorAll('.col-toggle').forEach(cb=>cb.addEventListener('change',function(){document.querySelectorAll('.col-'+this.dataset.col).forEach(el=>{el.style.display=this.checked?'':'none';});save();}));
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  if(typeof Sortable!=='undefined'){
+    const columnas=document.getElementById('columnas-reordenables');
+    const tabla=document.querySelector('table');
+    Sortable.create(columnas,{animation:150,onEnd:()=>{let order=[];columnas.querySelectorAll('th').forEach(th=>order.push(th.className));localStorage.setItem('orden_columnas_gastos',JSON.stringify(order));let filas=tabla.querySelectorAll('tbody tr');filas.forEach(tr=>{let celdas=Array.from(tr.children);let nuevo=[];order.forEach(cls=>{let cel=celdas.find(td=>td.classList.contains(cls));if(cel)nuevo.push(cel);});nuevo.forEach(td=>tr.appendChild(td));});}});
+    let saved=JSON.parse(localStorage.getItem('orden_columnas_gastos')||'[]');
+    if(saved.length>0){let ths=Array.from(columnas.children);let nuevo=[];saved.forEach(cls=>{let th=ths.find(el=>el.classList.contains(cls));if(th)nuevo.push(th);});nuevo.forEach(th=>columnas.appendChild(th));let filas=tabla.querySelectorAll('tbody tr');filas.forEach(tr=>{let celdas=Array.from(tr.children);let nuevo=[];saved.forEach(cls=>{let cel=celdas.find(td=>td.classList.contains(cls));if(cel)nuevo.push(cel);});nuevo.forEach(td=>tr.appendChild(td));});}
+  }
 });
 </script>
 </body>
