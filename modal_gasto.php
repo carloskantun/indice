@@ -54,9 +54,11 @@ if (!isset($_GET['modal'])) {
         <input type="text" name="cuenta_bancaria" class="form-control">
     </div>
     <div class="mb-3">
-        <label class="form-label">Comentario</label>
-        <textarea name="comentario" class="form-control"></textarea>
+        <label class="form-label">Concepto</label>
+        <textarea name="concepto" class="form-control"></textarea>
     </div>
+    <input type="hidden" name="origen" value="Directo">
+    <input type="hidden" name="origen_id" value="">
     <div class="text-end">
         <button type="submit" class="btn btn-success">Guardar</button>
     </div>

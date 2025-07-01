@@ -9,7 +9,9 @@ $unidad_id = $_POST['unidad_negocio_id'] ?? null;
 $tipo_gasto = $_POST['tipo_gasto'] ?? 'Unico';
 $medio_pago = $_POST['medio_pago'] ?? 'Transferencia';
 $cuenta = $_POST['cuenta_bancaria'] ?? null;
-$comentario = $_POST['comentario'] ?? null;
+$concepto = $_POST['concepto'] ?? null;
+$origen = $_POST['origen'] ?? 'Directo';
+$origen_id = $_POST['origen_id'] ?? null;
 
 if (!$proveedor_id || !$monto || !$fecha_pago || !$unidad_id) {
     echo 'Faltan datos';
@@ -21,8 +23,8 @@ $prefix = "G-$anio-";
 $count = $conn->query("SELECT COUNT(*) AS total FROM gastos WHERE folio LIKE '$prefix%'")->fetch_assoc()['total'] + 1;
 $folio = $prefix . str_pad($count, 4, '0', STR_PAD_LEFT);
 
-$stmt = $conn->prepare("INSERT INTO gastos (folio, proveedor_id, monto, fecha_pago, unidad_negocio_id, tipo_gasto, medio_pago, cuenta_bancaria, comentario) VALUES (?,?,?,?,?,?,?,?,?)");
-$stmt->bind_param('sidssssss', $folio, $proveedor_id, $monto, $fecha_pago, $unidad_id, $tipo_gasto, $medio_pago, $cuenta, $comentario);
+$stmt = $conn->prepare("INSERT INTO gastos (folio, proveedor_id, monto, fecha_pago, unidad_negocio_id, tipo_gasto, medio_pago, cuenta_bancaria, concepto, origen, origen_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+$stmt->bind_param('sidssssssss', $folio, $proveedor_id, $monto, $fecha_pago, $unidad_id, $tipo_gasto, $medio_pago, $cuenta, $concepto, $origen, $origen_id);
 if ($stmt->execute()) {
     echo 'ok';
 } else {
