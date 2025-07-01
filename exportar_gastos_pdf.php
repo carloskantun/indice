@@ -22,12 +22,12 @@ if (!empty($_GET['fecha_fin'])) {
 }
 $where = $cond ? 'WHERE '.implode(' AND ',$cond) : '';
 
-$sql = "SELECT g.folio, p.nombre AS proveedor, g.monto, g.fecha_pago, un.nombre AS unidad, g.tipo_gasto, g.medio_pago, g.cuenta_bancaria, g.estatus FROM gastos g LEFT JOIN proveedores p ON g.proveedor_id=p.id LEFT JOIN unidades_negocio un ON g.unidad_negocio_id=un.id $where ORDER BY g.fecha_pago DESC";
+$sql = "SELECT g.folio, p.nombre AS proveedor, g.monto, g.fecha_pago, un.nombre AS unidad, g.tipo_gasto, g.medio_pago, g.cuenta_bancaria, g.concepto, g.estatus FROM gastos g LEFT JOIN proveedores p ON g.proveedor_id=p.id LEFT JOIN unidades_negocio un ON g.unidad_negocio_id=un.id $where ORDER BY g.fecha_pago DESC";
 $res = $conn->query($sql);
 
 $html = '<h3 style="text-align:center;font-weight:bold;">Reporte de Gastos</h3>';
 $html .= '<table border="1" cellspacing="0" cellpadding="4" width="100%" style="font-size:10px">';
-$html .= '<thead><tr><th>Folio</th><th>Proveedor</th><th>Monto</th><th>Fecha</th><th>Unidad</th><th>Tipo</th><th>Medio</th><th>Cuenta</th><th>Estatus</th></tr></thead><tbody>';
+$html .= '<thead><tr><th>Folio</th><th>Proveedor</th><th>Monto</th><th>Fecha</th><th>Unidad</th><th>Tipo</th><th>Medio</th><th>Cuenta</th><th>Concepto</th><th>Estatus</th></tr></thead><tbody>';
 while($row=$res->fetch_assoc()){
     $html .= '<tr>';
     $html .= '<td>'.htmlspecialchars($row['folio']).'</td>';
@@ -38,6 +38,7 @@ while($row=$res->fetch_assoc()){
     $html .= '<td>'.htmlspecialchars($row['tipo_gasto']).'</td>';
     $html .= '<td>'.htmlspecialchars($row['medio_pago']).'</td>';
     $html .= '<td>'.htmlspecialchars($row['cuenta_bancaria']).'</td>';
+    $html .= '<td>'.htmlspecialchars($row['concepto']).'</td>';
     $html .= '<td>'.htmlspecialchars($row['estatus']).'</td>';
     $html .= '</tr>';
 }

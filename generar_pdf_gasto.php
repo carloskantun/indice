@@ -6,7 +6,7 @@ include 'conexion.php';
 $folio = $_GET['folio'] ?? '';
 if (!$folio) { die('Folio no proporcionado'); }
 
-$sql = "SELECT g.folio, p.nombre AS proveedor, g.monto, g.fecha_pago, un.nombre AS unidad, g.tipo_gasto, g.medio_pago, g.cuenta_bancaria, g.estatus, g.comentario FROM gastos g LEFT JOIN proveedores p ON g.proveedor_id=p.id LEFT JOIN unidades_negocio un ON g.unidad_negocio_id=un.id WHERE g.folio=?";
+$sql = "SELECT g.folio, p.nombre AS proveedor, g.monto, g.fecha_pago, un.nombre AS unidad, g.tipo_gasto, g.medio_pago, g.cuenta_bancaria, g.estatus, g.concepto FROM gastos g LEFT JOIN proveedores p ON g.proveedor_id=p.id LEFT JOIN unidades_negocio un ON g.unidad_negocio_id=un.id WHERE g.folio=?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('s',$folio);
 $stmt->execute();

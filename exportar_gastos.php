@@ -22,12 +22,12 @@ if (!empty($_GET['fecha_fin'])) {
 }
 $where = $cond ? 'WHERE '.implode(' AND ',$cond) : '';
 
-$sql = "SELECT g.folio, p.nombre AS proveedor, g.monto, g.fecha_pago, un.nombre AS unidad, g.tipo_gasto, g.medio_pago, g.cuenta_bancaria, g.estatus FROM gastos g LEFT JOIN proveedores p ON g.proveedor_id=p.id LEFT JOIN unidades_negocio un ON g.unidad_negocio_id=un.id $where ORDER BY g.fecha_pago DESC";
+$sql = "SELECT g.folio, p.nombre AS proveedor, g.monto, g.fecha_pago, un.nombre AS unidad, g.tipo_gasto, g.medio_pago, g.cuenta_bancaria, g.concepto, g.estatus FROM gastos g LEFT JOIN proveedores p ON g.proveedor_id=p.id LEFT JOIN unidades_negocio un ON g.unidad_negocio_id=un.id $where ORDER BY g.fecha_pago DESC";
 $res = $conn->query($sql);
 $out = fopen('php://output','w');
-fputcsv($out,['Folio','Proveedor','Monto','Fecha','Unidad','Tipo','Medio','Cuenta','Estatus']);
+fputcsv($out,['Folio','Proveedor','Monto','Fecha','Unidad','Tipo','Medio','Cuenta','Concepto','Estatus']);
 while($row=$res->fetch_assoc()){
-    fputcsv($out,[$row['folio'],$row['proveedor'],$row['monto'],$row['fecha_pago'],$row['unidad'],$row['tipo_gasto'],$row['medio_pago'],$row['cuenta_bancaria'],$row['estatus']]);
+    fputcsv($out,[$row['folio'],$row['proveedor'],$row['monto'],$row['fecha_pago'],$row['unidad'],$row['tipo_gasto'],$row['medio_pago'],$row['cuenta_bancaria'],$row['concepto'],$row['estatus']]);
 }
 fclose($out);
 exit;

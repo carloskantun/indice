@@ -16,9 +16,11 @@ $sql = "CREATE TABLE IF NOT EXISTS gastos (
   tipo_gasto ENUM('Recurrente','Unico') DEFAULT 'Unico',
   medio_pago ENUM('Tarjeta','Transferencia','Efectivo') DEFAULT 'Transferencia',
   cuenta_bancaria VARCHAR(50),
-  estatus ENUM('Pagado','Abonado','Nota credito') DEFAULT 'Pagado',
-  comentario TEXT,
+  estatus ENUM('Pagado','Pago parcial','Vencido','Por pagar') DEFAULT 'Pagado',
+  concepto TEXT,
   orden_folio VARCHAR(50),
+  origen ENUM('Directo','OrdenCompra') DEFAULT 'Directo',
+  origen_id VARCHAR(50),
   fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (proveedor_id) REFERENCES proveedores(id),
   FOREIGN KEY (unidad_negocio_id) REFERENCES unidades_negocio(id)
