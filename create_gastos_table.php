@@ -19,7 +19,7 @@ $sql = "CREATE TABLE IF NOT EXISTS gastos (
   estatus ENUM('Pagado','Pago parcial','Vencido','Por pagar') DEFAULT 'Pagado',
   concepto TEXT,
   orden_folio VARCHAR(50),
-  origen ENUM('Directo','OrdenCompra') DEFAULT 'Directo',
+  origen ENUM('Directo','Orden') DEFAULT 'Directo',
   origen_id VARCHAR(50),
   fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (proveedor_id) REFERENCES proveedores(id),

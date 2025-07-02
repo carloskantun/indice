@@ -7,6 +7,24 @@ if (!isset($_GET['modal'])) {
 ?>
 <form id="formGasto" method="POST" action="guardar_gasto.php">
     <div class="mb-3">
+        <label class="form-label">Tipo de registro</label>
+        <select id="tipoRegistro" class="form-select">
+            <option value="Directo">Gasto Directo</option>
+            <option value="Orden">Orden de Compra</option>
+        </select>
+    </div>
+    <div class="mb-3 d-none" id="campoOrden">
+        <label class="form-label">Orden relacionada</label>
+        <select name="orden_folio" class="form-select">
+            <option value="">Seleccione orden</option>
+            <?php
+            $ord=$conn->query("SELECT oc.folio, p.nombre AS prov FROM ordenes_compra oc JOIN proveedores p ON oc.proveedor_id=p.id WHERE oc.estatus_pago IN ('Por pagar','Vencido','Pago parcial') ORDER BY oc.folio DESC");
+            while($row=$ord->fetch_assoc()): ?>
+            <option value="<?php echo $row['folio']; ?>"><?php echo htmlspecialchars($row['folio'].' - '.$row['prov']); ?></option>
+            <?php endwhile; ?>
+        </select>
+    </div>
+    <div class="mb-3">
         <label class="form-label">Proveedor</label>
         <select name="proveedor_id" class="form-select" required>
             <option value="">Seleccione proveedor</option>
@@ -57,7 +75,6 @@ if (!isset($_GET['modal'])) {
         <label class="form-label">Concepto</label>
         <textarea name="concepto" class="form-control"></textarea>
     </div>
-    <input type="hidden" name="origen" value="Directo">
     <input type="hidden" name="origen_id" value="">
     <div class="text-end">
         <button type="submit" class="btn btn-success">Guardar</button>
@@ -79,5 +96,24 @@ document.getElementById('formGasto').addEventListener('submit', function(e) {
             }
         });
 });
+
+// Cambiar tipo de registro
+const tipoReg=document.getElementById('tipoRegistro');
+const campoOrden=document.getElementById('campoOrden');
+const inputOrigen=document.createElement('input');
+inputOrigen.type='hidden';
+inputOrigen.name='origen';
+document.getElementById('formGasto').appendChild(inputOrigen);
+tipoReg.addEventListener('change',actualizar);
+function actualizar(){
+    if(tipoReg.value==='Orden'){
+        campoOrden.classList.remove('d-none');
+        inputOrigen.value='Orden';
+    }else{
+        campoOrden.classList.add('d-none');
+        inputOrigen.value='Directo';
+    }
+}
+actualizar();
 </script>
 <?php exit; ?>
