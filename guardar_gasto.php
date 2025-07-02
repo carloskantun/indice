@@ -11,6 +11,7 @@ $medio_pago = $_POST['medio_pago'] ?? 'Transferencia';
 $cuenta = $_POST['cuenta_bancaria'] ?? null;
 $concepto = $_POST['concepto'] ?? null;
 $origen = $_POST['origen'] ?? 'Directo';
+$orden_folio = $_POST['orden_folio'] ?? null;
 $origen_id = $_POST['origen_id'] ?? null;
 
 if (!$proveedor_id || !$monto || !$fecha_pago || !$unidad_id) {
@@ -23,8 +24,13 @@ $prefix = "G-$anio-";
 $count = $conn->query("SELECT COUNT(*) AS total FROM gastos WHERE folio LIKE '$prefix%'")->fetch_assoc()['total'] + 1;
 $folio = $prefix . str_pad($count, 4, '0', STR_PAD_LEFT);
 
-$stmt = $conn->prepare("INSERT INTO gastos (folio, proveedor_id, monto, fecha_pago, unidad_negocio_id, tipo_gasto, medio_pago, cuenta_bancaria, concepto, origen, origen_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
-$stmt->bind_param('sidssssssss', $folio, $proveedor_id, $monto, $fecha_pago, $unidad_id, $tipo_gasto, $medio_pago, $cuenta, $concepto, $origen, $origen_id);
+$estatus = 'Pagado';
+if ($origen === 'Orden') {
+    $estatus = (strtotime($fecha_pago) < strtotime(date('Y-m-d'))) ? 'Vencido' : 'Por pagar';
+}
+
+$stmt = $conn->prepare("INSERT INTO gastos (folio, proveedor_id, monto, fecha_pago, unidad_negocio_id, tipo_gasto, medio_pago, cuenta_bancaria, estatus, concepto, orden_folio, origen, origen_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+$stmt->bind_param('sidsissssssss', $folio, $proveedor_id, $monto, $fecha_pago, $unidad_id, $tipo_gasto, $medio_pago, $cuenta, $estatus, $concepto, $orden_folio, $origen, $origen_id);
 if ($stmt->execute()) {
     echo 'ok';
 } else {
