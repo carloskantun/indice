@@ -1,17 +1,8 @@
 <?php
 session_start();
 include 'auth.php'; // Protección de sesión
+include 'conexion.php';
 
-$servername = "localhost";
-$username = "corazon_caribe";
-$password = "Kantun.01*";
-$database = "corazon_orderdecompras";
-
-$conn = new mysqli($servername, $username, $password, $database);
-
-if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
-}
 
 // KPIs
 $ordenes_totales = $conn->query("SELECT COUNT(*) AS total FROM ordenes_compra")->fetch_assoc()['total'];

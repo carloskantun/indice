@@ -9,11 +9,6 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'superadmin') {
     die("Acceso no autorizado.");
 }
 
-$conn = new mysqli($servername, $username, $password, $database);
-
-if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
-}
 
 // Obtener usuarios
 $result = $conn->query("SELECT id, nombre, email, telefono, puesto, rol FROM usuarios");
