@@ -20,6 +20,14 @@ if (!empty($_GET['fecha_fin'])) {
     $f = $conn->real_escape_string($_GET['fecha_fin']);
     $cond[] = "g.fecha_pago <= '$f'";
 }
+if (!empty($_GET['estatus'])) {
+    $e = $conn->real_escape_string($_GET['estatus']);
+    $cond[] = "g.estatus='$e'";
+}
+if (!empty($_GET['origen'])) {
+    $o = $conn->real_escape_string($_GET['origen']);
+    $cond[] = "g.origen='$o'";
+}
 $where = $cond ? 'WHERE '.implode(' AND ',$cond) : '';
 
 $sql = "SELECT g.folio, p.nombre AS proveedor, g.monto, g.fecha_pago, un.nombre AS unidad, g.tipo_gasto, g.medio_pago, g.cuenta_bancaria, g.concepto, g.estatus FROM gastos g LEFT JOIN proveedores p ON g.proveedor_id=p.id LEFT JOIN unidades_negocio un ON g.unidad_negocio_id=un.id $where ORDER BY g.fecha_pago DESC";

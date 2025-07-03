@@ -7,6 +7,8 @@ $proveedor = $_GET['proveedor'] ?? '';
 $unidad = $_GET['unidad'] ?? '';
 $fecha_inicio = $_GET['fecha_inicio'] ?? '';
 $fecha_fin = $_GET['fecha_fin'] ?? '';
+$estatus = $_GET['estatus'] ?? '';
+$origen = $_GET['origen'] ?? '';
 $orden = $_GET['orden'] ?? 'fecha';
 $dir = strtoupper($_GET['dir'] ?? 'DESC');
 
@@ -22,6 +24,12 @@ if ($fecha_inicio !== '') {
 }
 if ($fecha_fin !== '') {
     $cond[] = "g.fecha_pago <= '".$conn->real_escape_string($fecha_fin)."'";
+}
+if ($estatus !== '') {
+    $cond[] = "g.estatus='".$conn->real_escape_string($estatus)."'";
+}
+if ($origen !== '') {
+    $cond[] = "g.origen='".$conn->real_escape_string($origen)."'";
 }
 $where = $cond ? 'WHERE '.implode(' AND ',$cond) : '';
 
@@ -85,8 +93,8 @@ $kpi_anio = $conn->query("SELECT SUM(monto) AS total FROM gastos WHERE YEAR(fech
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalGasto">Agregar Gasto</button>
         </div>
     </div>
-    <form class="row g-2 mb-4">
-        <div class="col-md-3">
+    <form class="row g-2 mb-4" id="filtros" method="GET">
+        <div class="col-md">
             <select name="proveedor" class="form-select select2" data-placeholder="Proveedor">
                 <option value="">Proveedor</option>
                 <?php $pro=$conn->query("SELECT id,nombre FROM proveedores ORDER BY nombre");
@@ -95,8 +103,8 @@ $kpi_anio = $conn->query("SELECT SUM(monto) AS total FROM gastos WHERE YEAR(fech
                 <?php endwhile; ?>
             </select>
         </div>
-        <div class="col-md-3">
-            <select name="unidad" class="form-select select2" data-placeholder="Unidad">
+        <div class="col-md">
+            <select name="unidad" class="form-select" data-placeholder="Unidad">
                 <option value="">Unidad</option>
                 <?php $un=$conn->query("SELECT id,nombre FROM unidades_negocio ORDER BY nombre");
                 while($u=$un->fetch_assoc()): ?>
@@ -104,19 +112,41 @@ $kpi_anio = $conn->query("SELECT SUM(monto) AS total FROM gastos WHERE YEAR(fech
                 <?php endwhile; ?>
             </select>
         </div>
-        <div class="col-md-2">
+        <div class="col-md">
             <input type="date" name="fecha_inicio" class="form-control" value="<?php echo htmlspecialchars($fecha_inicio);?>">
         </div>
-        <div class="col-md-2">
+        <div class="col-md">
             <input type="date" name="fecha_fin" class="form-control" value="<?php echo htmlspecialchars($fecha_fin);?>">
         </div>
-        <div class="col-md-2">
+        <div class="col-md">
+            <select name="estatus" class="form-select">
+                <option value="">Estatus</option>
+                <?php $ests=['Pagado','Por pagar','Pago parcial','Vencido'];
+                foreach($ests as $e): ?>
+                <option value="<?php echo $e; ?>" <?php if($estatus==$e) echo 'selected';?>><?php echo $e; ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="col-md">
+            <select name="origen" class="form-select">
+                <option value="">Tipo</option>
+                <option value="Directo" <?php if($origen==='Directo') echo 'selected';?>>Directo</option>
+                <option value="Orden" <?php if($origen==='Orden') echo 'selected';?>>Orden</option>
+            </select>
+        </div>
+        <div class="col-md">
             <button type="submit" class="btn btn-primary w-100">Filtrar</button>
         </div>
     </form>
     <div class="mb-3">
         <a href="exportar_gastos_pdf.php?<?php echo http_build_query($_GET); ?>" target="_blank" class="btn btn-outline-danger btn-sm">PDF</a>
         <a href="exportar_gastos.php?<?php echo http_build_query($_GET); ?>" target="_blank" class="btn btn-outline-success btn-sm">CSV</a>
+    </div>
+    <div class="mb-3">
+        <button type="button" class="btn btn-sm btn-outline-dark quick-filter" data-origen="Orden" data-estatus="Por pagar">Órdenes por pagar</button>
+        <button type="button" class="btn btn-sm btn-outline-dark quick-filter" data-origen="" data-estatus="Pagado">Gastos</button>
+        <button type="button" class="btn btn-sm btn-outline-dark quick-filter" data-origen="Orden" data-estatus="Vencido">Órdenes vencidas</button>
+        <button type="button" class="btn btn-sm btn-outline-dark quick-filter" data-origen="Orden" data-estatus="Pago parcial">Órdenes en pago parcial</button>
     </div>
     <div class="dropdown mb-3">
         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
@@ -222,6 +252,22 @@ document.addEventListener('DOMContentLoaded',function(){
     let saved=JSON.parse(localStorage.getItem('orden_columnas_gastos')||'[]');
     if(saved.length>0){let ths=Array.from(columnas.children);let nuevo=[];saved.forEach(cls=>{let th=ths.find(el=>el.classList.contains(cls));if(th)nuevo.push(th);});nuevo.forEach(th=>columnas.appendChild(th));let filas=tabla.querySelectorAll('tbody tr');filas.forEach(tr=>{let celdas=Array.from(tr.children);let nuevo=[];saved.forEach(cls=>{let cel=celdas.find(td=>td.classList.contains(cls));if(cel)nuevo.push(cel);});nuevo.forEach(td=>tr.appendChild(td));});}
   }
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+    document.querySelectorAll('.quick-filter').forEach(btn=>{
+        btn.addEventListener('click',function(){
+            const form=document.getElementById('filtros');
+            if(form){
+                const est=this.dataset.estatus||'';
+                const ori=this.dataset.origen||'';
+                form.querySelector('[name="estatus"]').value=est;
+                form.querySelector('[name="origen"]').value=ori;
+                form.submit();
+            }
+        });
+    });
 });
 </script>
 </body>
