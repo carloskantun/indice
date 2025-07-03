@@ -7,12 +7,12 @@ $registros_por_pagina = 100;
 $pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $offset = ($pagina_actual - 1) * $registros_por_pagina;
 
-$query = "SELECT folio, monto, vencimiento_pago, concepto_pago, tipo_pago, genera_factura, estatus_pago, quien_pago_id, nivel,
-                 (SELECT nombre FROM proveedores WHERE id = proveedor_id) AS proveedor, 
+$query = "SELECT folio, descripcion_reporte, fecha_reporte, estatus, nivel, quien_realizo_id, costo_final,
+                 (SELECT nombre FROM alojamientos WHERE id = alojamiento_id) AS alojamiento,
                  (SELECT nombre FROM usuarios WHERE id = usuario_solicitante_id) AS usuario,
                  (SELECT nombre FROM unidades_negocio WHERE id = unidad_negocio_id) AS unidad_negocio
-          FROM ordenes_compra 
-          ORDER BY fecha_creacion DESC 
+          FROM ordenes_servicio_cliente
+          ORDER BY fecha_reporte DESC
           LIMIT $registros_por_pagina OFFSET $offset";
 
 $ordenes = $conn->query($query);
@@ -20,14 +20,16 @@ $ordenes = $conn->query($query);
 while ($orden = $ordenes->fetch_assoc()): ?>
     <tr>
         <td><?php echo htmlspecialchars($orden['folio']); ?></td>
-        <td><?php echo htmlspecialchars($orden['proveedor']); ?></td>
-        <td>$<?php echo number_format($orden['monto'], 2); ?></td>
-        <td><?php echo htmlspecialchars($orden['vencimiento_pago']); ?></td>
-        <td><?php echo htmlspecialchars($orden['concepto_pago']); ?></td>
-        <td><?php echo htmlspecialchars($orden['tipo_pago']); ?></td>
-        <td><?php echo htmlspecialchars($orden['genera_factura']); ?></td>
+        <td><?php echo htmlspecialchars($orden['alojamiento']); ?></td>
+        <td><?php echo htmlspecialchars($orden['descripcion_reporte']); ?></td>
+        <td><?php echo htmlspecialchars($orden['fecha_reporte']); ?></td>
         <td><?php echo htmlspecialchars($orden['usuario']); ?></td>
         <td><?php echo htmlspecialchars($orden['unidad_negocio']); ?></td>
-        <td><?php echo htmlspecialchars($orden['estatus_pago']); ?></td>
+        <td><?php echo htmlspecialchars($orden['estatus']); ?></td>
+        <td><?php echo htmlspecialchars($orden['quien_realizo_id']); ?></td>
+        <td><?php echo htmlspecialchars($orden['nivel']); ?></td>
+        <td>
+            <?php echo isset($orden['costo_final']) ? '$' . number_format($orden['costo_final'], 2) : ''; ?>
+        </td>
     </tr>
 <?php endwhile; ?>
