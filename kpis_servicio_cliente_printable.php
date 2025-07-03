@@ -74,6 +74,7 @@ $kpis = include 'kpis_servicio_cliente_data_core.php';
     <div class="col-md-6"><canvas id="graficoUnidades"></canvas></div>
     <div class="col-md-6"><canvas id="graficoCompletadas"></canvas></div>
     <div class="col-md-6"><canvas id="graficoUsuarios"></canvas></div>
+    <div class="col-md-6"><canvas id="graficoDelegados"></canvas></div>
   </div>
 </div>
 
@@ -120,6 +121,7 @@ crearGraficoPie('graficoUnidades', kpis.unidades.labels, kpis.unidades.valores, 
 crearGraficoPie('graficoEstatus', kpis.estatus.labels, kpis.estatus.valores, '% por Estatus');
 crearGraficoLineal('graficoCompletadas', kpis.completadas_dia.labels, kpis.completadas_dia.valores, 'Completadas por Día');
 crearGraficoPie('graficoUsuarios', kpis.completadas_usuario.labels, kpis.completadas_usuario.valores, 'Completadas por Usuario');
+crearGraficoPie('graficoDelegados', kpis.delegados.labels, kpis.delegados.valores, 'Delegadas por Usuario');
 </script>
 </body>
 </html>

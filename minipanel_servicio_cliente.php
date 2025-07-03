@@ -20,17 +20,19 @@ $pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $offset = ($pagina_actual - 1) * $registros_por_pagina;
 
 // 98 Construccin de la consulta con filtros dinmicos
-$query = "SELECT folio, fecha_reporte, descripcion_reporte, foto, estatus, nivel, quien_realizo_id, fecha_completado, detalle_completado, foto_completado, costo_final,
-                 (SELECT nombre FROM alojamientos WHERE id = alojamiento_id) AS alojamiento, 
+$query = "SELECT folio, fecha_reporte, fecha_vencimiento, descripcion_reporte, foto, estatus, nivel, delegar_usuario_id, quien_realizo_id, fecha_completado, detalle_completado, foto_completado, costo_final,
+                 (SELECT nombre FROM alojamientos WHERE id = alojamiento_id) AS alojamiento,
                  (SELECT nombre FROM usuarios WHERE id = usuario_solicitante_id) AS usuario,
+                 (SELECT nombre FROM usuarios WHERE id = delegar_usuario_id) AS delegado,
                  (SELECT nombre FROM unidades_negocio WHERE id = unidad_negocio_id) AS unidad_negocio
           FROM ordenes_servicio_cliente WHERE 1=1";
 
 
 // 98 Verificar y actualizar automticamente rdenes vencidas
-$conn->query("UPDATE ordenes_servicio_cliente 
-              SET estatus = 'Vencido' 
-              WHERE fecha_reporte < CURDATE() 
+$conn->query("UPDATE ordenes_servicio_cliente
+              SET estatus = 'Vencido'
+              WHERE fecha_vencimiento IS NOT NULL
+              AND fecha_vencimiento < CURDATE()
               AND estatus NOT IN ('Pagado', 'Cancelado', 'Terminado')");
 
 // Aplicar filtros dinmicos
@@ -68,8 +70,10 @@ $mapa_orden_sql = [
   'folio' => 'folio',
   'alojamiento' => 'alojamiento',
   'foto' => 'foto',
+  'vencimiento' => 'fecha_vencimiento',
   'fecha' => 'fecha_reporte',
   'usuario' => 'usuario',
+  'delegado' => 'delegado',
   'unidad_negocio' => 'unidad_negocio',
   'estatus' => 'estatus',
   'quien_pago' => 'quien_realizo_id',
@@ -340,7 +344,9 @@ function corregirCodificacion($cadena) {
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="descripcion"> Descripción</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="foto"> Foto</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="fecha"> Fecha</label></li>
+    <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="vencimiento"> Vencimiento</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="usuario"> Usuario</label></li>
+    <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="delegado"> Delegado</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="unidad_negocio"> Unidad de Negocio</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="estatus"> Estatus</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="quien_pago"> Quién Realizó</label></li>
@@ -369,8 +375,10 @@ $columnas_ordenables = [
   'folio' => 'Folio',
   'alojamiento' => 'Alojamiento',
   'foto' => 'Foto',
+  'vencimiento' => 'Vencimiento',
   'fecha' => 'Fecha',
   'usuario' => 'Usuario',
+  'delegado' => 'Delegado',
   'unidad_negocio' => 'Unidad de Negocio',
   'estatus' => 'Estatus',
   'quien_pago' => 'Quién Realizó',
@@ -429,7 +437,9 @@ foreach ($columnas_ordenables as $col => $label):
                         <?php endif; ?>
                     </td>
                     <td class="col-fecha"><?php echo htmlspecialchars($orden['fecha_reporte']); ?></td>
+                    <td class="col-vencimiento"><?php echo htmlspecialchars($orden['fecha_vencimiento']); ?></td>
                     <td class="col-usuario"><?php echo htmlspecialchars($orden['usuario']); ?></td>
+                    <td class="col-delegado"><?php echo $orden['delegado'] ? htmlspecialchars($orden['delegado']) : '—'; ?></td>
                     <td class="col-unidad_negocio"><?php echo htmlspecialchars($orden['unidad_negocio']); ?></td>
 
                     <!-- Estatus -->

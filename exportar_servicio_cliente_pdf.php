@@ -7,9 +7,10 @@ include 'conexion.php';
 $dompdf = new Dompdf();
 
 // Construcción de consulta (igual que en el CSV)
-$query = "SELECT folio, fecha_reporte, descripcion_reporte, estatus, nivel, fecha_completado, detalle_completado, costo_final,
-                 (SELECT nombre FROM alojamientos WHERE id = alojamiento_id) AS alojamiento, 
+$query = "SELECT folio, fecha_reporte, fecha_vencimiento, descripcion_reporte, estatus, nivel, fecha_completado, detalle_completado, costo_final,
+                 (SELECT nombre FROM alojamientos WHERE id = alojamiento_id) AS alojamiento,
                  (SELECT nombre FROM usuarios WHERE id = usuario_solicitante_id) AS usuario,
+                 (SELECT nombre FROM usuarios WHERE id = delegar_usuario_id) AS delegado,
                  (SELECT nombre FROM unidades_negocio WHERE id = unidad_negocio_id) AS unidad_negocio,
                  (SELECT nombre FROM usuarios WHERE id = quien_realizo_id) AS quien_realizo
           FROM ordenes_servicio_cliente WHERE 1=1";
@@ -57,6 +58,7 @@ $html .= '<thead>
 <tr>
 <th>Folio</th>
 <th>Fecha Reporte</th>
+<th>Vencimiento</th>
 <th>Descripción</th>
 <th>Estatus</th>
 <th>Nivel</th>
@@ -65,6 +67,7 @@ $html .= '<thead>
 <th>Costo</th>
 <th>Alojamiento</th>
 <th>Solicitante</th>
+<th>Delegado</th>
 <th>Unidad</th>
 <th>Quién Realizó</th>
 </tr>
@@ -74,6 +77,7 @@ while ($row = $resultado->fetch_assoc()) {
     $html .= '<tr>';
     $html .= '<td>' . htmlspecialchars($row['folio']) . '</td>';
     $html .= '<td>' . htmlspecialchars($row['fecha_reporte']) . '</td>';
+    $html .= '<td>' . htmlspecialchars($row['fecha_vencimiento']) . '</td>';
     $html .= '<td>' . htmlspecialchars($row['descripcion_reporte']) . '</td>';
     $estatus = $row['estatus'] ?? 'Pendiente';
     if ($estatus === '') $estatus = 'Pendiente';
@@ -84,6 +88,7 @@ while ($row = $resultado->fetch_assoc()) {
     $html .= '<td>$' . number_format($row['costo_final'], 2) . '</td>';
     $html .= '<td>' . htmlspecialchars($row['alojamiento']) . '</td>';
     $html .= '<td>' . htmlspecialchars($row['usuario']) . '</td>';
+    $html .= '<td>' . htmlspecialchars($row['delegado']) . '</td>';
     $html .= '<td>' . htmlspecialchars($row['unidad_negocio']) . '</td>';
     $html .= '<td>' . htmlspecialchars($row['quien_realizo']) . '</td>';
     $html .= '</tr>';
