@@ -32,6 +32,26 @@ if (isset($_GET['modal'])) {
         <input type="date" name="fecha_reporte" class="form-control" required>
     </div>
 
+    <!-- Fecha de vencimiento -->
+    <div class="mb-3">
+        <label for="fecha_vencimiento" class="form-label">Fecha de vencimiento</label>
+        <input type="date" name="fecha_vencimiento" class="form-control">
+    </div>
+
+    <!-- Delegar a -->
+    <div class="mb-3">
+        <label for="delegar_usuario_id" class="form-label">Delegar a</label>
+        <select name="delegar_usuario_id" class="form-control">
+            <option value="">Ninguno</option>
+            <?php
+            $usuarios = $conn->query("SELECT id, nombre FROM usuarios");
+            while ($usuario = $usuarios->fetch_assoc()):
+            ?>
+                <option value="<?php echo $usuario['id']; ?>"><?php echo htmlspecialchars($usuario['nombre']); ?></option>
+            <?php endwhile; ?>
+        </select>
+    </div>
+
     <!-- Descripcin -->
     <div class="mb-3">
         <label for="descripcion_reporte" class="form-label">Descripcin del Servicio al Cliente</label>

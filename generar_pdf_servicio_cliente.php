@@ -45,10 +45,11 @@ if (empty($folio)) {
 
 // Consulta SQL con todos los campos necesarios
 $query = "SELECT 
-    om.folio, om.fecha_reporte, om.descripcion_reporte, om.foto, om.estatus, om.nivel,
+    om.folio, om.fecha_reporte, om.fecha_vencimiento, om.descripcion_reporte, om.foto, om.estatus, om.nivel,
     om.fecha_completado, om.detalle_completado, om.foto_completado, om.costo_final,
     a.nombre AS alojamiento,
     u.nombre AS usuario,
+    (SELECT nombre FROM usuarios WHERE id = om.delegar_usuario_id) AS delegado,
     un.nombre AS unidad_negocio
 FROM ordenes_servicio_cliente om
 LEFT JOIN alojamientos a ON om.alojamiento_id = a.id
@@ -90,9 +91,11 @@ $html = '
   <table>
     <tr><th>Folio</th><td>' . $orden['folio'] . '</td></tr>
     <tr><th>Fecha del Reporte</th><td>' . $orden['fecha_reporte'] . '</td></tr>
+    <tr><th>Fecha Vencimiento</th><td>' . ($orden['fecha_vencimiento'] ?? '—') . '</td></tr>
     <tr><th>Alojamiento</th><td>' . $orden['alojamiento'] . '</td></tr>
     <tr><th>Unidad de Negocio</th><td>' . $orden['unidad_negocio'] . '</td></tr>
     <tr><th>Usuario Solicitante</th><td>' . $orden['usuario'] . '</td></tr>
+    <tr><th>Delegado</th><td>' . ($orden['delegado'] ?? '—') . '</td></tr>
     <tr><th>Descripción</th><td>' . $orden['descripcion_reporte'] . '</td></tr>
     <tr><th>Estatus</th><td>' . $estatus . '</td></tr>
     <tr><th>Nivel</th><td>' . $orden['nivel'] . '</td></tr>';
