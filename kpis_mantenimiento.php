@@ -151,8 +151,12 @@ $(function () {
   ${crearCard('% Cumplimiento Mes', res.cumplimiento_mes + '%', 'success')}
   ${crearCard('Coef. Productividad', res.productividad + '%', 'primary')}
   ${crearCard('Coef. Productividad Ponderado', res.ponderado + '%', 'warning')}
-
+  ${crearCard('Ponderado (En Proceso)', res.total_ponderado_proceso ?? 0, 'info')}
+  ${crearCard('Ponderado (Pendiente)', res.total_ponderado_pendiente ?? 0, 'secondary')}
+  ${crearCard('Ponderado (Terminado)', res.total_ponderado_terminado ?? 0, 'success')}
+  ${crearCard('Ponderado (Total)', res.total_ponderado_general ?? 0, 'dark')}
 `);
+
 
       // Alojamientos
       $("#top-general").html(res.top_general.map(r => `<li class="list-group-item">${r.nombre} (${r.total})</li>`).join(""));
