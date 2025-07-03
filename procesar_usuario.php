@@ -13,6 +13,7 @@ $telefono = $_POST['telefono'] ?? '';
 $email    = $_POST['email'] ?? '';
 $puesto   = $_POST['puesto'] ?? '';
 $password = $_POST['password'] ?? '';
+$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 $rol      = $_POST['rol'] ?? 'user';
 
 // Validar campos
@@ -20,10 +21,10 @@ if (empty($nombre) || empty($telefono) || empty($email) || empty($puesto) || emp
     die("Error: Todos los campos son obligatorios.");
 }
 
-// Guardar contraseña como texto plano (simple)
+// Guardar el hash de la contraseña
 $sql = "INSERT INTO usuarios (nombre, telefono, email, puesto, password, rol) VALUES (?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ssssss", $nombre, $telefono, $email, $puesto, $password, $rol);
+$stmt->bind_param("ssssss", $nombre, $telefono, $email, $puesto, $hashedPassword, $rol);
 
 if ($stmt->execute()) {
     echo "Usuario registrado correctamente. <a href='usuarios.php'>Regresar</a>";

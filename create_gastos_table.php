@@ -1,11 +1,5 @@
 <?php
-$servername = "localhost";
-$username   = "corazon_caribe";
-$password   = "Kantun.01*";
-$database   = "corazon_orderdecompras";
-
-$conn = new mysqli($servername, $username, $password, $database);
-
+include 'conexion.php';
 $sql = "CREATE TABLE IF NOT EXISTS gastos (
   id INT AUTO_INCREMENT PRIMARY KEY,
   folio VARCHAR(20) UNIQUE,
