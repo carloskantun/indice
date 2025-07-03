@@ -166,6 +166,14 @@ while ($row = $res->fetch_assoc()) {
     $sin_reportes[] = $row['nombre'];
 }
 
+// Ponderaciones por estatus
+$total_ponderado_general = obtener("SELECT SUM(ponderacion) AS total FROM ordenes_mantenimiento $where", $conn);
+$total_ponderado_proceso = obtener("SELECT SUM(ponderacion) AS total FROM ordenes_mantenimiento $where AND COALESCE(NULLIF(TRIM(estatus), ''), 'Pendiente') = 'En proceso'", $conn);
+$total_ponderado_terminado = obtener("SELECT SUM(ponderacion) AS total FROM ordenes_mantenimiento $where AND COALESCE(NULLIF(TRIM(estatus), ''), 'Pendiente') = 'Terminado'", $conn);
+$total_ponderado_pendiente = obtener("SELECT SUM(ponderacion) AS total FROM ordenes_mantenimiento $where AND COALESCE(NULLIF(TRIM(estatus), ''), 'Pendiente') = 'Pendiente'", $conn);
+
+
+
 // 👉 Retornar todos los KPIs
 $kpis = [
     'total' => (int)$total,
@@ -189,6 +197,10 @@ $kpis = [
     'top_pendientes' => $top_pendientes,
     'top_terminados' => $top_terminados,
     'sin_reportes' => $sin_reportes,
+    'total_ponderado_general' => (int)$total_ponderado_general,
+    'total_ponderado_proceso' => (int)$total_ponderado_proceso,
+    'total_ponderado_terminado' => (int)$total_ponderado_terminado,
+    'total_ponderado_pendiente' => (int)$total_ponderado_pendiente,
     'ponderado' => $ponderado,
 
 ];
