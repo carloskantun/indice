@@ -1,0 +1,11 @@
+# Ignore log files and temporary data
+*.log
+error_log
+log_renombrado_fotos.txt
+
+# Ignore user uploaded files
+uploads/
+
+# Ignore common OS generated files
+.DS_Store
+Thumbs.db
