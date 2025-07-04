@@ -48,7 +48,7 @@ $mapa_orden_sql = [
 $columna_orden = $mapa_orden_sql[$orden] ?? 'g.fecha_pago';
 $dir = $dir === 'ASC' ? 'ASC' : 'DESC';
 
-$sql = "SELECT g.folio, p.nombre AS proveedor, g.monto, g.fecha_pago, un.nombre AS unidad, g.tipo_gasto, g.medio_pago, g.cuenta_bancaria, g.concepto, g.estatus FROM gastos g LEFT JOIN proveedores p ON g.proveedor_id=p.id LEFT JOIN unidades_negocio un ON g.unidad_negocio_id=un.id $where ORDER BY $columna_orden $dir";
+$sql = "SELECT g.id, g.folio, p.nombre AS proveedor, g.monto, g.fecha_pago, un.nombre AS unidad, g.tipo_gasto, g.medio_pago, g.cuenta_bancaria, g.concepto, g.estatus, g.origen FROM gastos g LEFT JOIN proveedores p ON g.proveedor_id=p.id LEFT JOIN unidades_negocio un ON g.unidad_negocio_id=un.id $where ORDER BY $columna_orden $dir";
 $res = $conn->query($sql);
 $gastos = $res->fetch_all(MYSQLI_ASSOC);
 
@@ -180,7 +180,8 @@ $cols = [
     'medio'     => 'Medio de pago',
     'cuenta'    => 'Cuenta',
     'concepto'  => 'Concepto',
-    'estatus'   => 'Estatus'
+    'estatus'   => 'Estatus',
+    'accion'    => 'Pagar'
 ];
 $orden_actual = $_GET['orden'] ?? '';
 $dir_actual = $_GET['dir'] ?? 'ASC';
@@ -213,6 +214,11 @@ foreach ($cols as $c => $label):
                 <td class="col-cuenta"><?php echo htmlspecialchars($g['cuenta_bancaria']); ?></td>
                 <td class="col-concepto"><?php echo htmlspecialchars($g['concepto']); ?></td>
                 <td class="col-estatus"><?php echo htmlspecialchars($g['estatus']); ?></td>
+                <td class="col-accion">
+                    <?php if($g['origen']==='Orden' && $g['estatus']!=='Pagado'): ?>
+                        <button class="btn btn-sm btn-outline-primary pagar-btn" data-id="<?php echo $g['id']; ?>">Pagar</button>
+                    <?php endif; ?>
+                </td>
                 <td class="col-pdf"><a class="btn btn-sm btn-outline-dark" target="_blank" href="generar_pdf_gasto.php?folio=<?php echo $g['folio']; ?>">PDF</a></td>
             </tr>
             <?php endforeach; ?>
@@ -223,6 +229,11 @@ foreach ($cols as $c => $label):
 <div class="modal fade" id="modalGasto" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content" id="contenidoGasto"></div>
+  </div>
+</div>
+<div class="modal fade" id="modalAbono" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" id="contenidoAbono">Cargando...</div>
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -268,6 +279,21 @@ document.addEventListener('DOMContentLoaded',function(){
             }
         });
     });
+});
+</script>
+<script>
+document.addEventListener('click',function(e){
+    if(e.target.classList.contains('pagar-btn')){
+        const id=e.target.dataset.id;
+        const modal=document.getElementById('modalAbono');
+        const cont=document.getElementById('contenidoAbono');
+        cont.innerHTML='Cargando...';
+        var myModal=new bootstrap.Modal(modal);
+        myModal.show();
+        fetch('modal_abono.php?id='+id)
+            .then(r=>r.text())
+            .then(html=>{cont.innerHTML=html;});
+    }
 });
 </script>
 </body>
