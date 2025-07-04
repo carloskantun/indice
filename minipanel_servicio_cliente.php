@@ -223,6 +223,9 @@ function corregirCodificacion($cadena) {
     <div class="col-12 col-md-auto">
         <a href="kpis_servicio_cliente.php" class="btn btn-primary btn-custom w-100">Ver Detalles de KPIs</a>
         </div>
+    <div class="col-12 col-md-auto">
+        <a href="ordenes_servicio_cliente_list.php" class="btn btn-outline-secondary btn-custom w-100">Ver Tabla Simplificada</a>
+    </div>
 </div>
 
         <h4 class="mb-3">Reportes de Servicio al Cliente</h4>
