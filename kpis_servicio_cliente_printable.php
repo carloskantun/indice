@@ -31,7 +31,7 @@ $kpis = include 'kpis_servicio_cliente_data_core.php';
 </head>
 <body>
 <div class="container py-4">
-  <h2 class="mb-4 text-center">📊 KPIs de Servicio al Cliente (Vista para impresión)</h2>
+  <h2 class="mb-4 text-center">📊 KPIs de Tareas (Vista para impresión)</h2>
 
   <!-- KPIs -->
   <div class="section-title">🛠️ Indicadores Operativos</div>

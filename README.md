@@ -7,7 +7,7 @@ This project is a PHP based management system for purchase orders, maintenance r
 - `minipanel.php` and purchases related files: handle purchase orders.
 - `usuarios.php` & `editar_usuario.php`: user management.
 - `kpis_mantenimiento.php` and similar: KPI dashboards.
-- Newly added `minipanel_servicio_cliente.php` module replicates the maintenance workflow for **Servicio al Cliente**.
+- Newly added `minipanel_servicio_cliente.php` module replicates the maintenance workflow for **Tareas**.
 - `minipanel_transfers.php` module allows registering airport-hotel transfers.
 
 ## Database
@@ -20,7 +20,7 @@ The application expects a MySQL database configured in `conexion.php`. Tables su
 
 ## Modules
 - **Mantenimiento**: existing module for maintenance requests.
-- **Servicio al Cliente**: duplicated from maintenance, adjusted for customer service requests. Only roles *servicio al cliente*, *gerente* and *admin* can use it.
+- **Tareas**: duplicated from maintenance, adjusted for customer service requests. Only roles *servicio al cliente*, *gerente* and *admin* can use it.
 - **Transfers**: module to manage private transfers between airport and hotels with filters, exports and KPIs.
 
 ## Puestos Múltiples

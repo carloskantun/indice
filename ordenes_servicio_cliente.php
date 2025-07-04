@@ -26,15 +26,15 @@ if (isset($_GET['modal'])) {
         </select>
     </div>
 
-    <!-- Fecha del reporte -->
+    <!-- Fecha de la Tarea -->
     <div class="mb-3">
-        <label for="fecha_reporte" class="form-label">Fecha del reporte</label>
+        <label for="fecha_reporte" class="form-label">Fecha de la Tarea</label>
         <input type="date" name="fecha_reporte" class="form-control" required>
     </div>
 
     <!-- Descripcin -->
     <div class="mb-3">
-        <label for="descripcion_reporte" class="form-label">Descripcin del Servicio al Cliente</label>
+        <label for="descripcion_reporte" class="form-label">Descripción de la Tarea</label>
         <textarea name="descripcion_reporte" class="form-control" required></textarea>
     </div>
 
@@ -51,7 +51,7 @@ if (isset($_GET['modal'])) {
 
     <!-- Subir foto -->
     <div class="mb-3">
-        <label for="foto" class="form-label">Subir foto del Servicio al Cliente</label>
+        <label for="foto" class="form-label">Subir foto de la Tarea</label>
         <input type="file" name="foto" class="form-control">
     </div>
 
@@ -109,7 +109,7 @@ if (isset($_GET['modal'])) {
 </div>
 
     <!-- Botn -->
-    <button type="submit" class="btn btn-success w-100">Guardar Reporte</button>
+    <button type="submit" class="btn btn-success w-100">Guardar Tarea</button>
 </form>
 <?php
     exit;

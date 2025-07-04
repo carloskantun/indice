@@ -30,7 +30,7 @@ if (!$orden) {
     </div>
 
     <div class="mb-3">
-        <label for="detalle_completado" class="form-label">Detalle del Trabajo Realizado</label>
+        <label for="detalle_completado" class="form-label">Detalle de la Tarea</label>
         <textarea class="form-control" name="detalle_completado" rows="3" required><?php echo htmlspecialchars($orden['detalle_completado'] ?? ''); ?></textarea>
     </div>
 

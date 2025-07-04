@@ -106,7 +106,7 @@ function corregirCodificacion($cadena) {
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minipanel - Control de Gastos</title>
+    <title>Minipanel - Tareas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .container {
@@ -217,17 +217,17 @@ function corregirCodificacion($cadena) {
         </div>
     <?php endif; ?>
         <div class="col-12 col-md-auto">
-            <button class="btn btn-success btn-custom w-100" data-bs-toggle="modal" data-bs-target="#modalIngresarOrden">Ingresar Reporte de Servicio al Cliente</button>
+            <button class="btn btn-success btn-custom w-100" data-bs-toggle="modal" data-bs-target="#modalIngresarOrden">Ingresar Nueva Tarea</button>
         </div>
     <div class="col-12 col-md-auto">
         <button class="btn btn-info btn-custom w-100" data-bs-toggle="modal" data-bs-target="#modalKPIs">Resumen de KPIs</button>
     </div>
     <div class="col-12 col-md-auto">
-        <a href="kpis_servicio_cliente.php" class="btn btn-primary btn-custom w-100">Ver Detalles de KPIs</a>
+        <a href="kpis_servicio_cliente.php" class="btn btn-primary btn-custom w-100">Ver KPIs de Tareas</a>
         </div>
 </div>
 
-        <h4 class="mb-3">Reportes de Servicio al Cliente</h4>
+        <h4 class="mb-3">Listado de Tareas</h4>
     
 
 <!-- Filtros en Acorden -->
@@ -642,12 +642,12 @@ foreach ($columnas_ordenables as $col => $label):
     </div>
 </div>
 
-<!-- 98 MODAL: Ingresar Reporte de Servicio al Cliente -->
+<!-- 98 MODAL: Registrar Tarea -->
 <div class="modal fade" id="modalIngresarOrden" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-success text-white">
-                <h5 class="modal-title">Ingresar Reporte de Servicio al Cliente</h5>
+                <h5 class="modal-title">Registrar Tarea</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body" id="contenidoOrden">
@@ -658,11 +658,11 @@ foreach ($columnas_ordenables as $col => $label):
 </div>
 <div class="row g-2 mb-4">
     <div class="col-12 col-md-auto">
-    <button id="btnExportarCSV" class="btn btn-dark btn-custom w-100">Exportar Resultados</button>
+    <button id="btnExportarCSV" class="btn btn-dark btn-custom w-100">Exportar Tareas (CSV)</button>
 </div>
 
 <div class="col-12 col-md-auto">
-  <a id="btnExportarPDF" class="btn btn-danger btn-custom w-100" href="#">Exportar PDF</a>
+  <a id="btnExportarPDF" class="btn btn-danger btn-custom w-100" href="#">Exportar Tareas (PDF)</a>
 </div>
 
     <div class="col-12 col-md-auto">
@@ -809,9 +809,9 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(data => {
                 console.log("Respuesta JSON recibida:", data); // 73 Verifica en la consola
                 document.getElementById("kpi-summary-content").innerHTML = `
-                    <p><strong>Reportes de Servicio al Cliente Vencidas (Anual):</strong> $${data.foto_vencidas_anual}</p>
-                    <p><strong>Reportes de Servicio al Cliente Vencidas (Mes):</strong> $${data.foto_vencidas_mes}</p>
-                    <p><strong>Total de Reportes de Servicio al Cliente (Mes):</strong> $${data.foto_total_mes}</p>
+                    <p><strong>Tareas Vencidas (Anual):</strong> $${data.foto_vencidas_anual}</p>
+                    <p><strong>Tareas Vencidas (Mes):</strong> $${data.foto_vencidas_mes}</p>
+                    <p><strong>Total de Tareas del Mes:</strong> $${data.foto_total_mes}</p>
                     <p><strong>% Ordenes Liquidadas (Mes):</strong> ${data.porcentaje_liquidadas_mes}%</p>
                 `;
             })
@@ -1030,7 +1030,7 @@ document.addEventListener("DOMContentLoaded", function () {
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-success text-white">
-                <h5 class="modal-title">Completar Orden</h5>
+                <h5 class="modal-title">Completar Tarea</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body" id="contenidoCompletarOrden">

@@ -131,7 +131,7 @@ foreach ($modulos_disponibles as $m) {
                     <div class="modulo-box">
                         <a href="minipanel_servicio_cliente.php">
                             <span class="modulo-icon">📞</span>
-                            Servicio al Cliente
+                            Tareas
                         </a>
                     </div>
                 </div>
