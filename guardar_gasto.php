@@ -30,10 +30,9 @@ if (!$proveedor_id || !$monto || !$fecha_pago || !$unidad_id) {
     exit;
 }
 
-$anio = date('Y');
-$prefix = "G-$anio-";
-$count = $conn->query("SELECT COUNT(*) AS total FROM gastos WHERE folio LIKE '$prefix%'")->fetch_assoc()['total'] + 1;
-$folio = $prefix . str_pad($count, 4, '0', STR_PAD_LEFT);
+$nuevo_id = $conn->query("SELECT IFNULL(MAX(id),0)+1 AS nuevo_id FROM gastos")->fetch_assoc()['nuevo_id'];
+$prefijo = ($_POST['origen'] === 'Orden') ? 'OC-' : 'G-';
+$folio = $prefijo . str_pad($nuevo_id, 3, '0', STR_PAD_LEFT);
 
 $estatus = 'Pagado';
 if ($origen === 'Orden') {
