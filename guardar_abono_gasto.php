@@ -14,7 +14,7 @@ if(!$gasto_id || !$monto || !$fecha){
 $conn->begin_transaction();
 try{
     $archivo = null;
-    if(!empty($_FILES['comprobante']['name'])){
+    if(isset($_FILES['comprobante']) && is_uploaded_file($_FILES['comprobante']['tmp_name'])){
         $ext = strtolower(pathinfo($_FILES['comprobante']['name'], PATHINFO_EXTENSION));
         $permitidos = ['jpg','jpeg','png','pdf'];
         if(!in_array($ext,$permitidos)) throw new Exception('Tipo de archivo no permitido');
@@ -30,6 +30,17 @@ try{
         }
         $archivo = $destino;
     }
+    if($ext==='png'){
+    $png = imagecreatefrompng($_FILES['comprobante']['tmp_name']);
+    $bg = imagecreatetruecolor(imagesx($png), imagesy($png));
+    $white = imagecolorallocate($bg, 255, 255, 255);
+    imagefilledrectangle($bg, 0, 0, imagesx($png), imagesy($png), $white);
+    imagecopy($bg, $png, 0, 0, 0, 0, imagesx($png), imagesy($png));
+    imagejpeg($bg, $destino, 60);
+    imagedestroy($png);
+    imagedestroy($bg);
+}
+
 
     $stmt = $conn->prepare("INSERT INTO abonos_gastos (gasto_id,monto,fecha,comentario,archivo_comprobante) VALUES (?,?,?,?,?)");
     $stmt->bind_param('idsss',$gasto_id,$monto,$fecha,$comentario,$archivo);
@@ -38,6 +49,14 @@ try{
     $total = $conn->query("SELECT SUM(monto) AS s FROM abonos_gastos WHERE gasto_id=$gasto_id")->fetch_assoc()['s'];
     $gasto = $conn->query("SELECT monto FROM gastos WHERE id=$gasto_id")->fetch_assoc();
     $nuevo_status = ($total >= $gasto['monto']) ? 'Pagado' : 'Abonado';
+    if ($total == 0) {
+  $nuevo_status = 'Por pagar';
+} elseif ($total < $gasto['monto']) {
+  $nuevo_status = 'Abonado';
+} else {
+  $nuevo_status = 'Pagado';
+}
+
     $conn->query("UPDATE gastos SET estatus='".$conn->real_escape_string($nuevo_status)."' WHERE id=$gasto_id");
 
     $conn->commit();
