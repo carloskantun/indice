@@ -4,7 +4,7 @@ $id = intval($_GET['id'] ?? 0);
 $gasto = $conn->query("SELECT folio,monto FROM gastos WHERE id=$id")->fetch_assoc();
 if(!$gasto){ echo '<div class="p-3">Registro no encontrado</div>'; exit; }
 ?>
-<form id="formAbonoGasto" enctype="multipart/form-data">
+<form id="formAbono" enctype="multipart/form-data">
     <input type="hidden" name="gasto_id" value="<?php echo $id; ?>">
     <div class="modal-header bg-primary text-white">
         <h5 class="modal-title">Abonar a <?php echo htmlspecialchars($gasto['folio']); ?></h5>
@@ -33,7 +33,7 @@ if(!$gasto){ echo '<div class="p-3">Registro no encontrado</div>'; exit; }
     </div>
 </form>
 <script>
-document.getElementById('formAbonoGasto').addEventListener('submit',function(e){
+document.getElementById('formAbono').addEventListener('submit',function(e){
     e.preventDefault();
     var fd=new FormData(this);
     fetch('guardar_abono_gasto.php',{method:'POST',body:fd})

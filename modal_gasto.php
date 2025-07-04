@@ -54,10 +54,29 @@ if (!isset($_GET['modal'])) {
     </div>
     <div class="mb-3">
         <label class="form-label">Tipo de Gasto</label>
-        <select name="tipo_gasto" class="form-select">
+        <select name="tipo_gasto" id="tipoGasto" class="form-select">
             <option value="Recurrente">Recurrente</option>
             <option value="Unico">Único</option>
         </select>
+    </div>
+    <div id="camposRecurrente" class="d-none">
+        <div class="mb-3">
+            <label class="form-label">Periodicidad</label>
+            <select name="periodicidad" class="form-select">
+                <option value="Diario">Diario</option>
+                <option value="Semanal">Semanal</option>
+                <option value="Quincenal">Quincenal</option>
+                <option value="Mensual">Mensual</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Plazo</label>
+            <select name="plazo" class="form-select">
+                <option value="Trimestral">Trimestral</option>
+                <option value="Semestral">Semestral</option>
+                <option value="Anual">Anual</option>
+            </select>
+        </div>
     </div>
     <div class="mb-3">
         <label class="form-label">Medio de Pago</label>
@@ -104,7 +123,10 @@ const inputOrigen=document.createElement('input');
 inputOrigen.type='hidden';
 inputOrigen.name='origen';
 document.getElementById('formGasto').appendChild(inputOrigen);
+const tipoGasto=document.getElementById('tipoGasto');
+const camposRec=document.getElementById('camposRecurrente');
 tipoReg.addEventListener('change',actualizar);
+tipoGasto.addEventListener('change',mostrarCampos);
 function actualizar(){
     if(tipoReg.value==='Orden'){
         campoOrden.classList.remove('d-none');
@@ -114,6 +136,14 @@ function actualizar(){
         inputOrigen.value='Directo';
     }
 }
+function mostrarCampos(){
+    if(tipoGasto.value==='Recurrente'){
+        camposRec.classList.remove('d-none');
+    }else{
+        camposRec.classList.add('d-none');
+    }
+}
 actualizar();
+mostrarCampos();
 </script>
 <?php exit; ?>
