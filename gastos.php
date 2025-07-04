@@ -61,7 +61,8 @@ $sql = "SELECT
     g.concepto, 
     g.estatus, 
     g.origen,
-    (SELECT SUM(a.monto) FROM abonos_gastos a WHERE a.gasto_id = g.id) AS abonado_total
+    (SELECT SUM(a.monto) FROM abonos_gastos a WHERE a.gasto_id = g.id) AS abonado_total,
+    (g.monto - IFNULL((SELECT SUM(a.monto) FROM abonos_gastos a WHERE a.gasto_id = g.id), 0)) AS saldo
 FROM gastos g
 LEFT JOIN proveedores p ON g.proveedor_id = p.id
 LEFT JOIN unidades_negocio un ON g.unidad_negocio_id = un.id
@@ -183,6 +184,7 @@ $kpi_anio = $conn->query("SELECT SUM(monto) AS total FROM gastos WHERE YEAR(fech
             <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="concepto" checked> Concepto</label></li>
             <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="estatus" checked> Estatus</label></li>
             <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="abonado" checked> Abonado</label></li>
+            <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="saldo" checked> Saldo</label></li>
 
         </ul>
     </div>
@@ -203,6 +205,7 @@ $cols = [
     'concepto'  => 'Concepto',
     'estatus'   => 'Estatus',
     'abonado'   => 'Abonado',
+    'saldo'     => 'Saldo',
     'accion'    => 'Pagar'
 ];
 $orden_actual = $_GET['orden'] ?? '';
@@ -230,9 +233,16 @@ foreach ($cols as $c => $label):
                 <td class="col-proveedor"><?php echo htmlspecialchars($g['proveedor']); ?></td>
                 <td class="col-monto">$<?php echo number_format($g['monto'],2); ?></td>
                 <td class="col-abonado">$<?php echo number_format($g['abonado_total'] ?? 0, 2); ?></td>
+                <td class="col-saldo">$<?php echo number_format($g['saldo'] ?? ($g['monto'] - ($g['abonado_total'] ?? 0)), 2); ?></td>
                 <td class="col-fecha"><?php echo htmlspecialchars($g['fecha_pago']); ?></td>
                 <td class="col-unidad"><?php echo htmlspecialchars($g['unidad']); ?></td>
-                <td class="col-tipo"><?php echo htmlspecialchars($g['tipo_gasto']); ?></td>
+                <td class="col-tipo">
+                    <?php if($g['origen'] === 'Orden' && $g['estatus'] === 'Pagado'){
+                        echo 'Gasto (pagado)';
+                    } else {
+                        echo htmlspecialchars($g['tipo_gasto']);
+                    } ?>
+                </td>
                 <td class="col-medio"><?php echo htmlspecialchars($g['medio_pago']); ?></td>
                 <td class="col-cuenta"><?php echo htmlspecialchars($g['cuenta_bancaria']); ?></td>
                 <td class="col-concepto"><?php echo htmlspecialchars($g['concepto']); ?></td>
