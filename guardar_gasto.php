@@ -25,7 +25,7 @@ $folio = $prefix . str_pad($count, 4, '0', STR_PAD_LEFT);
 
 $estatus = 'Pagado';
 if ($origen === 'Orden') {
-    $estatus = (strtotime($fecha_pago) < strtotime(date('Y-m-d'))) ? 'Vencido' : 'Por pagar';
+    $estatus = 'Abonado';
 }
 
 $stmt = $conn->prepare("INSERT INTO gastos (folio, proveedor_id, monto, fecha_pago, unidad_negocio_id, tipo_gasto, medio_pago, cuenta_bancaria, estatus, concepto, orden_folio, origen) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
