@@ -101,6 +101,18 @@ foreach ($modulos_disponibles as $m) {
                 </div>
             <?php endif; ?>
 
+            <?php if (verModulo('gastos')): ?>
+
+          <div class="col-12 col-md-4">
+                    <div class="modulo-box">
+                        <a href="gastos.php">
+                            <span class="modulo-icon">📦</span>
+                            Gastos
+                        </a>
+                    </div>
+                </div>
+            <?php endif; ?>
+
             <?php if (verModulo('mantenimiento')): ?>
 
                 <div class="col-12 col-md-4">

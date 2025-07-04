@@ -5,10 +5,8 @@ include 'conexion.php'; // Conexión centralizada
 $alojamiento_id = $_POST['alojamiento_id'] ?? '';
 $descripcion = $_POST['descripcion_reporte'] ?? '';
 $fecha_reporte = $_POST['fecha_reporte'] ?? '';
-$fecha_vencimiento = $_POST['fecha_vencimiento'] ?? '';
 $estatus = isset($_POST['estatus']) && trim($_POST['estatus']) !== '' ? $_POST['estatus'] : 'Pendiente';
 $usuario_id = $_POST['usuario_solicitante_id'] ?? '';
-$delegar_usuario_id = $_POST['delegar_usuario_id'] ?? null;
 $unidad_id = $_POST['unidad_negocio_id'] ?? '';
 $notas = $_POST['notas'] ?? '';
 $foto_url = null;
@@ -20,25 +18,11 @@ if (empty($alojamiento_id) || empty($descripcion) || empty($fecha_reporte)) {
 
 // Procesar imagen si se subió
 if (!empty($_FILES['foto']['name'])) {
-    $allowedTypes = ['image/jpeg', 'image/png'];
-    $maxSize = 5 * 1024 * 1024; // 5MB
-    $tmpName = $_FILES['foto']['tmp_name'];
-    $mimeType = mime_content_type($tmpName);
-    $size = $_FILES['foto']['size'];
-
-    if (!in_array($mimeType, $allowedTypes)) {
-        die("Formato de imagen no permitido. Solo JPEG y PNG.");
-    }
-
-    if ($size > $maxSize) {
-        die("La imagen excede el tamaño máximo de 5MB.");
-    }
-
     $targetDir = "uploads/"; // Asegúrate de que esta carpeta exista y tenga permisos
     $fileName = basename($_FILES["foto"]["name"]);
     $targetFilePath = $targetDir . uniqid() . "_" . $fileName;
 
-    if (move_uploaded_file($tmpName, $targetFilePath)) {
+    if (move_uploaded_file($_FILES["foto"]["tmp_name"], $targetFilePath)) {
         $foto_url = $targetFilePath;
     } else {
         die("Error al subir la foto.");
@@ -46,24 +30,12 @@ if (!empty($_FILES['foto']['name'])) {
 }
 
 // Paso 1: Insertar SIN folio
-$sql = "INSERT INTO ordenes_servicio_cliente
-    (alojamiento_id, descripcion_reporte, foto, fecha_reporte, fecha_vencimiento, delegar_usuario_id, estatus, usuario_solicitante_id, unidad_negocio_id, notas)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+$sql = "INSERT INTO ordenes_servicio_cliente 
+    (alojamiento_id, descripcion_reporte, foto, fecha_reporte, estatus, usuario_solicitante_id, unidad_negocio_id, notas) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
 $stmt = $conn->prepare($sql);
-$stmt->bind_param(
-    "issssisiis",
-    $alojamiento_id,
-    $descripcion,
-    $foto_url,
-    $fecha_reporte,
-    $fecha_vencimiento,
-    $delegar_usuario_id,
-    $estatus,
-    $usuario_id,
-    $unidad_id,
-    $notas
-);
+$stmt->bind_param("isssssis", $alojamiento_id, $descripcion, $foto_url, $fecha_reporte, $estatus, $usuario_id, $unidad_id, $notas);
 
 if ($stmt->execute()) {
     $id_insertado = $stmt->insert_id;

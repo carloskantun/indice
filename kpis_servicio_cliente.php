@@ -115,9 +115,6 @@ include 'conexion.php';
     <div class="col-md-6">
   <canvas id="graficoCompletadasUsuario"></canvas>
 </div>
-    <div class="col-md-6">
-      <canvas id="graficoDelegados"></canvas>
-    </div>
   </div>
 </div>
 
@@ -184,7 +181,6 @@ $(function () {
     crearGraficoLineal('graficoCompletadasPorDia', res.completadas_dia.labels, res.completadas_dia.valores, 'Completadas por Día');
     crearGraficoPie('graficoUnidades', res.unidades.labels, res.unidades.valores, 'Distribución por Unidad de Negocio');
     crearGraficoPie('graficoCompletadasUsuario', res.completadas_usuario.labels, res.completadas_usuario.valores, 'Órdenes por Usuario');
-    crearGraficoPie('graficoDelegados', res.delegados.labels, res.delegados.valores, 'Delegadas por Usuario');
     crearGraficoPie('graficoEstatus', res.estatus.labels, res.estatus.valores, '% por Estatus');
   }
 

@@ -69,7 +69,7 @@ $html .= '<thead>
 <th>Descripción</th>
 <th>Estatus</th>
 <th>Nivel</th>
-<th>Fecha Conclusión</th>
+<th>Fecha Ejecución</th>
 <th>Detalle</th>
 <th>Costo</th>
 <th>Alojamiento</th>

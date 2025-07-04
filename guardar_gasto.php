@@ -12,7 +12,6 @@ $cuenta = $_POST['cuenta_bancaria'] ?? null;
 $concepto = $_POST['concepto'] ?? null;
 $origen = $_POST['origen'] ?? 'Directo';
 $orden_folio = $_POST['orden_folio'] ?? null;
-$origen_id = $_POST['origen_id'] ?? null;
 
 if (!$proveedor_id || !$monto || !$fecha_pago || !$unidad_id) {
     echo 'Faltan datos';
@@ -29,8 +28,9 @@ if ($origen === 'Orden') {
     $estatus = (strtotime($fecha_pago) < strtotime(date('Y-m-d'))) ? 'Vencido' : 'Por pagar';
 }
 
-$stmt = $conn->prepare("INSERT INTO gastos (folio, proveedor_id, monto, fecha_pago, unidad_negocio_id, tipo_gasto, medio_pago, cuenta_bancaria, estatus, concepto, orden_folio, origen, origen_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
-$stmt->bind_param('sidsissssssss', $folio, $proveedor_id, $monto, $fecha_pago, $unidad_id, $tipo_gasto, $medio_pago, $cuenta, $estatus, $concepto, $orden_folio, $origen, $origen_id);
+$stmt = $conn->prepare("INSERT INTO gastos (folio, proveedor_id, monto, fecha_pago, unidad_negocio_id, tipo_gasto, medio_pago, cuenta_bancaria, estatus, concepto, orden_folio, origen) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt->bind_param('sidsisssssss', $folio, $proveedor_id, $monto, $fecha_pago, $unidad_id, $tipo_gasto, $medio_pago, $cuenta, $estatus, $concepto, $orden_folio, $origen);
+
 if ($stmt->execute()) {
     echo 'ok';
 } else {

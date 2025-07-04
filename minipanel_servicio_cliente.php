@@ -20,19 +20,17 @@ $pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $offset = ($pagina_actual - 1) * $registros_por_pagina;
 
 // 98 Construccin de la consulta con filtros dinmicos
-$query = "SELECT folio, fecha_reporte, fecha_vencimiento, descripcion_reporte, foto, estatus, nivel, delegar_usuario_id, quien_realizo_id, fecha_completado, detalle_completado, foto_completado, costo_final,
-                 (SELECT nombre FROM alojamientos WHERE id = alojamiento_id) AS alojamiento,
+$query = "SELECT folio, fecha_reporte, fecha_vencimiento, usuario_delegado_id, descripcion_reporte, foto, estatus, nivel, quien_realizo_id, fecha_completado, detalle_completado, foto_completado, costo_final,
+                 (SELECT nombre FROM alojamientos WHERE id = alojamiento_id) AS alojamiento, 
                  (SELECT nombre FROM usuarios WHERE id = usuario_solicitante_id) AS usuario,
-                 (SELECT nombre FROM usuarios WHERE id = delegar_usuario_id) AS delegado,
                  (SELECT nombre FROM unidades_negocio WHERE id = unidad_negocio_id) AS unidad_negocio
           FROM ordenes_servicio_cliente WHERE 1=1";
 
 
 // 98 Verificar y actualizar automticamente rdenes vencidas
-$conn->query("UPDATE ordenes_servicio_cliente
-              SET estatus = 'Vencido'
-              WHERE fecha_vencimiento IS NOT NULL
-              AND fecha_vencimiento < CURDATE()
+$conn->query("UPDATE ordenes_servicio_cliente 
+              SET estatus = 'Vencido' 
+              WHERE fecha_reporte < CURDATE() 
               AND estatus NOT IN ('Pagado', 'Cancelado', 'Terminado')");
 
 // Aplicar filtros dinmicos
@@ -70,10 +68,8 @@ $mapa_orden_sql = [
   'folio' => 'folio',
   'alojamiento' => 'alojamiento',
   'foto' => 'foto',
-  'vencimiento' => 'fecha_vencimiento',
   'fecha' => 'fecha_reporte',
   'usuario' => 'usuario',
-  'delegado' => 'delegado',
   'unidad_negocio' => 'unidad_negocio',
   'estatus' => 'estatus',
   'quien_pago' => 'quien_realizo_id',
@@ -170,6 +166,12 @@ function corregirCodificacion($cadena) {
     th a:hover {
     text-decoration: underline;
     }
+    
+    .col-usuario select {
+        min-width: 160px;
+        max-width: 100%;
+    }
+
     </style>
     <!-- Bootstrap 5 -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -223,9 +225,6 @@ function corregirCodificacion($cadena) {
     <div class="col-12 col-md-auto">
         <a href="kpis_servicio_cliente.php" class="btn btn-primary btn-custom w-100">Ver Detalles de KPIs</a>
         </div>
-    <div class="col-12 col-md-auto">
-        <a href="ordenes_servicio_cliente_list.php" class="btn btn-outline-secondary btn-custom w-100">Ver Tabla Simplificada</a>
-    </div>
 </div>
 
         <h4 class="mb-3">Reportes de Servicio al Cliente</h4>
@@ -347,15 +346,15 @@ function corregirCodificacion($cadena) {
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="descripcion"> Descripción</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="foto"> Foto</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="fecha"> Fecha</label></li>
-    <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="vencimiento"> Vencimiento</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="usuario"> Usuario</label></li>
-    <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="delegado"> Delegado</label></li>
+    <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="fecha_vencimiento"> Vence</label></li>
+<li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="usuario_delegado"> Delegado</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="unidad_negocio"> Unidad de Negocio</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="estatus"> Estatus</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="quien_pago"> Quién Realizó</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="nivel"> Nivel</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="completar"> Completar</label></li>
-    <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="fecha_completado"> Fecha Conclusión</label></li>
+    <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="fecha_completado"> Fecha Ejecución</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="detalle_completado"> Detalle</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="foto_completado"> Foto Final</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="costo_final"> Costo Final</label></li>
@@ -378,16 +377,16 @@ $columnas_ordenables = [
   'folio' => 'Folio',
   'alojamiento' => 'Alojamiento',
   'foto' => 'Foto',
-  'vencimiento' => 'Vencimiento',
   'fecha' => 'Fecha',
   'usuario' => 'Usuario',
-  'delegado' => 'Delegado',
+  'fecha_vencimiento' => 'Vence',
+'usuario_delegado' => 'Delegado',
   'unidad_negocio' => 'Unidad de Negocio',
   'estatus' => 'Estatus',
   'quien_pago' => 'Quién Realizó',
   'nivel' => 'Nivel',
   'completar' => 'Completar',
-  'fecha_completado' => 'Fecha Conclusión',
+  'fecha_completado' => 'Fecha Ejecución',
   'detalle_completado' => 'Detalle',
   'foto_completado' => 'Foto Final',
   'costo_final' => 'Costo Final',
@@ -440,9 +439,56 @@ foreach ($columnas_ordenables as $col => $label):
                         <?php endif; ?>
                     </td>
                     <td class="col-fecha"><?php echo htmlspecialchars($orden['fecha_reporte']); ?></td>
-                    <td class="col-vencimiento"><?php echo htmlspecialchars($orden['fecha_vencimiento']); ?></td>
-                    <td class="col-usuario"><?php echo htmlspecialchars($orden['usuario']); ?></td>
-                    <td class="col-delegado"><?php echo $orden['delegado'] ? htmlspecialchars($orden['delegado']) : '—'; ?></td>
+                    <td class="col-fecha_vencimiento">
+    <?php if ($es_superadmin || $es_admin): ?>
+        <input type="date" class="form-control form-control-sm fecha-vencimiento-input" data-id="<?php echo $orden['folio']; ?>" value="<?php echo htmlspecialchars($orden['fecha_vencimiento']); ?>">
+    <?php else: ?>
+        <?php echo htmlspecialchars($orden['fecha_vencimiento'] ?? '—'); ?>
+    <?php endif; ?>
+</td>
+                    <td class="col-usuario">
+  <?php if ($_SESSION['user_role'] === 'superadmin' || $_SESSION['user_role'] === 'admin'): ?>
+    <select class="form-select form-select-sm usuario-solicitante-select" data-id="<?php echo $orden['folio']; ?>">
+      <?php
+      $usuarios = $conn->query("SELECT id, nombre FROM usuarios");
+      while ($usuario = $usuarios->fetch_assoc()):
+      ?>
+        <option value="<?= $usuario['id'] ?>" <?= ($orden['usuario'] == $usuario['nombre']) ? 'selected' : '' ?>>
+          <?= htmlspecialchars($usuario['nombre']) ?>
+        </option>
+      <?php endwhile; ?>
+    </select>
+  <?php else: ?>
+    <?php echo htmlspecialchars($orden['usuario']); ?>
+  <?php endif; ?>
+</td>
+<td class="col-usuario_delegado">
+    <?php if ($es_superadmin || $es_admin): ?>
+        <select class="form-select form-select-sm usuario-delegado-select" data-id="<?php echo $orden['folio']; ?>">
+            <option value="">SN</option>
+            <?php
+            $usuarios = $conn->query("SELECT id, nombre FROM usuarios");
+            while ($usuario = $usuarios->fetch_assoc()):
+            ?>
+                <option value="<?php echo $usuario['id']; ?>" <?php echo ($orden['usuario_delegado_id'] == $usuario['id']) ? 'selected' : ''; ?>>
+                    <?php echo htmlspecialchars($usuario['nombre']); ?>
+                </option>
+            <?php endwhile; ?>
+        </select>
+    <?php else: ?>
+        <?php
+        $nombre_delegado = 'SN';
+        if (!empty($orden['usuario_delegado_id'])) {
+            $id = intval($orden['usuario_delegado_id']);
+            $res = $conn->query("SELECT nombre FROM usuarios WHERE id = $id");
+            if ($res && $row = $res->fetch_assoc()) {
+                $nombre_delegado = $row['nombre'];
+            }
+        }
+        echo htmlspecialchars($nombre_delegado);
+        ?>
+    <?php endif; ?>
+</td>
                     <td class="col-unidad_negocio"><?php echo htmlspecialchars($orden['unidad_negocio']); ?></td>
 
                     <!-- Estatus -->
@@ -513,7 +559,7 @@ foreach ($columnas_ordenables as $col => $label):
                     <?php else: ?>
                         <td class="col-completar text-muted">N/A</td>
                     <?php endif; ?>
-                    <!-- Fecha de Conclusión -->
+                    <!-- Fecha de Ejecución -->
 <td class="col-fecha_completado">
     <?php echo isset($orden['fecha_completado']) && $orden['fecha_completado'] !== '' 
         ? htmlspecialchars($orden['fecha_completado']) 
@@ -687,6 +733,32 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".usuario-solicitante-select").forEach(select => {
+    select.addEventListener("change", function () {
+      const ordenId = this.dataset.id;
+      const usuarioId = this.value;
+
+      fetch("actualizar_usuario_servicio_cliente.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `orden_id=${encodeURIComponent(ordenId)}&usuario_id=${encodeURIComponent(usuarioId)}`
+      })
+      .then(response => response.text())
+      .then(res => {
+        if (res.trim() === "ok") {
+          alert("Usuario actualizado.");
+        } else {
+          alert("Error al actualizar el usuario.");
+        }
+      })
+      .catch(() => alert("Error de conexión."));
+    });
+  });
+});
+
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
@@ -1114,6 +1186,49 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById("btnFiltroTerminados").addEventListener("click", function () {
         aplicarFiltroRapido("Terminado");
+    });
+});
+// Actualizar fecha de vencimiento
+document.querySelectorAll(".fecha-vencimiento-input").forEach(input => {
+    input.addEventListener("change", function () {
+        const folio = this.dataset.id;
+        const valor = this.value;
+
+        fetch("actualizar_fecha_vencimiento_servicio_cliente.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `orden_id=${encodeURIComponent(folio)}&fecha_vencimiento=${encodeURIComponent(valor)}`
+        })
+        .then(res => res.text())
+        .then(res => {
+            if (res.trim() === "ok") {
+                alert("Fecha de vencimiento actualizada.");
+            } else {
+                alert("Error al actualizar fecha de vencimiento.");
+            }
+        });
+    });
+});
+
+// Actualizar usuario delegado
+document.querySelectorAll(".usuario-delegado-select").forEach(select => {
+    select.addEventListener("change", function () {
+        const folio = this.dataset.id;
+        const valor = this.value;
+
+        fetch("actualizar_delegado_servicio_cliente.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `orden_id=${encodeURIComponent(folio)}&usuario_delegado_id=${encodeURIComponent(valor)}`
+        })
+        .then(res => res.text())
+        .then(res => {
+            if (res.trim() === "ok") {
+                alert("Delegado actualizado.");
+            } else {
+                alert("Error al actualizar delegado.");
+            }
+        });
     });
 });
 </script>

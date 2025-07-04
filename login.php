@@ -1,7 +1,18 @@
 <?php
 session_start();
-include 'conexion.php';
 
+$servername = "localhost";
+$username = "corazon_caribe";
+$password = "Kantun.01*";
+$database = "corazon_orderdecompras";
+
+// Crear conexi贸n
+$conn = new mysqli($servername, $username, $password, $database);
+
+// Revisar conexi贸n
+if ($conn->connect_error) {
+    die("Conexi贸n fallida: " . $conn->connect_error);
+}
 
 // Obtener datos del formulario
 $email = $_POST['email'] ?? '';
@@ -16,15 +27,18 @@ $result = $stmt->get_result();
 
 if ($result->num_rows === 1) {
     $user = $result->fetch_assoc();
-    // Verificar contrase脙卤a
+    // Verificar contrase帽a
 
-if (password_verify($password, $user['password'])) {
+if ($password === $user['password']) {
 
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_name'] = $user['nombre'];
         $_SESSION['user_role'] = $user['rol']; // Almacena el rol del usuario
-        $_SESSION['puesto'] = $user['puesto']; // 聛7虏2聞1聜5 este es el que falta
+        $_SESSION['puesto'] = $user['puesto']; // ⚠️ este es el que falta
         header("Location: menu_principal.php");
+        echo "<pre>";
+print_r($_SESSION);
+exit;
         exit;
     } else {
         header("Location: index.php?error=Credenciales incorrectas");
@@ -34,3 +48,8 @@ if (password_verify($password, $user['password'])) {
     header("Location: index.php?error=Usuario no encontrado");
     exit;
 }
+
+echo "<pre>";
+print_r($_SESSION);
+exit;
+

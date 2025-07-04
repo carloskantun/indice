@@ -123,14 +123,6 @@ while ($r = $q_users->fetch_assoc()) {
     $valores_usuarios[] = (int)$r['total'];
 }
 
-// Ordenes delegadas por usuario
-$q_deleg = $conn->query("SELECT (SELECT nombre FROM usuarios WHERE id = delegar_usuario_id) AS usuario, COUNT(*) AS total FROM ordenes_servicio_cliente $where GROUP BY delegar_usuario_id");
-$labels_deleg = $valores_deleg = [];
-while ($r = $q_deleg->fetch_assoc()) {
-    $labels_deleg[] = $r['usuario'];
-    $valores_deleg[] = (int)$r['total'];
-}
-
 // Productividad
 $total_completadas = array_sum($valores_completadas);
 $usuarios_ativos = obtener("SELECT COUNT(*) AS total FROM usuarios WHERE puesto LIKE '%servicio_cliente%'", $conn);
@@ -188,7 +180,6 @@ $kpis = [
     'estatus' => ['labels' => $estatus_labels, 'valores' => $estatus_valores],
     'completadas_dia' => ['labels' => $labels_completadas, 'valores' => $valores_completadas],
     'completadas_usuario' => ['labels' => $labels_usuarios, 'valores' => $valores_usuarios],
-    'delegados' => ['labels' => $labels_deleg, 'valores' => $valores_deleg],
     'top_general' => $top_general,
     'top_pendientes' => $top_pendientes,
     'top_terminados' => $top_terminados,

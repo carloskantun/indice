@@ -346,7 +346,7 @@ function corregirCodificacion($cadena) {
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="quien_pago"> Quién Realizó</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="nivel"> Nivel</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="completar"> Completar</label></li>
-    <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="fecha_completado"> Fecha Conclusión</label></li>
+    <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="fecha_completado"> Fecha Ejecución</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="detalle_completado"> Detalle</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="foto_completado"> Foto Final</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="costo_final"> Costo Final</label></li>
@@ -377,7 +377,7 @@ $columnas_ordenables = [
   'quien_pago' => 'Quién Realizó',
   'nivel' => 'Nivel',
   'completar' => 'Completar',
-  'fecha_completado' => 'Fecha Conclusión',
+  'fecha_completado' => 'Fecha Ejecución',
   'detalle_completado' => 'Detalle',
   'foto_completado' => 'Foto Final',
   'costo_final' => 'Costo Final',
@@ -502,7 +502,7 @@ foreach ($columnas_ordenables as $col => $label):
                     <?php else: ?>
                         <td class="col-completar text-muted">N/A</td>
                     <?php endif; ?>
-                    <!-- Fecha de Conclusión -->
+                    <!-- Fecha de Ejecución -->
 <td class="col-fecha_completado">
     <?php echo isset($orden['fecha_completado']) && $orden['fecha_completado'] !== '' 
         ? htmlspecialchars($orden['fecha_completado']) 
