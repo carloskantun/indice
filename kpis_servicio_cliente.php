@@ -6,7 +6,7 @@ include 'conexion.php';
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>KPIs de Servicio al Cliente</title>
+  <title>KPIs de Tareas</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet">
@@ -25,7 +25,7 @@ include 'conexion.php';
 </head>
 <body class="bg-light">
 <div class="container py-5">
-  <h2 class="mb-4">📊 KPIs de Servicio al Cliente</h2>
+  <h2 class="mb-4">📊 KPIs de Tareas</h2>
 
   <!-- 🎛️ Filtros -->
   <form id="formFiltros" class="row g-3 mb-4">

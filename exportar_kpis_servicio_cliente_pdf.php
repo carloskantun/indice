@@ -43,7 +43,7 @@ $mes_terminados = obtener("SELECT COUNT(*) AS total FROM ordenes_servicio_client
 $cumplimiento_mes = ($mes_total > 0) ? round(($mes_terminados / $mes_total) * 100, 1) : 0;
 
 $html = "
-<h2 style='text-align:center;'>📊 KPIs de Servicio al Cliente</h2>
+<h2 style='text-align:center;'>📊 KPIs de Tareas</h2>
 <table border='1' cellpadding='8' cellspacing='0' style='width:100%; font-family:sans-serif; font-size:14px;'>
 <tr><th>Indicador</th><th>Valor</th></tr>
 <tr><td>Solicitudes Totales</td><td>$total</td></tr>

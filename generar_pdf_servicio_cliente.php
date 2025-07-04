@@ -83,7 +83,7 @@ $html = '
     .img-thumb { max-width: 200px; max-height: 150px; display: block; margin-top: 10px; }
 </style>
 
-<h2 class="titulo">REPORTE DE SERVICIO AL CLIENTE</h2>
+<h2 class="titulo">Resumen de Tarea</h2>
 
 <div class="seccion">
   <h4>Información del Reporte</h4>
