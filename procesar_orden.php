@@ -29,10 +29,26 @@ $folio = "OC-$fecha-$conteo"; // Ejemplo: OC-20250205-3
 // Procesar archivo si aplica
 $comprobante_path = null;
 if (!empty($_FILES['comprobante']['name'])) {
+    $allowedTypes = ['image/jpeg', 'image/png'];
+    $maxSize = 5 * 1024 * 1024; // 5MB
+    $tmpName = $_FILES['comprobante']['tmp_name'];
+    $mimeType = mime_content_type($tmpName);
+    $size = $_FILES['comprobante']['size'];
+
+    if (!in_array($mimeType, $allowedTypes)) {
+        die("Formato de comprobante no permitido. Solo JPEG y PNG.");
+    }
+
+    if ($size > $maxSize) {
+        die("El comprobante excede el tamaño máximo de 5MB.");
+    }
+
     $directorio = "uploads/";
     $nombre_archivo = time() . "_" . basename($_FILES['comprobante']['name']);
     $comprobante_path = $directorio . $nombre_archivo;
-    move_uploaded_file($_FILES['comprobante']['tmp_name'], $comprobante_path);
+    if (!move_uploaded_file($tmpName, $comprobante_path)) {
+        die("Error al subir el comprobante.");
+    }
 }
 
 // Validaciones
