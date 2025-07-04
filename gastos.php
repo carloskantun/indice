@@ -48,7 +48,26 @@ $mapa_orden_sql = [
 $columna_orden = $mapa_orden_sql[$orden] ?? 'g.fecha_pago';
 $dir = $dir === 'ASC' ? 'ASC' : 'DESC';
 
-$sql = "SELECT g.id, g.folio, p.nombre AS proveedor, g.monto, g.fecha_pago, un.nombre AS unidad, g.tipo_gasto, g.medio_pago, g.cuenta_bancaria, g.concepto, g.estatus, g.origen FROM gastos g LEFT JOIN proveedores p ON g.proveedor_id=p.id LEFT JOIN unidades_negocio un ON g.unidad_negocio_id=un.id $where ORDER BY $columna_orden $dir";
+$sql = "SELECT 
+    g.id, 
+    g.folio, 
+    p.nombre AS proveedor, 
+    g.monto, 
+    g.fecha_pago, 
+    un.nombre AS unidad, 
+    g.tipo_gasto, 
+    g.medio_pago, 
+    g.cuenta_bancaria, 
+    g.concepto, 
+    g.estatus, 
+    g.origen,
+    (SELECT SUM(a.monto) FROM abonos_gastos a WHERE a.gasto_id = g.id) AS abonado_total
+FROM gastos g
+LEFT JOIN proveedores p ON g.proveedor_id = p.id
+LEFT JOIN unidades_negocio un ON g.unidad_negocio_id = un.id
+$where
+ORDER BY $columna_orden $dir";
+
 $res = $conn->query($sql);
 $gastos = $res->fetch_all(MYSQLI_ASSOC);
 
@@ -163,6 +182,8 @@ $kpi_anio = $conn->query("SELECT SUM(monto) AS total FROM gastos WHERE YEAR(fech
             <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="cuenta" checked> Cuenta</label></li>
             <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="concepto" checked> Concepto</label></li>
             <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="estatus" checked> Estatus</label></li>
+            <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="abonado" checked> Abonado</label></li>
+
         </ul>
     </div>
     <div class="table-responsive">
@@ -181,6 +202,7 @@ $cols = [
     'cuenta'    => 'Cuenta',
     'concepto'  => 'Concepto',
     'estatus'   => 'Estatus',
+    'abonado'   => 'Abonado',
     'accion'    => 'Pagar'
 ];
 $orden_actual = $_GET['orden'] ?? '';
@@ -207,6 +229,7 @@ foreach ($cols as $c => $label):
                 <td class="col-folio"><?php echo htmlspecialchars($g['folio']); ?></td>
                 <td class="col-proveedor"><?php echo htmlspecialchars($g['proveedor']); ?></td>
                 <td class="col-monto">$<?php echo number_format($g['monto'],2); ?></td>
+                <td class="col-abonado">$<?php echo number_format($g['abonado_total'] ?? 0, 2); ?></td>
                 <td class="col-fecha"><?php echo htmlspecialchars($g['fecha_pago']); ?></td>
                 <td class="col-unidad"><?php echo htmlspecialchars($g['unidad']); ?></td>
                 <td class="col-tipo"><?php echo htmlspecialchars($g['tipo_gasto']); ?></td>
