@@ -92,43 +92,36 @@ include 'header.php';
 ?>
 
 <div class="container mt-5">
-    <h2 class="mb-4">Lista de Órdenes de Compra</h2>
+    <h2 class="mb-4">Lista de Órdenes de Servicio al Cliente</h2>
     <table class="table table-striped">
         <thead>
             <tr>
                 <th>Folio</th>
-                <th>Proveedor</th>
-                <th>Monto</th>
-                <th>Vencimiento</th>
-                <th>Concepto</th>
-                <th>Tipo de Pago</th>
+                <th>Alojamiento</th>
+                <th>Descripción</th>
+                <th>Fecha Reporte</th>
+                <th>Estatus</th>
                 <th>Usuario</th>
                 <th>Unidad de Negocio</th>
-                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             <?php
-            $ordenes = $conn->query("SELECT folio, monto, vencimiento_pago, concepto_pago, tipo_pago,
-                                    (SELECT nombre FROM proveedores WHERE id = proveedor_id) AS proveedor, 
+            $ordenes = $conn->query("SELECT folio, fecha_reporte, descripcion_reporte, estatus,
+                                    (SELECT nombre FROM alojamientos WHERE id = alojamiento_id) AS alojamiento,
                                     (SELECT nombre FROM usuarios WHERE id = usuario_solicitante_id) AS usuario,
                                     (SELECT nombre FROM unidades_negocio WHERE id = unidad_negocio_id) AS unidad_negocio
-                              FROM ordenes_compra");
+                              FROM ordenes_servicio_cliente");
             while ($orden = $ordenes->fetch_assoc()):
             ?>
                 <tr>
                     <td><?php echo htmlspecialchars($orden['folio']); ?></td>
-                    <td><?php echo htmlspecialchars($orden['proveedor']); ?></td>
-                    <td>$<?php echo number_format($orden['monto'], 2); ?></td>
-                    <td><?php echo htmlspecialchars($orden['vencimiento_pago']); ?></td>
-                    <td><?php echo htmlspecialchars($orden['concepto_pago']); ?></td>
-                    <td><?php echo htmlspecialchars($orden['tipo_pago']); ?></td>
+                    <td><?php echo htmlspecialchars($orden['alojamiento']); ?></td>
+                    <td><?php echo htmlspecialchars($orden['descripcion_reporte']); ?></td>
+                    <td><?php echo htmlspecialchars($orden['fecha_reporte']); ?></td>
+                    <td><?php echo htmlspecialchars($orden['estatus']); ?></td>
                     <td><?php echo htmlspecialchars($orden['usuario']); ?></td>
                     <td><?php echo htmlspecialchars($orden['unidad_negocio']); ?></td>
-                    <td>
-                        <a href="editar_orden.php?id=<?php echo $orden['folio']; ?>" class="btn btn-sm btn-warning">Editar</a>
-                        <a href="eliminar_orden.php?id=<?php echo $orden['folio']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro que deseas eliminar esta orden?')">Eliminar</a>
-                    </td>
                 </tr>
             <?php endwhile; ?>
         </tbody>
