@@ -28,6 +28,24 @@ if (!empty($_FILES['archivo']['name']) && $_FILES['archivo']['error'] === UPLOAD
         exit;
     }
 
+    if (in_array($ext, ['jpg', 'jpeg', 'png'])) {
+        $allowedTypes = ['image/jpeg', 'image/png'];
+        $maxSize = 5 * 1024 * 1024; // 5MB
+        $tmpName = $_FILES['archivo']['tmp_name'];
+        $mimeType = mime_content_type($tmpName);
+        $size = $_FILES['archivo']['size'];
+
+        if (!in_array($mimeType, $allowedTypes)) {
+            echo "Formato de imagen no permitido. Solo JPEG y PNG.";
+            exit;
+        }
+
+        if ($size > $maxSize) {
+            echo "La imagen excede el tamaño máximo de 5MB.";
+            exit;
+        }
+    }
+
     $nombre_limpio = preg_replace("/[^a-zA-Z0-9._-]/", "", basename($_FILES['archivo']['name']));
     $archivo_nombre = "uploads/nota_{$folio}_{$nombre_limpio}";
 
