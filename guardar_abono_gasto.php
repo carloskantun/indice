@@ -14,6 +14,7 @@ if(!$gasto_id || !$monto || !$fecha){
 $conn->begin_transaction();
 try{
     $archivo = null;
+    $ext = null;
     if(isset($_FILES['comprobante']) && is_uploaded_file($_FILES['comprobante']['tmp_name'])){
         $ext = strtolower(pathinfo($_FILES['comprobante']['name'], PATHINFO_EXTENSION));
         $permitidos = ['jpg','jpeg','png','pdf'];
@@ -21,25 +22,24 @@ try{
         if(!is_dir('uploads/comprobantes')) mkdir('uploads/comprobantes',0777,true);
         $nombre = uniqid('comp_').'.'.$ext;
         $destino = 'uploads/comprobantes/'.$nombre;
-        if($ext==='jpg' || $ext==='jpeg' || $ext==='png'){
-            $img = ($ext==='png') ? imagecreatefrompng($_FILES['comprobante']['tmp_name']) : imagecreatefromjpeg($_FILES['comprobante']['tmp_name']);
+        if($ext==='png'){
+            $png = imagecreatefrompng($_FILES['comprobante']['tmp_name']);
+            $bg = imagecreatetruecolor(imagesx($png), imagesy($png));
+            $white = imagecolorallocate($bg, 255, 255, 255);
+            imagefilledrectangle($bg, 0, 0, imagesx($png), imagesy($png), $white);
+            imagecopy($bg, $png, 0, 0, 0, 0, imagesx($png), imagesy($png));
+            imagejpeg($bg, $destino, 60);
+            imagedestroy($png);
+            imagedestroy($bg);
+        }elseif($ext==='jpg' || $ext==='jpeg'){
+            $img = imagecreatefromjpeg($_FILES['comprobante']['tmp_name']);
             imagejpeg($img,$destino,60);
             imagedestroy($img);
-        }else{
+        }else{ // pdf
             if(!move_uploaded_file($_FILES['comprobante']['tmp_name'],$destino)) throw new Exception('Error subiendo archivo');
         }
         $archivo = $destino;
     }
-    if($ext==='png'){
-    $png = imagecreatefrompng($_FILES['comprobante']['tmp_name']);
-    $bg = imagecreatetruecolor(imagesx($png), imagesy($png));
-    $white = imagecolorallocate($bg, 255, 255, 255);
-    imagefilledrectangle($bg, 0, 0, imagesx($png), imagesy($png), $white);
-    imagecopy($bg, $png, 0, 0, 0, 0, imagesx($png), imagesy($png));
-    imagejpeg($bg, $destino, 60);
-    imagedestroy($png);
-    imagedestroy($bg);
-}
 
 
     $stmt = $conn->prepare("INSERT INTO abonos_gastos (gasto_id,monto,fecha,comentario,archivo_comprobante) VALUES (?,?,?,?,?)");

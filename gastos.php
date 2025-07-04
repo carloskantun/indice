@@ -313,9 +313,8 @@ document.addEventListener('click',function(e){
         cont.innerHTML='Cargando...';
         var myModal=new bootstrap.Modal(modal);
         myModal.show();
-        fetch('modal_abono.php?id='+id)
-            .then(r=>r.text())
-            .then(html=>{cont.innerHTML=html;});
+        // Cargar el contenido del formulario y ejecutar los scripts incluidos
+        $(cont).load('modal_abono.php?id='+id);
     }
 });
 </script>
