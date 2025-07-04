@@ -115,7 +115,7 @@ $html .= '
 <div class="seccion">
   <h4>Información del Trabajo Completado</h4>
   <table>
-    <tr><th>Fecha de Ejecución</th><td>' . ($orden['fecha_completado'] ?? '—') . '</td></tr>
+    <tr><th>Fecha de Conclusión</th><td>' . ($orden['fecha_completado'] ?? '—') . '</td></tr>
     <tr><th>Detalle del Trabajo</th><td>' . ($orden['detalle_completado'] ?? '—') . '</td></tr>
     <tr><th>Costo Final</th><td>' . (isset($orden['costo_final']) && $orden['costo_final'] !== null ? '$' . number_format($orden['costo_final'], 2) : '—') . '</td></tr>';
 

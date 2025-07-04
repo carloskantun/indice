@@ -25,12 +25,12 @@ if (!$orden) {
     <input type="hidden" name="folio" value="<?php echo htmlspecialchars($folio); ?>">
 
     <div class="mb-3">
-        <label for="fecha_completado" class="form-label">Fecha de Ejecuci¨®n</label>
+        <label for="fecha_completado" class="form-label">Fecha de ConclusiÃ³n</label>
         <input type="date" class="form-control" name="fecha_completado" value="<?php echo htmlspecialchars($orden['fecha_completado'] ?? ''); ?>" required>
     </div>
 
     <div class="mb-3">
-        <label for="detalle_completado" class="form-label">Detalle del Trabajo Realizado</label>
+        <label for="detalle_completado" class="form-label">Detalle de la tarea</label>
         <textarea class="form-control" name="detalle_completado" rows="3" required><?php echo htmlspecialchars($orden['detalle_completado'] ?? ''); ?></textarea>
     </div>
 
@@ -75,7 +75,7 @@ document.getElementById("formCompletarOrden").addEventListener("submit", functio
         }
     })
     .catch(() => {
-        alert("Ocurri¨® un error al enviar los datos.");
+        alert("OcurriÂ¨Â® un error al enviar los datos.");
     });
 });
 </script>
