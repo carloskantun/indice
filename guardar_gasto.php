@@ -119,8 +119,8 @@ $meses_plazo = [
 $conn->begin_transaction();
 try {
     $sql = "INSERT INTO gastos 
-    (folio, proveedor_id, monto, fecha_pago, unidad_negocio_id, tipo_gasto, tipo_compra, medio_pago, cuenta_bancaria, estatus, concepto, orden_folio, origen, archivo_comprobante) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    (folio, proveedor_id, monto, fecha_pago, unidad_negocio_id, tipo_gasto, tipo_compra, medio_pago, cuenta_bancaria, estatus, concepto, orden_folio, origen, archivo_comprobante)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
 
     if ($tipo_gasto === 'Recurrente') {
@@ -183,7 +183,21 @@ try {
         }
     } else {
         // únicos
-        $stmt->bind_param('sidsisssssssss', $folio, $proveedor_id, $monto, $fecha_pago, $unidad_id, $tipo_gasto, $tipo_compra, $medio_pago, $cuenta, $estatus, $concepto, $orden_folio, $origen, $archivo_comprobante);
+        $folio_u = $folio;
+        $prov_u = $proveedor_id;
+        $monto_u = $monto;
+        $fecha_u = $fecha_pago;
+        $unidad_u = $unidad_id;
+        $tipo_gasto_u = $tipo_gasto;
+        $tipo_compra_u = $tipo_compra;
+        $medio_u = $medio_pago;
+        $cuenta_u = $cuenta;
+        $estatus_u = $estatus;
+        $concepto_u = $concepto;
+        $orden_u = $orden_folio;
+        $origen_u = $origen;
+        $archivo_u = $archivo_comprobante;
+        $stmt->bind_param('sidsisssssssss', $folio_u, $prov_u, $monto_u, $fecha_u, $unidad_u, $tipo_gasto_u, $tipo_compra_u, $medio_u, $cuenta_u, $estatus_u, $concepto_u, $orden_u, $origen_u, $archivo_u);
         if (!$stmt->execute()) throw new Exception($stmt->error);
 
         $gasto_id = $conn->insert_id;

@@ -13,6 +13,7 @@ CREATE TABLE gastos (
   concepto TEXT,
   orden_folio VARCHAR(50),
   origen ENUM('Directo','Orden') DEFAULT 'Directo',
+  archivo_comprobante VARCHAR(255),
   origen_id VARCHAR(50),
   fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (proveedor_id) REFERENCES proveedores(id),
