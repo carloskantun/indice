@@ -14,6 +14,7 @@ $sql = "CREATE TABLE IF NOT EXISTS gastos (
   fecha_pago DATE NOT NULL,
   unidad_negocio_id INT,
   tipo_gasto ENUM('Recurrente','Unico') DEFAULT 'Unico',
+  tipo_compra ENUM('Venta','Administrativa','Operativo','Impuestos','Intereses/Créditos') DEFAULT NULL,
   medio_pago ENUM('Tarjeta','Transferencia','Efectivo') DEFAULT 'Transferencia',
   cuenta_bancaria VARCHAR(50),
   estatus ENUM('Pagado','Pago parcial','Vencido','Por pagar') DEFAULT 'Pagado',

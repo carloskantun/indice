@@ -106,7 +106,7 @@ foreach ($modulos_disponibles as $m) {
           <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="gastos.php">
-                            <span class="modulo-icon">📦</span>
+                            <span class="modulo-icon"><img src="https://elcorazondelcaribe.com/indice/uploads/imgs/gastos.PNG" width="50px"></span>
                             Gastos
                         </a>
                     </div>
@@ -118,7 +118,7 @@ foreach ($modulos_disponibles as $m) {
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="minipanel_mantenimiento.php">
-                            <span class="modulo-icon">🛠️</span>
+                            <span class="modulo-icon"><img src="https://elcorazondelcaribe.com/indice/uploads/imgs/mantenimiento.PNG" width="50px">️</span>
                             Mantenimiento
                         </a>
                     </div>
@@ -130,8 +130,8 @@ foreach ($modulos_disponibles as $m) {
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="minipanel_servicio_cliente.php">
-                            <span class="modulo-icon">📞</span>
-                            Tareas
+                            <span class="modulo-icon"><img src="https://elcorazondelcaribe.com/indice/uploads/imgs/tareas.PNG" width="50px"></span>
+                            Tareas Y Procesos
                         </a>
                     </div>
                 </div>
@@ -141,7 +141,7 @@ foreach ($modulos_disponibles as $m) {
     <div class="col-12 col-md-4">
         <div class="modulo-box">
             <a href="minipanel_transfers.php">
-                <span class="modulo-icon">🚐</span>
+                <span class="modulo-icon"><img src="https://elcorazondelcaribe.com/indice/uploads/imgs/transfers.PNG" width="50px"></span>
                 Transfers
             </a>
         </div>
@@ -152,7 +152,7 @@ foreach ($modulos_disponibles as $m) {
     <div class="col-12 col-md-4">
         <div class="modulo-box">
             <a href="minipanel_lavanderia.php">
-                <span class="modulo-icon">🧺</span>
+                <span class="modulo-icon"><img src="https://elcorazondelcaribe.com/indice/uploads/imgs/lavanderia.PNG" width="50px"></span>
                 Lavandería
             </a>
         </div>
@@ -164,7 +164,7 @@ foreach ($modulos_disponibles as $m) {
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="usuarios.php">
-                            <span class="modulo-icon">👤</span>
+                            <span class="modulo-icon"><img src="https://elcorazondelcaribe.com/indice/uploads/imgs/usuarios.PNG" width="50px"></span>
                             Gestión de Usuarios
                         </a>
                     </div>
@@ -188,7 +188,7 @@ foreach ($modulos_disponibles as $m) {
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="panel_config.php">
-                            <span class="modulo-icon">⚙️</span>
+                            <span class="modulo-icon"><img src="https://elcorazondelcaribe.com/indice/uploads/imgs/configuracion.PNG" width="50px">️</span>
                             Configuración
                         </a>
                     </div>
@@ -199,7 +199,7 @@ foreach ($modulos_disponibles as $m) {
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="reporte_camarista.php">
-                            <span class="modulo-icon">🧹</span>
+                            <span class="modulo-icon"><img src="https://elcorazondelcaribe.com/indice/uploads/imgs/camaristas.PNG" width="50px"></span>
                             Reporte Camarista
                         </a>
                     </div>

@@ -50,6 +50,12 @@ if (!empty($_GET['usuario'])) {
     $usuario_ids = array_map('intval', $usuarios);
     $query .= " AND usuario_solicitante_id IN (" . implode(',', $usuario_ids) . ")";
 }
+if (!empty($_GET['delegado'])) {
+    $delegados = is_array($_GET['delegado']) ? $_GET['delegado'] : [$_GET['delegado']];
+    $delegado_ids = array_map('intval', $delegados);
+    $query .= " AND usuario_delegado_id IN (" . implode(',', $delegado_ids) . ")";
+}
+
 if (!empty($_GET['unidad_negocio'])) {
     $unidad_negocio = is_array($_GET['unidad_negocio']) ? $_GET['unidad_negocio'] : [$_GET['unidad_negocio']];
     $unidad_ids = array_map('intval', $unidad_negocio);
@@ -171,7 +177,25 @@ function corregirCodificacion($cadena) {
         min-width: 160px;
         max-width: 100%;
     }
-
+    
+    .col-nivel select {
+        min-width: 160px;
+        max-width: 100%;
+    }
+    
+    .col-usuario_delegado select {
+        min-width: 160px;
+        max-width: 100%;
+    }
+    
+    .col-estatus select {
+        min-width: 160px;
+        max-width: 100%;
+    }
+    .col-col-quien_pago select{
+        min-width: 160px;
+        max-width: 100%;
+    }
     </style>
     <!-- Bootstrap 5 -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -275,7 +299,7 @@ function corregirCodificacion($cadena) {
 
                         <!-- Usuario -->
                         <div class="col-12 col-md-4">
-                            <label for="usuario" class="form-label">Usuario Solicitante</label>
+                            <label for="usuario" class="form-label">Emisor</label>
                             <select class="form-select select2-multiple" id="usuario" name="usuario[]" multiple="multiple">
                                 <option value="">Todos</option>
                                 <?php
@@ -290,10 +314,26 @@ function corregirCodificacion($cadena) {
                             </select>
                         </div>
                     </div>
+<!-- Delegado -->
+<div class="col-12 col-md-4">
+    <label for="delegado" class="form-label">Delegado</label>
+    <select class="form-select select2-multiple" id="delegado" name="delegado[]" multiple="multiple">
+        <option value="">Todos</option>
+        <?php
+        $usuarios = $conn->query("SELECT id, nombre FROM usuarios");
+        while ($usuario = $usuarios->fetch_assoc()):
+        ?>
+            <option value="<?php echo $usuario['id']; ?>"
+                <?php echo (isset($_GET['delegado']) && is_array($_GET['delegado']) && in_array($usuario['id'], $_GET['delegado'])) ? 'selected' : ''; ?>>
+                <?php echo htmlspecialchars($usuario['nombre']); ?>
+            </option>
+        <?php endwhile; ?>
+    </select>
+</div>
 
                     <div class="row g-3 mt-3">
                         <!-- Unidad de Negocio -->
-                        <div class="col-12 col-md-6">
+                        <div class="col-6 col-md-3">
                             <label for="unidad_negocio" class="form-label">Unidad de Negocio</label>
                             <select class="form-select select2-multiple" id="unidad_negocio" name="unidad_negocio[]" multiple="multiple">
                                 <option value="">Todos</option>
@@ -345,8 +385,8 @@ function corregirCodificacion($cadena) {
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="alojamiento"> Alojamiento</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="descripcion"> Descripción</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="foto"> Foto</label></li>
-    <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="fecha"> Fecha</label></li>
-    <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="usuario"> Usuario</label></li>
+    <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="fecha"> Inicia</label></li>
+    <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="usuario"> Emisor</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="fecha_vencimiento"> Vence</label></li>
 <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="usuario_delegado"> Delegado</label></li>
     <li><label class="dropdown-item"><input type="checkbox" checked class="col-toggle" data-col="unidad_negocio"> Unidad de Negocio</label></li>
@@ -377,8 +417,8 @@ $columnas_ordenables = [
   'folio' => 'Folio',
   'alojamiento' => 'Alojamiento',
   'foto' => 'Foto',
-  'fecha' => 'Fecha',
-  'usuario' => 'Usuario',
+  'fecha' => 'Inicia',
+  'usuario' => 'Emisor',
   'fecha_vencimiento' => 'Vence',
 'usuario_delegado' => 'Delegado',
   'unidad_negocio' => 'Unidad de Negocio',
@@ -540,9 +580,9 @@ foreach ($columnas_ordenables as $col => $label):
                             <form method="POST" class="nivel-form">
                                 <input type="hidden" name="orden_id" value="<?php echo $orden['folio']; ?>">
                                 <select name="nivel" class="form-select nivel-select" data-id="<?php echo $orden['folio']; ?>">
-                                    <option value="Alto" <?php echo ($orden['nivel'] == 'Alto') ? 'selected' : ''; ?>>Alto</option>
-                                    <option value="Medio" <?php echo ($orden['nivel'] == 'Medio') ? 'selected' : ''; ?>>Medio</option>
-                                    <option value="Bajo" <?php echo ($orden['nivel'] == 'Bajo') ? 'selected' : ''; ?>>Bajo</option>
+                                    <option value="Alto" <?php echo ($orden['nivel'] == 'Prioritario') ? 'selected' : ''; ?>>Prioritario</option>
+                                    <option value="Medio" <?php echo ($orden['nivel'] == 'Regular') ? 'selected' : ''; ?>>Regular</option>
+                                    <option value="Bajo" <?php echo ($orden['nivel'] == 'Secundario') ? 'selected' : ''; ?>>Secundario</option>
                                 </select>
                             </form>
                         <?php else: ?>

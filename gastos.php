@@ -40,6 +40,7 @@ $mapa_orden_sql = [
     'fecha'    => 'g.fecha_pago',
     'unidad'   => 'un.nombre',
     'tipo'     => 'g.tipo_gasto',
+    'tipo_compra' => 'g.tipo_compra',
     'medio'    => 'g.medio_pago',
     'cuenta'   => 'g.cuenta_bancaria',
     'concepto' => 'g.concepto',
@@ -48,7 +49,28 @@ $mapa_orden_sql = [
 $columna_orden = $mapa_orden_sql[$orden] ?? 'g.fecha_pago';
 $dir = $dir === 'ASC' ? 'ASC' : 'DESC';
 
-$sql = "SELECT g.folio, p.nombre AS proveedor, g.monto, g.fecha_pago, un.nombre AS unidad, g.tipo_gasto, g.medio_pago, g.cuenta_bancaria, g.concepto, g.estatus FROM gastos g LEFT JOIN proveedores p ON g.proveedor_id=p.id LEFT JOIN unidades_negocio un ON g.unidad_negocio_id=un.id $where ORDER BY $columna_orden $dir";
+$sql = "SELECT 
+    g.id, 
+    g.folio, 
+    p.nombre AS proveedor, 
+    g.monto, 
+    g.fecha_pago, 
+    un.nombre AS unidad, 
+    g.tipo_gasto,
+    g.tipo_compra,
+    g.medio_pago,
+    g.cuenta_bancaria, 
+    g.concepto, 
+    g.estatus, 
+    g.origen,
+    (SELECT SUM(a.monto) FROM abonos_gastos a WHERE a.gasto_id = g.id) AS abonado_total,
+    (g.monto - IFNULL((SELECT SUM(a.monto) FROM abonos_gastos a WHERE a.gasto_id = g.id), 0)) AS saldo
+FROM gastos g
+LEFT JOIN proveedores p ON g.proveedor_id = p.id
+LEFT JOIN unidades_negocio un ON g.unidad_negocio_id = un.id
+$where
+ORDER BY $columna_orden $dir";
+
 $res = $conn->query($sql);
 $gastos = $res->fetch_all(MYSQLI_ASSOC);
 
@@ -159,10 +181,15 @@ $kpi_anio = $conn->query("SELECT SUM(monto) AS total FROM gastos WHERE YEAR(fech
             <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="fecha" checked> Fecha de pago</label></li>
             <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="unidad" checked> Unidad</label></li>
             <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="tipo" checked> Tipo</label></li>
-            <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="medio" checked> Medio de pago</label></li>
+            <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="tipo_compra" checked> Tipo Compra/Gasto</label></li>
+            <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="medio" checked> Forma</label></li>
             <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="cuenta" checked> Cuenta</label></li>
             <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="concepto" checked> Concepto</label></li>
             <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="estatus" checked> Estatus</label></li>
+            <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="abonado" checked> Abonado</label></li>
+            <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="saldo" checked> Saldo</label></li>
+            <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="comprobante" checked> Recibo</label></li>
+
         </ul>
     </div>
     <div class="table-responsive">
@@ -174,13 +201,18 @@ $cols = [
     'folio'     => 'Folio',
     'proveedor' => 'Proveedor',
     'monto'     => 'Monto',
-    'fecha'     => 'Fecha de pago',
+    'fecha'     => 'Día de pago',
     'unidad'    => 'Unidad',
     'tipo'      => 'Tipo',
-    'medio'     => 'Medio de pago',
+    'tipo_compra' => 'Uso',
+    'medio'     => 'Forma',
     'cuenta'    => 'Cuenta',
     'concepto'  => 'Concepto',
-    'estatus'   => 'Estatus'
+    'estatus'   => 'Estatus',
+    'abonado'   => 'Abonado',
+    'saldo'     => 'Saldo',
+    'comprobante'=> 'Recibo',
+    'accion'    => 'Pagar'
 ];
 $orden_actual = $_GET['orden'] ?? '';
 $dir_actual = $_GET['dir'] ?? 'ASC';
@@ -206,13 +238,56 @@ foreach ($cols as $c => $label):
                 <td class="col-folio"><?php echo htmlspecialchars($g['folio']); ?></td>
                 <td class="col-proveedor"><?php echo htmlspecialchars($g['proveedor']); ?></td>
                 <td class="col-monto">$<?php echo number_format($g['monto'],2); ?></td>
+                <td class="col-abonado">$<?php echo number_format($g['abonado_total'] ?? 0, 2); ?></td>
+                <td class="col-saldo">$<?php echo number_format($g['saldo'] ?? ($g['monto'] - ($g['abonado_total'] ?? 0)), 2); ?></td>
                 <td class="col-fecha"><?php echo htmlspecialchars($g['fecha_pago']); ?></td>
                 <td class="col-unidad"><?php echo htmlspecialchars($g['unidad']); ?></td>
-                <td class="col-tipo"><?php echo htmlspecialchars($g['tipo_gasto']); ?></td>
+                <td class="col-tipo">
+<?php
+$origen = $g['origen'];
+$tipo   = $g['tipo_gasto'];
+$estatus = $g['estatus'];
+
+if ($origen === 'Orden') {
+    if ($estatus === 'Pagado') {
+        echo "Orden ($tipo) → Gasto";
+    } else {
+        echo "Orden ($tipo)";
+    }
+} else {
+    echo "Gasto ($tipo)";
+}
+?>
+                </td>
+                <td class="col-tipo_compra"><?php echo htmlspecialchars($g['tipo_compra']); ?></td>
                 <td class="col-medio"><?php echo htmlspecialchars($g['medio_pago']); ?></td>
                 <td class="col-cuenta"><?php echo htmlspecialchars($g['cuenta_bancaria']); ?></td>
                 <td class="col-concepto"><?php echo htmlspecialchars($g['concepto']); ?></td>
                 <td class="col-estatus"><?php echo htmlspecialchars($g['estatus']); ?></td>
+<td class="col-comprobante">
+<?php
+$sqlComps = "SELECT archivo_comprobante FROM abonos_gastos 
+             WHERE gasto_id = {$g['id']} AND archivo_comprobante IS NOT NULL 
+             ORDER BY id ASC";
+$resComps = $conn->query($sqlComps);
+$comps = [];
+while ($row = $resComps->fetch_assoc()) {
+    $comps[] = $row['archivo_comprobante'];
+}
+if (count($comps)) {
+    echo '<button class="btn btn-sm btn-outline-secondary ver-comprobantes-btn" data-id="' . $g['id'] . '">Ver</button>';
+} else {
+    echo '<span class="text-muted">Sin archivo</span>';
+}
+?>
+</td>
+
+
+                <td class="col-accion">
+                    <?php if($g['origen']==='Orden' && $g['estatus']!=='Pagado'): ?>
+                        <button class="btn btn-sm btn-outline-primary pagar-btn" data-id="<?php echo $g['id']; ?>">Pagar</button>
+                    <?php endif; ?>
+                </td>
                 <td class="col-pdf"><a class="btn btn-sm btn-outline-dark" target="_blank" href="generar_pdf_gasto.php?folio=<?php echo $g['folio']; ?>">PDF</a></td>
             </tr>
             <?php endforeach; ?>
@@ -225,6 +300,17 @@ foreach ($cols as $c => $label):
     <div class="modal-content" id="contenidoGasto"></div>
   </div>
 </div>
+<div class="modal fade" id="modalAbono" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" id="contenidoAbono">Cargando...</div>
+  </div>
+</div>
+<div class="modal fade" id="modalComprobantes" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content" id="contenidoComprobantes">Cargando...</div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 $(function(){
@@ -269,6 +355,33 @@ document.addEventListener('DOMContentLoaded',function(){
         });
     });
 });
+</script>
+<script>
+document.addEventListener('click',function(e){
+    if(e.target.classList.contains('pagar-btn')){
+        const id=e.target.dataset.id;
+        const modal=document.getElementById('modalAbono');
+        const cont=document.getElementById('contenidoAbono');
+        cont.innerHTML='Cargando...';
+        var myModal=new bootstrap.Modal(modal);
+        myModal.show();
+        // Cargar el contenido del formulario y ejecutar los scripts incluidos
+        $(cont).load('modal_abono.php?id='+id);
+    }
+});
+
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('ver-comprobantes-btn')) {
+        const id = e.target.dataset.id;
+        const modal = document.getElementById('modalComprobantes');
+        const cont = document.getElementById('contenidoComprobantes');
+        cont.innerHTML = 'Cargando...';
+        var myModal = new bootstrap.Modal(modal);
+        myModal.show();
+        $(cont).load('modal_comprobantes.php?id=' + id);
+    }
+});
+
 </script>
 </body>
 </html>

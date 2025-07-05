@@ -5,7 +5,7 @@ if (!isset($_GET['modal'])) {
     exit;
 }
 ?>
-<form id="formGasto" method="POST" action="guardar_gasto.php">
+<form id="formGasto" method="POST" action="guardar_gasto.php" enctype="multipart/form-data">
     <div class="mb-3">
         <label class="form-label">Tipo de registro</label>
         <select id="tipoRegistro" class="form-select">
@@ -54,10 +54,39 @@ if (!isset($_GET['modal'])) {
     </div>
     <div class="mb-3">
         <label class="form-label">Tipo de Gasto</label>
-        <select name="tipo_gasto" class="form-select">
+        <select name="tipo_gasto" id="tipoGasto" class="form-select">
             <option value="Recurrente">Recurrente</option>
             <option value="Unico">Único</option>
         </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Tipo de Compra/Gasto:</label>
+        <select name="tipo_compra" class="form-select" required>
+          <option value="Venta">Venta</option>
+          <option value="Administrativa">Administrativa</option>
+          <option value="Operativo">Operativo</option>
+          <option value="Impuestos">Impuestos</option>
+          <option value="Intereses/Créditos">Intereses/Créditos</option>
+        </select>
+    </div>
+    <div id="camposRecurrente" class="d-none">
+        <div class="mb-3">
+            <label class="form-label">Periodicidad</label>
+            <select name="periodicidad" class="form-select">
+                <option value="Diario">Diario</option>
+                <option value="Semanal">Semanal</option>
+                <option value="Quincenal">Quincenal</option>
+                <option value="Mensual">Mensual</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Plazo</label>
+            <select name="plazo" class="form-select">
+                <option value="Trimestral">Trimestral</option>
+                <option value="Semestral">Semestral</option>
+                <option value="Anual">Anual</option>
+            </select>
+        </div>
     </div>
     <div class="mb-3">
         <label class="form-label">Medio de Pago</label>
@@ -75,12 +104,18 @@ if (!isset($_GET['modal'])) {
         <label class="form-label">Concepto</label>
         <textarea name="concepto" class="form-control"></textarea>
     </div>
-    <input type="hidden" name="origen_id" value="">
+    <div class="mb-3" id="comprobanteDirecto" style="display:none;">
+      <label>Comprobante (opcional):</label>
+      <input type="file" name="comprobante_gasto" class="form-control" accept="image/jpeg,image/png,application/pdf">
+    </div>
+    <input type="hidden" name="origen" value="Directo" id="origenInput">
+
     <div class="text-end">
         <button type="submit" class="btn btn-success">Guardar</button>
     </div>
 </form>
 <script>
+
 document.getElementById('formGasto').addEventListener('submit', function(e) {
     e.preventDefault();
     const formData = new FormData(this);
@@ -98,22 +133,37 @@ document.getElementById('formGasto').addEventListener('submit', function(e) {
 });
 
 // Cambiar tipo de registro
-const tipoReg=document.getElementById('tipoRegistro');
-const campoOrden=document.getElementById('campoOrden');
-const inputOrigen=document.createElement('input');
-inputOrigen.type='hidden';
-inputOrigen.name='origen';
-document.getElementById('formGasto').appendChild(inputOrigen);
-tipoReg.addEventListener('change',actualizar);
-function actualizar(){
-    if(tipoReg.value==='Orden'){
+const tipoReg = document.getElementById('tipoRegistro');
+const campoOrden = document.getElementById('campoOrden');
+const inputOrigen = document.getElementById('origenInput');
+const tipoGasto = document.getElementById('tipoGasto');
+const camposRec = document.getElementById('camposRecurrente');
+const compDirecto = document.getElementById('comprobanteDirecto');
+
+tipoReg.addEventListener('change', actualizar);
+tipoGasto.addEventListener('change', mostrarCampos);
+
+function actualizar() {
+    if (tipoReg.value === 'Orden') {
         campoOrden.classList.remove('d-none');
-        inputOrigen.value='Orden';
-    }else{
+        inputOrigen.value = 'Orden';
+        compDirecto.style.display = 'none';
+    } else {
         campoOrden.classList.add('d-none');
-        inputOrigen.value='Directo';
+        inputOrigen.value = 'Directo';
+        compDirecto.style.display = 'block';
     }
 }
+
+function mostrarCampos() {
+    if (tipoGasto.value === 'Recurrente') {
+        camposRec.classList.remove('d-none');
+    } else {
+        camposRec.classList.add('d-none');
+    }
+}
+
 actualizar();
+mostrarCampos();
 </script>
 <?php exit; ?>
