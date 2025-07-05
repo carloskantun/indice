@@ -40,6 +40,7 @@ $mapa_orden_sql = [
     'fecha'    => 'g.fecha_pago',
     'unidad'   => 'un.nombre',
     'tipo'     => 'g.tipo_gasto',
+    'tipo_compra' => 'g.tipo_compra',
     'medio'    => 'g.medio_pago',
     'cuenta'   => 'g.cuenta_bancaria',
     'concepto' => 'g.concepto',
@@ -55,8 +56,9 @@ $sql = "SELECT
     g.monto, 
     g.fecha_pago, 
     un.nombre AS unidad, 
-    g.tipo_gasto, 
-    g.medio_pago, 
+    g.tipo_gasto,
+    g.tipo_compra,
+    g.medio_pago,
     g.cuenta_bancaria, 
     g.concepto, 
     g.estatus, 
@@ -179,12 +181,14 @@ $kpi_anio = $conn->query("SELECT SUM(monto) AS total FROM gastos WHERE YEAR(fech
             <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="fecha" checked> Fecha de pago</label></li>
             <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="unidad" checked> Unidad</label></li>
             <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="tipo" checked> Tipo</label></li>
+            <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="tipo_compra" checked> Tipo Compra/Gasto</label></li>
             <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="medio" checked> Medio de pago</label></li>
             <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="cuenta" checked> Cuenta</label></li>
             <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="concepto" checked> Concepto</label></li>
             <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="estatus" checked> Estatus</label></li>
             <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="abonado" checked> Abonado</label></li>
             <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="saldo" checked> Saldo</label></li>
+            <li><label class="dropdown-item"><input type="checkbox" class="col-toggle" data-col="comprobante" checked> Comprobante</label></li>
 
         </ul>
     </div>
@@ -200,12 +204,14 @@ $cols = [
     'fecha'     => 'Fecha de pago',
     'unidad'    => 'Unidad',
     'tipo'      => 'Tipo',
+    'tipo_compra' => 'Tipo Compra/Gasto',
     'medio'     => 'Medio de pago',
     'cuenta'    => 'Cuenta',
     'concepto'  => 'Concepto',
     'estatus'   => 'Estatus',
     'abonado'   => 'Abonado',
     'saldo'     => 'Saldo',
+    'comprobante'=> 'Comprobante',
     'accion'    => 'Pagar'
 ];
 $orden_actual = $_GET['orden'] ?? '';
@@ -253,10 +259,22 @@ if ($origen === 'Orden') {
 }
 ?>
                 </td>
+                <td class="col-tipo_compra"><?php echo htmlspecialchars($g['tipo_compra']); ?></td>
                 <td class="col-medio"><?php echo htmlspecialchars($g['medio_pago']); ?></td>
                 <td class="col-cuenta"><?php echo htmlspecialchars($g['cuenta_bancaria']); ?></td>
                 <td class="col-concepto"><?php echo htmlspecialchars($g['concepto']); ?></td>
                 <td class="col-estatus"><?php echo htmlspecialchars($g['estatus']); ?></td>
+                <td class="col-comprobante">
+<?php
+$has_comprobante = $g['estatus'] === 'Pagado' || $g['estatus'] === 'Pago parcial';
+if ($has_comprobante) {
+  $comp = $conn->query("SELECT archivo_comprobante FROM abonos_gastos WHERE gasto_id = " . $g['id'] . " ORDER BY id DESC LIMIT 1")->fetch_assoc();
+  if (!empty($comp['archivo_comprobante'])) {
+      echo '<a href="' . $comp['archivo_comprobante'] . '" target="_blank" class="btn btn-sm btn-outline-secondary">Comprobante</a>';
+  }
+}
+?>
+                </td>
                 <td class="col-accion">
                     <?php if($g['origen']==='Orden' && $g['estatus']!=='Pagado'): ?>
                         <button class="btn btn-sm btn-outline-primary pagar-btn" data-id="<?php echo $g['id']; ?>">Pagar</button>

@@ -59,6 +59,16 @@ if (!isset($_GET['modal'])) {
             <option value="Unico">Único</option>
         </select>
     </div>
+    <div class="mb-3">
+        <label class="form-label">Tipo de Compra/Gasto:</label>
+        <select name="tipo_compra" class="form-select" required>
+          <option value="Venta">Venta</option>
+          <option value="Administrativa">Administrativa</option>
+          <option value="Operativo">Operativo</option>
+          <option value="Impuestos">Impuestos</option>
+          <option value="Intereses/Créditos">Intereses/Créditos</option>
+        </select>
+    </div>
     <div id="camposRecurrente" class="d-none">
         <div class="mb-3">
             <label class="form-label">Periodicidad</label>
@@ -94,6 +104,10 @@ if (!isset($_GET['modal'])) {
         <label class="form-label">Concepto</label>
         <textarea name="concepto" class="form-control"></textarea>
     </div>
+    <div class="mb-3" id="comprobanteDirecto" style="display:none;">
+      <label>Comprobante (opcional):</label>
+      <input type="file" name="comprobante_gasto" class="form-control" accept="image/jpeg,image/png,application/pdf">
+    </div>
     <input type="hidden" name="origen_id" value="">
     <div class="text-end">
         <button type="submit" class="btn btn-success">Guardar</button>
@@ -125,15 +139,18 @@ inputOrigen.name='origen';
 document.getElementById('formGasto').appendChild(inputOrigen);
 const tipoGasto=document.getElementById('tipoGasto');
 const camposRec=document.getElementById('camposRecurrente');
+const compDirecto=document.getElementById('comprobanteDirecto');
 tipoReg.addEventListener('change',actualizar);
 tipoGasto.addEventListener('change',mostrarCampos);
 function actualizar(){
     if(tipoReg.value==='Orden'){
         campoOrden.classList.remove('d-none');
         inputOrigen.value='Orden';
+        compDirecto.style.display='none';
     }else{
         campoOrden.classList.add('d-none');
         inputOrigen.value='Directo';
+        compDirecto.style.display='block';
     }
 }
 function mostrarCampos(){

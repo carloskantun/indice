@@ -75,6 +75,7 @@ $monto = $_POST['monto'] ?? null;
 $fecha_pago = $_POST['fecha_pago'] ?? null;
 $unidad_id = $_POST['unidad_negocio_id'] ?? null;
 $tipo_gasto = $_POST['tipo_gasto'] ?? 'Unico';
+$tipo_compra = $_POST['tipo_compra'] ?? null;
 $periodicidad = $_POST['periodicidad'] ?? null;
 $plazo = $_POST['plazo'] ?? null;
 $medio_pago = $_POST['medio_pago'] ?? 'Transferencia';
@@ -82,6 +83,32 @@ $cuenta = $_POST['cuenta_bancaria'] ?? null;
 $concepto = $_POST['concepto'] ?? null;
 $origen = $_POST['origen'] ?? 'Directo';
 $orden_folio = $_POST['orden_folio'] ?? null;
+
+$archivo_comprobante = null;
+if(isset($_FILES['comprobante_gasto']) && is_uploaded_file($_FILES['comprobante_gasto']['tmp_name'])){
+    $ext = strtolower(pathinfo($_FILES['comprobante_gasto']['name'], PATHINFO_EXTENSION));
+    $permitidos = ['jpg','jpeg','png','pdf'];
+    if(in_array($ext, $permitidos)){
+        if(!is_dir('uploads/comprobantes')) mkdir('uploads/comprobantes',0777,true);
+        $nombre = uniqid('comp_').'.'.$ext;
+        $destino = 'uploads/comprobantes/'.$nombre;
+        if($ext==='png'){
+            $png=imagecreatefrompng($_FILES['comprobante_gasto']['tmp_name']);
+            $bg=imagecreatetruecolor(imagesx($png),imagesy($png));
+            $white=imagecolorallocate($bg,255,255,255);
+            imagefilledrectangle($bg,0,0,imagesx($png),imagesy($png),$white);
+            imagecopy($bg,$png,0,0,0,0,imagesx($png),imagesy($png));
+            imagejpeg($bg,$destino,60);
+            imagedestroy($png); imagedestroy($bg);
+        }elseif($ext==='jpg' || $ext==='jpeg'){
+            $img=imagecreatefromjpeg($_FILES['comprobante_gasto']['tmp_name']);
+            imagejpeg($img,$destino,60); imagedestroy($img);
+        }else{
+            move_uploaded_file($_FILES['comprobante_gasto']['tmp_name'],$destino);
+        }
+        $archivo_comprobante = $destino;
+    }
+}
 
 if (!$proveedor_id || !$monto || !$fecha_pago || !$unidad_id) {
     echo 'Faltan datos';
@@ -92,9 +119,11 @@ $nuevo_id = $conn->query("SELECT IFNULL(MAX(id),0)+1 AS nuevo_id FROM gastos")->
 $prefijo = ($_POST['origen'] === 'Orden') ? 'OC-' : 'G-';
 $folio = $prefijo . str_pad($nuevo_id, 3, '0', STR_PAD_LEFT);
 
-$estatus = 'Pagado';
+$hoy = date('Y-m-d');
 if ($origen === 'Orden') {
-    $estatus = 'Abonado';
+    $estatus = ($fecha_pago < $hoy) ? 'Vencido' : 'Por pagar';
+} else {
+    $estatus = 'Pagado';
 }
 
 $meses_plazo = [
@@ -105,7 +134,7 @@ $meses_plazo = [
 
 $conn->begin_transaction();
 try{
-    $stmt = $conn->prepare("INSERT INTO gastos (folio, proveedor_id, monto, fecha_pago, unidad_negocio_id, tipo_gasto, medio_pago, cuenta_bancaria, estatus, concepto, orden_folio, origen) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO gastos (folio, proveedor_id, monto, fecha_pago, unidad_negocio_id, tipo_gasto, tipo_compra, medio_pago, cuenta_bancaria, estatus, concepto, orden_folio, origen) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     if($tipo_gasto==='Recurrente'){
         $plazo_meses = intval($_POST['plazo_meses'] ?? ($meses_plazo[$plazo] ?? 0));
@@ -136,12 +165,24 @@ try{
         foreach($fechas as $i => $fecha_i){
             $sufijo = letraSufijo($i);
             $folio_i = $folio.'-'.$sufijo;
-            $stmt->bind_param('sidsisssssss', $folio_i, $proveedor_id, $monto, $fecha_i, $unidad_id, $tipo_gasto, $medio_pago, $cuenta, $estatus, $concepto, $orden_folio, $origen);
+            $stmt->bind_param('sidsissssssss', $folio_i, $proveedor_id, $monto, $fecha_i, $unidad_id, $tipo_gasto, $tipo_compra, $medio_pago, $cuenta, $estatus, $concepto, $orden_folio, $origen);
             if(!$stmt->execute()) throw new Exception($stmt->error);
+            $gasto_id = $conn->insert_id;
+            if($origen==='Directo' && $archivo_comprobante){
+                $ab = $conn->prepare("INSERT INTO abonos_gastos (gasto_id,monto,fecha,comentario,archivo_comprobante) VALUES (?,?,?,?,?)");
+                $ab->bind_param('idsss',$gasto_id,$monto,$fecha_i,'', $archivo_comprobante);
+                $ab->execute();
+            }
         }
     }else{
-        $stmt->bind_param('sidsisssssss', $folio, $proveedor_id, $monto, $fecha_pago, $unidad_id, $tipo_gasto, $medio_pago, $cuenta, $estatus, $concepto, $orden_folio, $origen);
+        $stmt->bind_param('sidsissssssss', $folio, $proveedor_id, $monto, $fecha_pago, $unidad_id, $tipo_gasto, $tipo_compra, $medio_pago, $cuenta, $estatus, $concepto, $orden_folio, $origen);
         if(!$stmt->execute()) throw new Exception($stmt->error);
+        $gasto_id = $conn->insert_id;
+        if($origen==='Directo' && $archivo_comprobante){
+            $ab = $conn->prepare("INSERT INTO abonos_gastos (gasto_id,monto,fecha,comentario,archivo_comprobante) VALUES (?,?,?,?,?)");
+            $ab->bind_param('idsss',$gasto_id,$monto,$fecha_pago,'', $archivo_comprobante);
+            $ab->execute();
+        }
     }
     $conn->commit();
     echo 'ok';
