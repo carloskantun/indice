@@ -237,9 +237,9 @@ foreach ($cols as $c => $label):
             <tr>
                 <td class="col-folio"><?php echo htmlspecialchars($g['folio']); ?></td>
                 <td class="col-proveedor"><?php echo htmlspecialchars($g['proveedor']); ?></td>
-                <td class="col-monto">$<?php echo number_format($g['monto'],2); ?></td>
-                <td class="col-abonado">$<?php echo number_format($g['abonado_total'] ?? 0, 2); ?></td>
-                <td class="col-saldo">$<?php echo number_format($g['saldo'] ?? ($g['monto'] - ($g['abonado_total'] ?? 0)), 2); ?></td>
+                <td class="col-monto monto">$<?php echo number_format($g['monto'],2); ?></td>
+                <td class="col-abonado abono">$<?php echo number_format($g['abonado_total'] ?? 0, 2); ?></td>
+                <td class="col-saldo saldo">$<?php echo number_format($g['saldo'] ?? ($g['monto'] - ($g['abonado_total'] ?? 0)), 2); ?></td>
                 <td class="col-fecha"><?php echo htmlspecialchars($g['fecha_pago']); ?></td>
                 <td class="col-unidad"><?php echo htmlspecialchars($g['unidad']); ?></td>
                 <td class="col-tipo">
@@ -292,6 +292,15 @@ if (count($comps)) {
             </tr>
             <?php endforeach; ?>
         </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="4">Totales:</th>
+                <th id="total-monto"></th>
+                <th id="total-abono"></th>
+                <th id="total-saldo"></th>
+                <th colspan="9"></th>
+            </tr>
+        </tfoot>
     </table>
     </div>
 </div>
@@ -382,6 +391,31 @@ document.addEventListener('click', function(e) {
     }
 });
 
+</script>
+<script>
+function sumarTotales() {
+    let totalMonto = 0;
+    let totalAbono = 0;
+    let totalSaldo = 0;
+
+    document.querySelectorAll('.monto').forEach(el => {
+        totalMonto += parseFloat(el.textContent.replace(/[$,]/g, '')) || 0;
+    });
+
+    document.querySelectorAll('.abono').forEach(el => {
+        totalAbono += parseFloat(el.textContent.replace(/[$,]/g, '')) || 0;
+    });
+
+    document.querySelectorAll('.saldo').forEach(el => {
+        totalSaldo += parseFloat(el.textContent.replace(/[$,]/g, '')) || 0;
+    });
+
+    document.getElementById('total-monto').textContent = totalMonto.toLocaleString('es-MX', {style:'currency', currency:'MXN'});
+    document.getElementById('total-abono').textContent = totalAbono.toLocaleString('es-MX', {style:'currency', currency:'MXN'});
+    document.getElementById('total-saldo').textContent = totalSaldo.toLocaleString('es-MX', {style:'currency', currency:'MXN'});
+}
+
+document.addEventListener('DOMContentLoaded', sumarTotales);
 </script>
 </body>
 </html>
