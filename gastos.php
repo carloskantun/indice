@@ -237,11 +237,21 @@ foreach ($cols as $c => $label):
                 <td class="col-fecha"><?php echo htmlspecialchars($g['fecha_pago']); ?></td>
                 <td class="col-unidad"><?php echo htmlspecialchars($g['unidad']); ?></td>
                 <td class="col-tipo">
-                    <?php if($g['origen'] === 'Orden' && $g['estatus'] === 'Pagado'){
-                        echo 'Gasto (pagado)';
-                    } else {
-                        echo htmlspecialchars($g['tipo_gasto']);
-                    } ?>
+<?php
+$origen = $g['origen'];
+$tipo   = $g['tipo_gasto'];
+$estatus = $g['estatus'];
+
+if ($origen === 'Orden') {
+    if ($estatus === 'Pagado') {
+        echo "Orden ($tipo) → Gasto";
+    } else {
+        echo "Orden ($tipo)";
+    }
+} else {
+    echo "Gasto ($tipo)";
+}
+?>
                 </td>
                 <td class="col-medio"><?php echo htmlspecialchars($g['medio_pago']); ?></td>
                 <td class="col-cuenta"><?php echo htmlspecialchars($g['cuenta_bancaria']); ?></td>
