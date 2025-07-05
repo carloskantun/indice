@@ -296,15 +296,8 @@ if (count($comps)) {
             </tr>
             <?php endforeach; ?>
         </tbody>
-        <tfoot>
-            <tr>
-                <th colspan="4">Totales:</th>
-                <th id="total-monto"></th>
-                <th id="total-abono"></th>
-                <th id="total-saldo"></th>
-                <th colspan="9"></th>
-            </tr>
-        </tfoot>
+        <tfoot id="tfoot-dinamico"></tfoot>
+
     </table>
     </div>
 </div>
@@ -421,5 +414,49 @@ function sumarTotales() {
 
 document.addEventListener('DOMContentLoaded', sumarTotales);
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const tabla = document.querySelector('table');
+    const cuerpo = tabla.querySelector('tbody');
+    const filas = cuerpo.querySelectorAll('tr');
+
+    let totalMonto = 0, totalAbono = 0, totalSaldo = 0;
+
+    filas.forEach(tr => {
+        const monto = parseFloat(tr.querySelector('.col-monto')?.textContent.replace(/[$,]/g, '') || 0);
+        const abonado = parseFloat(tr.querySelector('.col-abonado')?.textContent.replace(/[$,]/g, '') || 0);
+        const saldo = parseFloat(tr.querySelector('.col-saldo')?.textContent.replace(/[$,]/g, '') || 0);
+
+        totalMonto += monto;
+        totalAbono += abonado;
+        totalSaldo += saldo;
+    });
+
+    const columnas = tabla.querySelectorAll('thead th');
+    const tfoot = document.getElementById('tfoot-dinamico');
+    const fila = document.createElement('tr');
+
+    columnas.forEach(th => {
+        const td = document.createElement('td');
+        const clase = th.className;
+
+        if (clase.includes('col-monto')) {
+            td.innerHTML = `<strong>$${totalMonto.toLocaleString('es-MX', {minimumFractionDigits:2})}</strong>`;
+        } else if (clase.includes('col-abonado')) {
+            td.innerHTML = `<strong>$${totalAbono.toLocaleString('es-MX', {minimumFractionDigits:2})}</strong>`;
+        } else if (clase.includes('col-saldo')) {
+            td.innerHTML = `<strong>$${totalSaldo.toLocaleString('es-MX', {minimumFractionDigits:2})}</strong>`;
+        } else if (clase.includes('col-folio')) {
+            td.innerHTML = '<strong>Totales:</strong>';
+        }
+
+        fila.appendChild(td);
+    });
+
+    tfoot.innerHTML = '';
+    tfoot.appendChild(fila);
+});
+</script>
+
 </body>
 </html>
