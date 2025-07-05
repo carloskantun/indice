@@ -47,15 +47,19 @@ try{
     if(!$stmt->execute()) throw new Exception($stmt->error);
 
     $total = $conn->query("SELECT SUM(monto) AS s FROM abonos_gastos WHERE gasto_id=$gasto_id")->fetch_assoc()['s'];
-    $gasto = $conn->query("SELECT monto FROM gastos WHERE id=$gasto_id")->fetch_assoc();
-    $nuevo_status = ($total >= $gasto['monto']) ? 'Pagado' : 'Abonado';
-    if ($total == 0) {
-  $nuevo_status = 'Por pagar';
-} elseif ($total < $gasto['monto']) {
-  $nuevo_status = 'Abonado';
-} else {
-  $nuevo_status = 'Pagado';
-}
+    $gasto = $conn->query("SELECT monto, fecha_pago, origen FROM gastos WHERE id=$gasto_id")->fetch_assoc();
+    $hoy = date('Y-m-d');
+    if ($total >= $gasto['monto']) {
+        $nuevo_status = 'Pagado';
+    } elseif ($total > 0 && $gasto['fecha_pago'] < $hoy) {
+        $nuevo_status = 'Vencido';
+    } elseif ($total > 0) {
+        $nuevo_status = 'Pago parcial';
+    } elseif ($gasto['origen'] === 'Orden' && $gasto['fecha_pago'] < $hoy) {
+        $nuevo_status = 'Vencido';
+    } else {
+        $nuevo_status = 'Por pagar';
+    }
 
     $conn->query("UPDATE gastos SET estatus='".$conn->real_escape_string($nuevo_status)."' WHERE id=$gasto_id");
 

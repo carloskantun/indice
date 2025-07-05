@@ -1,12 +1,4 @@
-<?php
-$servername = "localhost";
-$username   = "corazon_caribe";
-$password   = "Kantun.01*";
-$database   = "corazon_orderdecompras";
-
-$conn = new mysqli($servername, $username, $password, $database);
-
-$sql = "CREATE TABLE IF NOT EXISTS gastos (
+CREATE TABLE gastos (
   id INT AUTO_INCREMENT PRIMARY KEY,
   folio VARCHAR(20) UNIQUE,
   proveedor_id INT,
@@ -25,11 +17,4 @@ $sql = "CREATE TABLE IF NOT EXISTS gastos (
   fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (proveedor_id) REFERENCES proveedores(id),
   FOREIGN KEY (unidad_negocio_id) REFERENCES unidades_negocio(id)
-);";
-
-if ($conn->query($sql) === TRUE) {
-    echo "Tabla creada";
-} else {
-    echo "Error: " . $conn->error;
-}
-?>
+);
