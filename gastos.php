@@ -158,6 +158,10 @@ $kpi_anio = $conn->query("SELECT SUM(monto) AS total FROM gastos WHERE YEAR(fech
         </div>
         <div class="col-md">
             <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+            <div class="col-md">
+                <a href="gastos.php" class="btn btn-outline-secondary w-100">Limpiar filtros</a>
+            </div>
+
         </div>
     </form>
     <div class="mb-3">
