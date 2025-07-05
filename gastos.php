@@ -278,7 +278,9 @@ $comps = [];
 while ($row = $resComps->fetch_assoc()) {
     $comps[] = $row['archivo_comprobante'];
 }
-if (count($comps)) {
+if (count($comps) === 1) {
+    echo '<a href="' . htmlspecialchars($comps[0]) . '" target="_blank" class="btn btn-sm btn-outline-secondary">Ver</a>';
+} elseif (count($comps) > 1) {
     echo '<button class="btn btn-sm btn-outline-secondary ver-comprobantes-btn" data-id="' . $g['id'] . '">Ver</button>';
 } else {
     echo '<span class="text-muted">Sin archivo</span>';
