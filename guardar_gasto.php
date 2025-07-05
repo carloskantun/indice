@@ -12,6 +12,64 @@ function letraSufijo(int $num): string {
     return $s;
 }
 
+function generarFechasRecurrentes(array $config){
+    $inicio = new DateTime($config['fecha_inicio']);
+    $fin = (clone $inicio)->modify("+{$config['plazo_meses']} months");
+    $fechas = [];
+    $tipo = $config['frecuencia'];
+    $patron = $config['patron'];
+
+    if ($tipo === 'diaria') {
+        while ($inicio <= $fin) {
+            $fechas[] = $inicio->format('Y-m-d');
+            $inicio->modify('+1 day');
+        }
+
+    } elseif ($tipo === 'quincenal_calendario') {
+        while ($inicio <= $fin) {
+            $f15 = new DateTime($inicio->format('Y-m-15'));
+            $flast = new DateTime($inicio->format('Y-m-t'));
+            if ($f15 >= new DateTime($config['fecha_inicio']) && $f15 <= $fin) $fechas[] = $f15->format('Y-m-d');
+            if ($flast >= new DateTime($config['fecha_inicio']) && $flast <= $fin) $fechas[] = $flast->format('Y-m-d');
+            $inicio->modify('first day of next month');
+        }
+
+    } elseif ($tipo === 'semanal') {
+        $dias_map = ['lunes'=>1,'martes'=>2,'miércoles'=>3,'jueves'=>4,'viernes'=>5,'sábado'=>6,'domingo'=>0];
+        $dias = array_map(fn($d)=>$dias_map[strtolower($d)], $patron['dias_semana'] ?? []);
+        while ($inicio <= $fin) {
+            if (in_array((int)$inicio->format('w'), $dias)) {
+                $fechas[] = $inicio->format('Y-m-d');
+            }
+            $inicio->modify('+1 day');
+        }
+
+    } elseif ($tipo === 'mensual') {
+        while ($inicio <= $fin) {
+            foreach ($patron['dias_mes'] ?? [] as $dia) {
+                try {
+                    $fecha = new DateTime($inicio->format('Y-m-') . str_pad($dia, 2, '0', STR_PAD_LEFT));
+                    if ($fecha >= new DateTime($config['fecha_inicio']) && $fecha <= $fin) {
+                        $fechas[] = $fecha->format('Y-m-d');
+                    }
+                } catch(Exception $e){}
+            }
+            $inicio->modify('first day of next month');
+        }
+
+    } elseif ($tipo === 'personalizada') {
+        foreach ($patron['fechas_exactas'] ?? [] as $f) {
+            $fecha = new DateTime($f);
+            if ($fecha >= new DateTime($config['fecha_inicio']) && $fecha <= $fin) {
+                $fechas[] = $fecha->format('Y-m-d');
+            }
+        }
+    }
+
+    sort($fechas);
+    return array_values(array_unique($fechas));
+}
+
 $proveedor_id = $_POST['proveedor_id'] ?? null;
 $monto = $_POST['monto'] ?? null;
 $fecha_pago = $_POST['fecha_pago'] ?? null;
@@ -39,12 +97,6 @@ if ($origen === 'Orden') {
     $estatus = 'Abonado';
 }
 
-$dias_periodicidad = [
-    'Diario'     => 1,
-    'Semanal'    => 7,
-    'Quincenal'  => 15,
-    'Mensual'    => 30
-];
 $meses_plazo = [
     'Trimestral' => 3,
     'Semestral'  => 6,
@@ -56,14 +108,34 @@ try{
     $stmt = $conn->prepare("INSERT INTO gastos (folio, proveedor_id, monto, fecha_pago, unidad_negocio_id, tipo_gasto, medio_pago, cuenta_bancaria, estatus, concepto, orden_folio, origen) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     if($tipo_gasto==='Recurrente'){
-        if(!isset($dias_periodicidad[$periodicidad]) || !isset($meses_plazo[$plazo])){
-            throw new Exception('Datos de recurrencia inválidos');
+        $plazo_meses = intval($_POST['plazo_meses'] ?? ($meses_plazo[$plazo] ?? 0));
+        $map_freq = ['Diario'=>'diaria','Semanal'=>'semanal','Quincenal'=>'quincenal_calendario','Mensual'=>'mensual'];
+        $frecuencia = $_POST['frecuencia'] ?? ($map_freq[$periodicidad] ?? 'diaria');
+        $patron = [
+            'dias_mes' => $_POST['dias_mes'] ?? [],
+            'dias_semana' => $_POST['dias_semana'] ?? [],
+            'fechas_exactas' => $_POST['fechas_exactas'] ?? []
+        ];
+        if(empty($patron['dias_semana']) && $frecuencia==='semanal'){
+            $dias_nombre = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+            $patron['dias_semana'] = [$dias_nombre[(int)date('w', strtotime($fecha_pago))]];
         }
-        $repeticiones = intval(($meses_plazo[$plazo]*30) / $dias_periodicidad[$periodicidad]);
-        for($i=0;$i<$repeticiones;$i++){
+        if(empty($patron['dias_mes']) && $frecuencia==='mensual'){
+            $patron['dias_mes'] = [intval(date('d', strtotime($fecha_pago)))];
+        }
+
+        $config = [
+            'fecha_inicio' => $fecha_pago,
+            'plazo_meses' => $plazo_meses,
+            'frecuencia' => $frecuencia,
+            'patron' => $patron
+        ];
+
+        $fechas = generarFechasRecurrentes($config);
+
+        foreach($fechas as $i => $fecha_i){
             $sufijo = letraSufijo($i);
             $folio_i = $folio.'-'.$sufijo;
-            $fecha_i = date('Y-m-d', strtotime($fecha_pago.' +'.($i*$dias_periodicidad[$periodicidad]).' days'));
             $stmt->bind_param('sidsisssssss', $folio_i, $proveedor_id, $monto, $fecha_i, $unidad_id, $tipo_gasto, $medio_pago, $cuenta, $estatus, $concepto, $orden_folio, $origen);
             if(!$stmt->execute()) throw new Exception($stmt->error);
         }
