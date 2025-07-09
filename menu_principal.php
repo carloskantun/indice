@@ -22,10 +22,10 @@ function verModulo($modulo) {
             return str_contains($puesto, 'mantenimiento') || str_contains($puesto, 'servicio al cliente');
         case 'servicio_cliente':
             return str_contains($puesto, 'servicio al cliente');
-       case 'transfers':
+        case 'transfers':
             return in_array($rol, ['superadmin', 'webmaster', 'admin', 'ceo']) ||
-           str_contains($puesto, 'operador') ||
-           str_contains($puesto, 'supervisor operador');
+                   str_contains($puesto, 'operador') ||
+                   str_contains($puesto, 'supervisor operador');
         case 'lavanderia':
             return in_array($rol, ['superadmin', 'administrador', 'gerente', 'admin']) ||
                    str_contains($puesto, 'lavanderia');
@@ -90,8 +90,7 @@ foreach ($modulos_disponibles as $m) {
         <div class="row justify-content-center g-4">
 
             <?php if (verModulo('ordenes_compra')): ?>
-
-          <div class="col-12 col-md-4">
+                <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="minipanel.php">
                             <span class="modulo-icon">📦</span>
@@ -102,8 +101,12 @@ foreach ($modulos_disponibles as $m) {
             <?php endif; ?>
 
             <?php if (verModulo('gastos')): ?>
+<<<<<<< Updated upstream
 
           <div class="col-12 col-md-4">
+=======
+                <div class="col-12 col-md-4">
+>>>>>>> Stashed changes
                     <div class="modulo-box">
                         <a href="gastos.php">
                             <span class="modulo-icon"><img src="https://elcorazondelcaribe.com/indice/uploads/imgs/gastos.PNG" width="50px"></span>
@@ -112,9 +115,13 @@ foreach ($modulos_disponibles as $m) {
                     </div>
                 </div>
             <?php endif; ?>
+<<<<<<< Updated upstream
 
             <?php if (verModulo('mantenimiento')): ?>
+=======
+>>>>>>> Stashed changes
 
+            <?php if (verModulo('mantenimiento')): ?>
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="minipanel_mantenimiento.php">
@@ -126,7 +133,6 @@ foreach ($modulos_disponibles as $m) {
             <?php endif; ?>
 
             <?php if (verModulo('servicio_cliente')): ?>
-
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="minipanel_servicio_cliente.php">
@@ -137,6 +143,7 @@ foreach ($modulos_disponibles as $m) {
                 </div>
             <?php endif; ?>
 
+<<<<<<< Updated upstream
 <?php if (verModulo('transfers')): ?>
     <div class="col-12 col-md-4">
         <div class="modulo-box">
@@ -158,9 +165,31 @@ foreach ($modulos_disponibles as $m) {
         </div>
     </div>
 <?php endif; ?>
+=======
+            <?php if (verModulo('transfers')): ?>
+                <div class="col-12 col-md-4">
+                    <div class="modulo-box">
+                        <a href="minipanel_transfers.php">
+                            <span class="modulo-icon"><img src="https://elcorazondelcaribe.com/indice/uploads/imgs/transfers.PNG" width="50px"></span>
+                            Transfers
+                        </a>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <?php if (verModulo('lavanderia')): ?>
+                <div class="col-12 col-md-4">
+                    <div class="modulo-box">
+                        <a href="minipanel_lavanderia.php">
+                            <span class="modulo-icon"><img src="https://elcorazondelcaribe.com/indice/uploads/imgs/lavanderia.PNG" width="50px"></span>
+                            Lavandería
+                        </a>
+                    </div>
+                </div>
+            <?php endif; ?>
+>>>>>>> Stashed changes
 
             <?php if (verModulo('usuarios')): ?>
-
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="usuarios.php">
@@ -172,7 +201,6 @@ foreach ($modulos_disponibles as $m) {
             <?php endif; ?>
 
             <?php if (verModulo('kpis')): ?>
-
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="kpis_mantenimiento.php">
@@ -184,7 +212,6 @@ foreach ($modulos_disponibles as $m) {
             <?php endif; ?>
 
             <?php if (verModulo('configuracion')): ?>
-
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
                         <a href="panel_config.php">
@@ -205,6 +232,38 @@ foreach ($modulos_disponibles as $m) {
                     </div>
                 </div>
             <?php endif; ?>
+
+            <!-- Nuevos accesos generales sin restricciones -->
+
+            <!-- Recursos Humanos -->
+            <div class="col-12 col-md-4">
+                <div class="modulo-box">
+                    <a href="https://docs.google.com/spreadsheets/d/19_Bi2m5STQXcNn7YIC2WA87OPplbuUOrfRlwZST0UqE/edit?gid=2094784319" target="_blank">
+                        <span class="modulo-icon"><img src="https://elcorazondelcaribe.com/indice/uploads/imgs/Recursos.jpeg" width="50px"></span>
+                        Recursos Humanos
+                    </a>
+                </div>
+            </div>
+
+            <!-- Notas de Crédito -->
+            <div class="col-12 col-md-4">
+                <div class="modulo-box">
+                    <a href="https://docs.google.com/spreadsheets/d/1L9Pz7Vpc25emKZa-VP30Uxts2mrXkCt-m1sEqCyB7xY/edit?gid=0" target="_blank">
+                        <span class="modulo-icon"><img src="https://elcorazondelcaribe.com/indice/uploads/imgs/notas_credito.png" width="50px"></span>
+                        Notas de Crédito
+                    </a>
+                </div>
+            </div>
+
+            <!-- Control de Minutas -->
+            <div class="col-12 col-md-4">
+                <div class="modulo-box">
+                    <a href="https://drive.google.com/drive/folders/1DZv9UlTs6pAjpy5PfStnBvoJIdpjFbdv" target="_blank">
+                        <span class="modulo-icon"><img src="https://elcorazondelcaribe.com/indice/uploads/imgs/minutas.png" width="50px"></span>
+                        Control de Minutas
+                    </a>
+                </div>
+            </div>
 
             <?php if (!$puede_ver_algo): ?>
                 <div class="col-12">

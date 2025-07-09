@@ -89,4 +89,8 @@ $dompdf->setPaper('A4','landscape');
 $dompdf->render();
 $dompdf->stream('gastos.pdf', ['Attachment'=>false]);
 exit;
+<<<<<<< Updated upstream
 ?>
+=======
+?>
+>>>>>>> Stashed changes

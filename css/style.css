@@ -1,0 +1,107 @@
+  .container {
+            max-width: 100%;
+        }
+
+        .btn-custom {
+            min-width: 150px;
+            font-size: 0.9rem;
+        }
+
+        /* Scroll para tabla */
+        .table-responsive { overflow-x: auto; }
+        th, td { white-space: nowrap; }
+
+        /* Personalizacin de etiquetas del dropdown */
+        .dropdown-item label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Espaciado entre secciones */
+        .section-spacing {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+         .btn-custom {
+        font-size: 0.9rem;
+        padding: 0.6rem 1rem;
+        text-align: center;
+    }
+    @media (min-width: 992px) {
+    .container-fluid {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .table {
+        font-size: 0.85rem;
+    }
+}
+
+    @media (max-width: 576px) {
+        .btn-custom {
+            font-size: 0.85rem;
+            padding: 0.5rem 0.8rem;
+        }
+    }
+        
+        .table-responsive { overflow-x: auto; }  /* 97 Arreglo para mviles */
+
+    th a {
+    text-decoration: none;
+    color: inherit;
+        }
+    th a:hover {
+    text-decoration: underline;
+    }
+    
+    .col-usuario select {
+        min-width: 160px;
+        max-width: 100%;
+    }
+    
+    .col-nivel select {
+        min-width: 160px;
+        max-width: 100%;
+    }
+    
+    .col-usuario_delegado select {
+        min-width: 160px;
+        max-width: 100%;
+    }
+    
+    .col-estatus select {
+        min-width: 160px;
+        max-width: 100%;
+    }
+    .col-tipo select {
+        min-width: 160px;
+        max-width: 100%;
+    }
+    .col-tipo_compra select {
+        min-width: 160px;
+        max-width: 100%;
+    }
+    .col-medio select {
+        min-width: 160px;
+        max-width: 100%;
+    }
+    .col-cuenta {
+        min-width: 160px;
+        max-width: 100%;
+    }
+    
+    .col-concepto {
+        min-width: 160px;
+        max-width: 100%;
+    }
+
+    .col-accion {
+        min-width: 160px;
+        max-width: 100%;
+    }
+    .col-col-quien_pago select{
+        min-width: 160px;
+        max-width: 100%;
+    }
