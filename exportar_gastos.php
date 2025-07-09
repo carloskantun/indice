@@ -83,8 +83,4 @@ while($row=$res->fetch_assoc()){
 }
 fclose($out);
 exit;
-<<<<<<< Updated upstream
 ?>
-=======
-?>
->>>>>>> Stashed changes

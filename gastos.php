@@ -87,10 +87,7 @@ $kpi_anio = $conn->query("SELECT SUM(monto) AS total FROM gastos WHERE YEAR(fech
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
-<<<<<<< Updated upstream
-=======
 <link href="css/style.css" rel="stylesheet">
->>>>>>> Stashed changes
 </head>
 <body class="bg-light">
 <nav class="navbar navbar-light bg-white shadow-sm">
@@ -115,11 +112,6 @@ $kpi_anio = $conn->query("SELECT SUM(monto) AS total FROM gastos WHERE YEAR(fech
                 </div>
             </div>
         </div>
-<<<<<<< Updated upstream
-        <div class="col text-end align-self-center">
-            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalGasto">Agregar Gasto</button>
-        </div>
-=======
 
 <div class="col text-end align-self-center d-flex justify-content-end gap-2">
     <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalOrden">
@@ -130,7 +122,6 @@ $kpi_anio = $conn->query("SELECT SUM(monto) AS total FROM gastos WHERE YEAR(fech
     </button>
 </div>
 
->>>>>>> Stashed changes
     </div>
     <form class="row g-2 mb-4" id="filtros" method="GET">
         <div class="col-md">
@@ -181,12 +172,6 @@ $kpi_anio = $conn->query("SELECT SUM(monto) AS total FROM gastos WHERE YEAR(fech
 
         </div>
     </form>
-<<<<<<< Updated upstream
-    <div class="mb-3">
-        <a href="exportar_gastos_pdf.php?<?php echo http_build_query($_GET); ?>" target="_blank" class="btn btn-outline-danger btn-sm">PDF</a>
-        <a href="exportar_gastos.php?<?php echo http_build_query($_GET); ?>" target="_blank" class="btn btn-outline-success btn-sm">CSV</a>
-    </div>
-=======
     <div class="mb-3 d-flex justify-content-between align-items-center">
     <div>
         <a href="exportar_gastos_pdf.php?<?php echo http_build_query($_GET); ?>" target="_blank" class="btn btn-outline-danger btn-sm">PDF</a>
@@ -196,7 +181,6 @@ $kpi_anio = $conn->query("SELECT SUM(monto) AS total FROM gastos WHERE YEAR(fech
     </button>
     </div>
 </div>
->>>>>>> Stashed changes
     <div class="mb-3">
         <button type="button" class="btn btn-sm btn-outline-dark quick-filter" data-origen="Orden" data-estatus="Por pagar">Órdenes por pagar</button>
         <button type="button" class="btn btn-sm btn-outline-dark quick-filter" data-origen="" data-estatus="Pagado">Gastos</button>
@@ -228,9 +212,6 @@ $kpi_anio = $conn->query("SELECT SUM(monto) AS total FROM gastos WHERE YEAR(fech
     <div class="table-responsive">
     <table class="table table-striped">
         <thead>
-<<<<<<< Updated upstream
-            <tr id="columnas-reordenables">
-=======
             
             <tr id="columnas-reordenables">
             <?php if ($_SESSION['user_role'] === 'superadmin'): ?>
@@ -238,7 +219,6 @@ $kpi_anio = $conn->query("SELECT SUM(monto) AS total FROM gastos WHERE YEAR(fech
         <input type="checkbox" id="seleccionar-todos">
     </th>
 <?php endif; ?>
->>>>>>> Stashed changes
 <?php
 $cols = [
     'folio'     => 'Folio',
@@ -278,14 +258,11 @@ foreach ($cols as $c => $label):
         <tbody>
             <?php foreach($gastos as $g): ?>
             <tr>
-<<<<<<< Updated upstream
-=======
             <?php if ($_SESSION['user_role'] === 'superadmin'): ?>
     <td class="col-seleccion">
         <input type="checkbox" class="seleccionar-gasto" value="<?php echo $g['id']; ?>">
     </td>
 <?php endif; ?>
->>>>>>> Stashed changes
                 <td class="col-folio"><?php echo htmlspecialchars($g['folio']); ?></td>
                 <td class="col-proveedor"><?php echo htmlspecialchars($g['proveedor']); ?></td>
                 <td class="col-monto monto">$<?php echo number_format($g['monto'],2); ?></td>
@@ -310,13 +287,6 @@ if ($origen === 'Orden') {
 }
 ?>
                 </td>
-<<<<<<< Updated upstream
-                <td class="col-tipo_compra"><?php echo htmlspecialchars($g['tipo_compra']); ?></td>
-                <td class="col-medio"><?php echo htmlspecialchars($g['medio_pago']); ?></td>
-                <td class="col-cuenta"><?php echo htmlspecialchars($g['cuenta_bancaria']); ?></td>
-                <td class="col-concepto"><?php echo htmlspecialchars($g['concepto']); ?></td>
-                <td class="col-estatus"><?php echo htmlspecialchars($g['estatus']); ?></td>
-=======
                 <td class="col-tipo_compra">
 <?php if ($_SESSION['user_role'] === 'superadmin'): ?>
     <select class="form-select form-select-sm editable-campo" data-id="<?= $g['id']; ?>" data-campo="tipo_compra">
@@ -369,7 +339,6 @@ if ($origen === 'Orden') {
 <?php endif; ?>
 </td>
 
->>>>>>> Stashed changes
 <td class="col-comprobante">
 <?php
 $sqlComps = "SELECT archivo_comprobante FROM abonos_gastos 
@@ -390,14 +359,6 @@ if (count($comps) === 1) {
 ?>
 </td>
 
-<<<<<<< Updated upstream
-
-                <td class="col-accion">
-                    <?php if($g['origen']==='Orden' && $g['estatus']!=='Pagado'): ?>
-                        <button class="btn btn-sm btn-outline-primary pagar-btn" data-id="<?php echo $g['id']; ?>">Pagar</button>
-                    <?php endif; ?>
-                </td>
-=======
 <td class="col-accion">
     <?php if($g['origen'] === 'Orden' && $g['estatus'] !== 'Pagado'): ?>
         <button class="btn btn-sm btn-outline-primary pagar-btn" data-id="<?php echo $g['id']; ?>">Pagar</button>
@@ -409,7 +370,6 @@ if (count($comps) === 1) {
     <?php endif; ?>
 </td>
 
->>>>>>> Stashed changes
                 <td class="col-pdf"><a class="btn btn-sm btn-outline-dark" target="_blank" href="generar_pdf_gasto.php?folio=<?php echo $g['folio']; ?>">PDF</a></td>
             </tr>
             <?php endforeach; ?>
@@ -419,8 +379,6 @@ if (count($comps) === 1) {
     </table>
     </div>
 </div>
-<<<<<<< Updated upstream
-=======
 
 <div class="modal fade" id="modalOrden" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
@@ -428,7 +386,6 @@ if (count($comps) === 1) {
   </div>
 </div>
 
->>>>>>> Stashed changes
 <div class="modal fade" id="modalGasto" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content" id="contenidoGasto"></div>
@@ -445,15 +402,12 @@ if (count($comps) === 1) {
   </div>
 </div>
 
-<<<<<<< Updated upstream
-=======
 <div class="modal fade" id="modalEditarGasto" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content" id="contenidoEditarGasto">Cargando...</div>
   </div>
 </div>
 
->>>>>>> Stashed changes
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 $(function(){
@@ -585,11 +539,8 @@ document.addEventListener('DOMContentLoaded', function () {
             td.innerHTML = `<strong>$${totalSaldo.toLocaleString('es-MX', {minimumFractionDigits:2})}</strong>`;
         } else if (clase.includes('col-folio')) {
             td.innerHTML = '<strong>Totales:</strong>';
-<<<<<<< Updated upstream
-=======
         } else {
             td.innerHTML = '';
->>>>>>> Stashed changes
         }
 
         fila.appendChild(td);
@@ -600,10 +551,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-<<<<<<< Updated upstream
-</body>
-</html>
-=======
 <script>
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -718,4 +665,3 @@ document.addEventListener('change', function(e) {
 
 </body>
 </html>
->>>>>>> Stashed changes

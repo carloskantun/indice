@@ -215,8 +215,4 @@ try {
     $conn->rollback();
     echo 'Error al guardar: ' . $e->getMessage();
 }
-<<<<<<< Updated upstream
 ?>
-=======
-?>
->>>>>>> Stashed changes

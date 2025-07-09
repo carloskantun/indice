@@ -101,12 +101,7 @@ foreach ($modulos_disponibles as $m) {
             <?php endif; ?>
 
             <?php if (verModulo('gastos')): ?>
-<<<<<<< Updated upstream
-
-          <div class="col-12 col-md-4">
-=======
                 <div class="col-12 col-md-4">
->>>>>>> Stashed changes
                     <div class="modulo-box">
                         <a href="gastos.php">
                             <span class="modulo-icon"><img src="https://elcorazondelcaribe.com/indice/uploads/imgs/gastos.PNG" width="50px"></span>
@@ -115,11 +110,6 @@ foreach ($modulos_disponibles as $m) {
                     </div>
                 </div>
             <?php endif; ?>
-<<<<<<< Updated upstream
-
-            <?php if (verModulo('mantenimiento')): ?>
-=======
->>>>>>> Stashed changes
 
             <?php if (verModulo('mantenimiento')): ?>
                 <div class="col-12 col-md-4">
@@ -143,29 +133,6 @@ foreach ($modulos_disponibles as $m) {
                 </div>
             <?php endif; ?>
 
-<<<<<<< Updated upstream
-<?php if (verModulo('transfers')): ?>
-    <div class="col-12 col-md-4">
-        <div class="modulo-box">
-            <a href="minipanel_transfers.php">
-                <span class="modulo-icon"><img src="https://elcorazondelcaribe.com/indice/uploads/imgs/transfers.PNG" width="50px"></span>
-                Transfers
-            </a>
-        </div>
-    </div>
-<?php endif; ?>
-
-            <?php if (verModulo('lavanderia')): ?>
-    <div class="col-12 col-md-4">
-        <div class="modulo-box">
-            <a href="minipanel_lavanderia.php">
-                <span class="modulo-icon"><img src="https://elcorazondelcaribe.com/indice/uploads/imgs/lavanderia.PNG" width="50px"></span>
-                Lavandería
-            </a>
-        </div>
-    </div>
-<?php endif; ?>
-=======
             <?php if (verModulo('transfers')): ?>
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
@@ -187,7 +154,6 @@ foreach ($modulos_disponibles as $m) {
                     </div>
                 </div>
             <?php endif; ?>
->>>>>>> Stashed changes
 
             <?php if (verModulo('usuarios')): ?>
                 <div class="col-12 col-md-4">

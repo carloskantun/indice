@@ -53,8 +53,4 @@ $dompdf->setPaper('A4','portrait');
 $dompdf->render();
 $dompdf->stream('gasto_'.$folio.'.pdf', ['Attachment'=>false]);
 exit;
-<<<<<<< Updated upstream
 ?>
-=======
-?>
->>>>>>> Stashed changes
