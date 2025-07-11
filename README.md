@@ -11,10 +11,11 @@ This project is a PHP based management system for purchase orders, maintenance r
 - `minipanel_transfers.php` module allows registering airport-hotel transfers.
 
 ## Database
-The application expects a MySQL database configured in `conexion.php`. Tables such as `ordenes_compra`, `ordenes_mantenimiento`, `ordenes_servicio_cliente` and `ordenes_transfers` store the different orders.
+The application expects a MySQL database. Connection credentials are read from environment variables. Copy `.env.example` to `.env` and set `DB_HOST`, `DB_USER`, `DB_PASSWORD` and `DB_NAME`.
+Tables such as `ordenes_compra`, `ordenes_mantenimiento`, `ordenes_servicio_cliente` and `ordenes_transfers` store the different orders.
 
 ## Usage
-1. Configure database credentials in `conexion.php`.
+1. Create a `.env` file with your database credentials.
 2. Access `index.php` to login.
 3. Depending on user role, the main menu (`menu_principal.php`) provides access to modules like purchases, maintenance, customer service and KPIs.
 
