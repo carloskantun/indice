@@ -1,9 +1,9 @@
 <?php
 // database/migrations/create_proveedores_table.php
-$servername = "localhost";
-$username = "corazon_caribe";
-$password = "Kantun.01*";
-$database = "corazon_orderdecompras";
+$servername = getenv('DB_HOST') ?: 'localhost';
+$username   = getenv('DB_USER') ?: 'user';
+$password   = getenv('DB_PASSWORD') ?: 'password';
+$database   = getenv('DB_NAME') ?: 'database';
 
 $conn = new mysqli($servername, $username, $password, $database);
 
