@@ -1,6 +1,7 @@
 <?php
-include 'conexion.php';
 session_start();
+include 'auth.php';
+include 'conexion.php';
 
 // Mostrar errores (modo desarrollo)
 ini_set('display_errors', 1);
