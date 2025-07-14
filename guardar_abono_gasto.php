@@ -1,4 +1,5 @@
 <?php
+include 'auth.php';
 include 'conexion.php';
 
 $gasto_id = intval($_POST['gasto_id'] ?? 0);
