@@ -21,4 +21,8 @@ mysqli_query($conn, "SET NAMES 'utf8mb4'");
 mysqli_query($conn, "SET CHARACTER SET utf8mb4");
 mysqli_query($conn, "SET SESSION collation_connection = 'utf8mb4_unicode_ci'");
 
+if ($conn->connect_error) {
+    die("Error de conexi¨®n a la base de datos: " . $conn->connect_error);
+}
+
 ?>

@@ -115,10 +115,10 @@ $kpi_anio = $conn->query("SELECT SUM(monto) AS total FROM gastos WHERE YEAR(fech
 
 <div class="col text-end align-self-center d-flex justify-content-end gap-2">
     <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalOrden">
-        📄 Nueva Orden de Compra
+        Nueva Orden de Compra
     </button>
     <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalGasto">
-        💸 Nuevo Gasto
+        Nuevo Gasto
     </button>
 </div>
 
@@ -244,7 +244,7 @@ foreach ($cols as $c => $label):
     $params['orden'] = $c;
     $params['dir'] = ($orden_actual === $c && $dir_actual === 'ASC') ? 'DESC' : 'ASC';
     $url = '?' . http_build_query($params);
-    $icon = ($orden_actual === $c) ? ($dir_actual === 'DESC' ? '▼' : '▲') : '';
+    $icon = ($orden_actual === $c) ? ($dir_actual === 'DESC' ? 'â–¼' : 'â–²') : '';
 ?>
                 <th class="col-<?php echo $c; ?>">
                     <a href="<?php echo htmlspecialchars($url); ?>" style="text-decoration:none;color:inherit;">
@@ -278,7 +278,7 @@ $estatus = $g['estatus'];
 
 if ($origen === 'Orden') {
     if ($estatus === 'Pagado') {
-        echo "Orden ($tipo) → Gasto";
+        echo "Orden ($tipo) â†’ Gasto";
     } else {
         echo "Orden ($tipo)";
     }
@@ -290,7 +290,7 @@ if ($origen === 'Orden') {
                 <td class="col-tipo_compra">
 <?php if ($_SESSION['user_role'] === 'superadmin'): ?>
     <select class="form-select form-select-sm editable-campo" data-id="<?= $g['id']; ?>" data-campo="tipo_compra">
-        <?php foreach (['Venta', 'Administrativa', 'Operativo', 'Impuestos', 'Intereses/Créditos'] as $op): ?>
+        <?php foreach (['Venta', 'Administrativa', 'Operativo', 'Impuestos', 'Intereses/CrÃ©ditos'] as $op): ?>
             <option value="<?= $op ?>" <?= $g['tipo_compra'] === $op ? 'selected' : '' ?>><?= $op ?></option>
         <?php endforeach; ?>
     </select>
@@ -366,7 +366,7 @@ if (count($comps) === 1) {
 
     <?php if ($_SESSION['user_role'] === 'superadmin'): ?>
         <button class="btn btn-sm btn-outline-warning editar-gasto-btn" data-id="<?php echo $g['id']; ?>">Editar</button>
-        <a href="eliminar_gasto.php?id=<?php echo $g['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Estás seguro de eliminar este gasto?')">Eliminar</a>
+        <a href="eliminar_gasto.php?id=<?php echo $g['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Â¿EstÃ¡s seguro de eliminar este gasto?')">Eliminar</a>
     <?php endif; ?>
 </td>
 
@@ -382,7 +382,9 @@ if (count($comps) === 1) {
 
 <div class="modal fade" id="modalOrden" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
-    <div class="modal-content" id="contenidoOrden">Cargando...</div>
+    <div class="modal-content">
+      <?php include 'modal_orden.php'; ?>
+    </div>
   </div>
 </div>
 
@@ -570,7 +572,7 @@ document.addEventListener('DOMContentLoaded', function () {
         actualizarBoton();
     });
 
-    // ✅ SOLO esta función:
+    // âœ… SOLO esta funciÃ³n:
     btnEliminar?.addEventListener('click', function () {
         const ids = Array.from(document.querySelectorAll('.seleccionar-gasto'))
             .filter(cb => cb.checked)
@@ -578,7 +580,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!ids.length) return;
 
-        if (!confirm('¿Estás seguro de eliminar los gastos seleccionados?')) return;
+        if (!confirm('Â¿EstÃ¡s seguro de eliminar los gastos seleccionados?')) return;
 
         const params = new URLSearchParams();
         ids.forEach(id => params.append('ids[]', id));
@@ -598,24 +600,61 @@ document.addEventListener('DOMContentLoaded', function () {
                 alert('Error: ' + res);
             }
         })
-        .catch(() => alert('Error en la conexión'));
+        .catch(() => alert('Error en la conexiÃ³n'));
     });
 });
 
 document.addEventListener("DOMContentLoaded", function () {
     const modalOrden = document.getElementById("modalOrden");
+
     modalOrden.addEventListener("show.bs.modal", function () {
-        document.getElementById("contenidoOrden").innerHTML = "Cargando...";
-        fetch("modal_orden.php?modal=1")
+        const cont = document.getElementById("contenidoOrden");
+        cont.innerHTML = "Cargando...";
+
+        fetch("modal_orden.php")
             .then(res => res.text())
             .then(html => {
-                document.getElementById("contenidoOrden").innerHTML = html;
+                cont.innerHTML = html;
+
+                const tipoSelect = cont.querySelector('select[name="tipo_gasto"]');
+                const camposRecurrente = cont.querySelector('#camposRecurrente');
+                const form = cont.querySelector('#formOrden');
+
+                function toggleCampos() {
+                    camposRecurrente.style.display = (tipoSelect.value === 'Recurrente') ? 'block' : 'none';
+                }
+
+                tipoSelect?.addEventListener('change', toggleCampos);
+                toggleCampos(); // por si ya está seleccionado
+
+                form?.addEventListener('submit', function (e) {
+                    e.preventDefault();
+
+                    const datos = new FormData(form);
+
+                    fetch("guardar_gasto.php", {
+                        method: "POST",
+                        body: datos
+                    })
+                    .then(res => res.text())
+                    .then(respuesta => {
+                        if (respuesta.trim() === 'ok') {
+                            alert("✅ Orden registrada correctamente");
+                            bootstrap.Modal.getInstance(modalOrden).hide();
+                            location.reload(); // o actualizar parte de la tabla
+                        } else {
+                            alert("❌ Error: " + respuesta);
+                        }
+                    })
+                    .catch(() => alert("❌ Error de conexión"));
+                });
             })
             .catch(() => {
-                document.getElementById("contenidoOrden").innerHTML = "<div class='p-3 text-danger'>Error al cargar el formulario.</div>";
+                cont.innerHTML = "<div class='p-3 text-danger'>Error al cargar el formulario.</div>";
             });
     });
 });
+
 
 </script>
 <script>
@@ -657,7 +696,7 @@ document.addEventListener('change', function(e) {
                 alert('Error al guardar: ' + res);
             }
         })
-        .catch(() => alert('Error en la conexi�n'));
+        .catch(() => alert('Error en la conexiï¿½n'));
     }
 });
 </script>

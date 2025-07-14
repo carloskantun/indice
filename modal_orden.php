@@ -1,21 +1,12 @@
-<?php
-include 'conexion.php';
-?>
+<?php include 'conexion.php'; ?>
 
 <form id="formOrden" enctype="multipart/form-data">
   <div class="modal-header">
     <h5 class="modal-title">Registrar Orden de Compra</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
   </div>
-  <div class="modal-body">
-    <div class="mb-3">
-      <label class="form-label">Orden relacionada</label>
-      <select name="orden_relacionada" class="form-select">
-        <option value="">Seleccione orden</option>
-        <!-- Opcional: puedes cargar órdenes previas -->
-      </select>
-    </div>
 
+  <div class="modal-body">
     <div class="mb-3">
       <label class="form-label">Proveedor</label>
       <select name="proveedor_id" class="form-select" required>
@@ -54,10 +45,33 @@ include 'conexion.php';
 
     <div class="mb-3">
       <label class="form-label">Tipo de Orden</label>
-      <select name="tipo_gasto" class="form-select" required>
-        <option value="Única">Orden (Única)</option>
+      <select name="tipo_gasto" class="form-select" required id="tipoOrden">
+        <option value="Único">Orden (Única)</option>
         <option value="Recurrente">Orden (Recurrente)</option>
       </select>
+    </div>
+
+    <div id="camposRecurrente" style="display:none;">
+      <div class="mb-3">
+        <label class="form-label">Periodicidad</label>
+        <select name="periodicidad" class="form-select">
+          <option value="">Seleccione</option>
+          <option value="Mensual">Mensual</option>
+          <option value="Quincenal">Quincenal</option>
+          <option value="Semanal">Semanal</option>
+          <option value="Diario">Diario</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Plazo</label>
+        <select name="plazo" class="form-select">
+          <option value="">Seleccione</option>
+          <option value="Trimestral">3 meses</option>
+          <option value="Semestral">6 meses</option>
+          <option value="Anual">12 meses</option>
+        </select>
+      </div>
     </div>
 
     <input type="hidden" name="origen" value="Orden">
@@ -67,3 +81,53 @@ include 'conexion.php';
     <button type="submit" class="btn btn-success">Guardar Orden</button>
   </div>
 </form>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const tipoSelect = document.getElementById("tipoOrden");
+  const campos = document.getElementById("camposRecurrente");
+  const form = document.getElementById("formOrden");
+
+  function toggleCampos() {
+    campos.style.display = tipoSelect.value === "Recurrente" ? "block" : "none";
+  }
+
+  tipoSelect.addEventListener("change", toggleCampos);
+  toggleCampos();
+
+  form.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const tipo = form.querySelector('[name="tipo_gasto"]').value;
+  const periodicidad = form.querySelector('[name="periodicidad"]').value;
+  const plazo = form.querySelector('[name="plazo"]').value;
+
+  if (tipo === "Recurrente") {
+    if (!periodicidad || !plazo) {
+      alert("⚠️ Debes seleccionar periodicidad y plazo para una orden recurrente.");
+      return;
+    }
+  }
+
+  const datos = new FormData(form);
+
+  fetch("guardar_gasto.php", {
+    method: "POST",
+    body: datos
+  })
+  .then(res => res.text())
+  .then(respuesta => {
+    if (respuesta.trim() === "ok") {
+      alert("✅ Orden registrada correctamente");
+      bootstrap.Modal.getInstance(document.getElementById("modalOrden")).hide();
+      location.reload();
+    } else {
+      alert("❌ Error: " + respuesta);
+    }
+  })
+  .catch(() => {
+    alert("❌ Error de conexión");
+  });
+});
+});
+</script>
