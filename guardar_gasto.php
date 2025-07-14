@@ -4,6 +4,11 @@ session_start();
 include 'auth.php';
 include 'conexion.php';
 
+// Detectar si la solicitud es AJAX
+$isAjax = !empty($_POST['ajax']) ||
+    (isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+     strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest');
+
 // Mostrar errores (modo desarrollo)
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -155,7 +160,11 @@ if ($tipo_gasto === 'Recurrente' && empty($plazo)) {
     }
 
     $conn->commit();
-    header('Location: gastos.php');
+    if ($isAjax) {
+        echo 'ok';
+    } else {
+        header('Location: gastos.php');
+    }
     exit;
 } catch (Exception $e) {
     $conn->rollback();
