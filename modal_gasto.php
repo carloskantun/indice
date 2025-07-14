@@ -49,7 +49,7 @@
     </div>
 
     <input type="hidden" name="origen" value="Directo">
-    <input type="hidden" name="tipo_gasto" value="Gasto">
+    <input type="hidden" name="tipo_gasto" value="Unico">
   </div>
 
   <div class="modal-footer">

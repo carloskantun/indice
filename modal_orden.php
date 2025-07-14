@@ -46,7 +46,7 @@
     <div class="mb-3">
       <label class="form-label">Tipo de Orden</label>
       <select name="tipo_gasto" class="form-select" required id="tipoOrden">
-        <option value="Único">Orden (Única)</option>
+        <option value="Unico">Orden (Única)</option>
         <option value="Recurrente">Orden (Recurrente)</option>
       </select>
     </div>
