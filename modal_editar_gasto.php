@@ -10,7 +10,7 @@ if (!$gasto) {
 }
 ?>
 
-<form id="formEditarGasto">
+<form id="formEditarGasto" action="actualizar_gasto.php" method="POST">
   <input type="hidden" name="id" value="<?= $gasto['id'] ?>">
   <div class="modal-header">
     <h5 class="modal-title">Editar Gasto</h5>
@@ -66,3 +66,34 @@ if (!$gasto) {
     <button type="submit" class="btn btn-warning">Actualizar Gasto</button>
   </div>
 </form>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("formEditarGasto");
+  if (!form) return;
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const datos = new FormData(form);
+
+    fetch(form.action, {
+      method: form.method,
+      body: datos
+    })
+    .then(res => res.text())
+    .then(respuesta => {
+      if (respuesta.trim() === "ok") {
+        alert("✅ Gasto actualizado correctamente");
+        const modal = bootstrap.Modal.getInstance(form.closest(".modal"));
+        if (modal) modal.hide();
+
+        const queryString = window.location.search;
+        window.location.href = "gastos.php" + queryString;
+      } else {
+        alert("❌ Error: " + respuesta);
+      }
+    })
+    .catch(() => alert("❌ Error de conexión"));
+  });
+});
+</script>
