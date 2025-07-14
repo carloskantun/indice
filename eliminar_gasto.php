@@ -18,8 +18,8 @@ if (!$id) {
 $res = $conn->query("SELECT archivo_comprobante FROM abonos_gastos WHERE gasto_id = $id AND archivo_comprobante IS NOT NULL");
 while ($row = $res->fetch_assoc()) {
     $archivo = $row['archivo_comprobante'];
-    if ($archivo && file_exists("comprobantes/$archivo")) {
-        unlink("comprobantes/$archivo");
+    if ($archivo && file_exists(COMPROBANTES_DIR . "/$archivo")) {
+        unlink(COMPROBANTES_DIR . "/$archivo");
     }
 }
 
