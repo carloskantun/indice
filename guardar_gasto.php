@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 include 'auth.php';
 include 'conexion.php';
