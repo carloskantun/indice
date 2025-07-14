@@ -1,40 +1,28 @@
 <?php
 session_start();
 
-$servername = "localhost";
-$username = "corazon_caribe";
-$password = "Kantun.01*";
-$database = "corazon_orderdecompras";
+$servername = getenv('DB_HOST') ?: 'localhost';
+$username   = getenv('DB_USER') ?: 'user';
+$password   = getenv('DB_PASSWORD') ?: 'password';
+$database   = getenv('DB_NAME') ?: 'database';
 
-// Crear conexi贸n
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Revisar conexi贸n
-if ($conn->connect_error) {
-    die("Conexi贸n fallida: " . $conn->connect_error);
-}
-
-// Obtener datos del formulario
-$email = $_POST['email'] ?? '';
-$password = $_POST['password'] ?? '';
-
-// Validar credenciales
-$sql = "SELECT * FROM usuarios WHERE email = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows === 1) {
-    $user = $result->fetch_assoc();
-    // Verificar contrase帽a
+    die('Conexi贸n fallida: ' . $conn->connect_error);
+$email    = $_POST['email'] ?? '';
+    if ($password === $user['password']) {
+        $_SESSION['user_id']   = $user['id'];
+        $_SESSION['user_role'] = $user['rol'];
+        $_SESSION['puesto']    = $user['puesto'];
+        header('Location: menu_principal.php');
+        header('Location: index.php?error=Credenciales incorrectas');
+    header('Location: index.php?error=Usuario no encontrado');
+?>
 
 if ($password === $user['password']) {
 
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_name'] = $user['nombre'];
         $_SESSION['user_role'] = $user['rol']; // Almacena el rol del usuario
-        $_SESSION['puesto'] = $user['puesto']; // ⚠️ este es el que falta
+        $_SESSION['puesto'] = $user['puesto']; // 聛7虏2鈥�1鈥�5 este es el que falta
         header("Location: menu_principal.php");
         echo "<pre>";
 print_r($_SESSION);
