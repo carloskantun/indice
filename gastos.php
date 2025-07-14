@@ -302,7 +302,7 @@ if ($origen === 'Orden') {
                 <td class="col-medio">
 <?php if ($_SESSION['user_role'] === 'superadmin'): ?>
     <select class="form-select form-select-sm editable-campo" data-id="<?= $g['id']; ?>" data-campo="medio_pago">
-        <?php foreach (['Efectivo', 'Transferencia', 'Cheque'] as $op): ?>
+        <?php foreach (['Tarjeta', 'Transferencia', 'Efectivo'] as $op): ?>
             <option value="<?= $op ?>" <?= $g['medio_pago'] === $op ? 'selected' : '' ?>><?= $op ?></option>
         <?php endforeach; ?>
     </select>

@@ -61,7 +61,7 @@ if (!$orden) {
     <div class="mb-3">
       <label class="form-label">Tipo de Orden</label>
       <select name="tipo_gasto" class="form-select" required>
-        <option value="Única" <?= $orden['tipo_gasto'] === 'Única' ? 'selected' : '' ?>>Orden (Única)</option>
+        <option value="Unico" <?= $orden['tipo_gasto'] === 'Unico' ? 'selected' : '' ?>>Orden (Única)</option>
         <option value="Recurrente" <?= $orden['tipo_gasto'] === 'Recurrente' ? 'selected' : '' ?>>Orden (Recurrente)</option>
       </select>
     </div>
