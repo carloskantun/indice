@@ -161,11 +161,13 @@ if ($tipo_gasto === 'Recurrente' && empty($plazo)) {
 
     $conn->commit();
     if ($isAjax) {
-        echo 'ok';
-    } else {
-        header('Location: gastos.php');
-    }
-    exit;
+    header('Content-Type: application/json');
+    echo json_encode(['status' => 'ok']);
+} else {
+    header('Location: gastos.php');
+}
+exit;
+
 } catch (Exception $e) {
     $conn->rollback();
     file_put_contents('log_error_gastos.txt', date('[Y-m-d H:i:s] ') . $e->getMessage() . PHP_EOL, FILE_APPEND);
