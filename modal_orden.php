@@ -83,51 +83,51 @@
 </form>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+(function () {
   const tipoSelect = document.getElementById("tipoOrden");
   const campos = document.getElementById("camposRecurrente");
   const form = document.getElementById("formOrden");
+
+  if (!tipoSelect || !campos || !form) return;
 
   function toggleCampos() {
     campos.style.display = tipoSelect.value === "Recurrente" ? "block" : "none";
   }
 
   tipoSelect.addEventListener("change", toggleCampos);
-  toggleCampos();
+  toggleCampos(); // activar al cargar
 
   form.addEventListener("submit", function (e) {
-  e.preventDefault();
+    e.preventDefault();
 
-  const tipo = form.querySelector('[name="tipo_gasto"]').value;
-  const periodicidad = form.querySelector('[name="periodicidad"]').value;
-  const plazo = form.querySelector('[name="plazo"]').value;
+    const tipo = form.querySelector('[name="tipo_gasto"]').value;
+    const periodicidad = form.querySelector('[name="periodicidad"]').value;
+    const plazo = form.querySelector('[name="plazo"]').value;
 
-  if (tipo === "Recurrente") {
-    if (!periodicidad || !plazo) {
+    if (tipo === "Recurrente" && (!periodicidad || !plazo)) {
       alert("⚠️ Debes seleccionar periodicidad y plazo para una orden recurrente.");
       return;
     }
-  }
 
-  const datos = new FormData(form);
+    const datos = new FormData(form);
+    datos.append('ajax', '1');
 
-  fetch("guardar_gasto.php", {
-    method: "POST",
-    body: datos
-  })
-  .then(res => res.text())
-  .then(respuesta => {
-    if (respuesta.trim() === "ok") {
-      alert("✅ Orden registrada correctamente");
-      bootstrap.Modal.getInstance(document.getElementById("modalOrden")).hide();
-      location.reload();
-    } else {
-      alert("❌ Error: " + respuesta);
-    }
-  })
-  .catch(() => {
-    alert("❌ Error de conexión");
+    fetch("guardar_gasto.php", {
+      method: "POST",
+      body: datos
+    })
+    .then(res => res.json())
+    .then(respuesta => {
+      if (respuesta.status === "ok") {
+        bootstrap.Modal.getInstance(document.getElementById("modalOrden")).hide();
+        location.reload();
+      } else {
+        alert("❌ Error al guardar: " + JSON.stringify(respuesta));
+      }
+    })
+    .catch(() => {
+      alert("❌ Error de conexión");
+    });
   });
-});
-});
+})();
 </script>
