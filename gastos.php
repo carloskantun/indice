@@ -88,6 +88,9 @@ $kpi_anio = $conn->query("SELECT SUM(monto) AS total FROM gastos WHERE YEAR(fech
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <link href="css/style.css" rel="stylesheet">
+<script src="includes/assets/js/kpis_gastos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 <body class="bg-light">
 <nav class="navbar navbar-light bg-white shadow-sm">
@@ -120,7 +123,12 @@ $kpi_anio = $conn->query("SELECT SUM(monto) AS total FROM gastos WHERE YEAR(fech
     <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalGasto">
         Nuevo Gasto
     </button>
+    <!-- 👇 Agrega este botón -->
+    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalKpisGastos">
+        📊 Ver Análisis de KPIs
+    </button>
 </div>
+
 
     </div>
     <form class="row g-2 mb-4" id="filtros" method="GET">
@@ -499,6 +507,8 @@ function sumarTotales() {
     document.querySelectorAll('.saldo').forEach(el => {
         totalSaldo += parseFloat(el.textContent.replace(/[$,]/g, '')) || 0;
     });
+const elMonto = document.getElementById('total-monto');
+if (elMonto) elMonto.textContent = totalMonto.toLocaleString('es-MX', {style:'currency', currency:'MXN'});
 
     document.getElementById('total-monto').textContent = totalMonto.toLocaleString('es-MX', {style:'currency', currency:'MXN'});
     document.getElementById('total-abono').textContent = totalAbono.toLocaleString('es-MX', {style:'currency', currency:'MXN'});
@@ -700,6 +710,8 @@ document.addEventListener('change', function(e) {
     }
 });
 </script>
+<!-- Modal KPIs -->
+<?php include 'includes/modals/modal_kpis_gastos.php'; ?>
 
 
 </body>
