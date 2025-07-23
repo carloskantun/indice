@@ -20,7 +20,7 @@ if (!$gasto) {
 
     <div class="mb-3">
       <label class="form-label">Proveedor</label>
-      <select name="proveedor_id" class="form-select" required>
+      <select name="proveedor_id" class="form-select select2" required>
         <option value="">Seleccione proveedor</option>
         <?php
         $prov = $conn->query("SELECT id, nombre FROM proveedores ORDER BY nombre");

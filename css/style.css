@@ -105,3 +105,33 @@
         min-width: 160px;
         max-width: 100%;
     }
+    
+    .fade-in-bottom {
+  animation: fadeInBottom 0.3s ease-out forwards;
+}
+
+.fade-out-bottom {
+  animation: fadeOutBottom 0.3s ease-in forwards;
+}
+
+@keyframes fadeInBottom {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOutBottom {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}

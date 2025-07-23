@@ -50,7 +50,7 @@ foreach ($modulos_disponibles as $m) {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Menú Principal - PocketTrack</title>
+    <title>Menú Principal - Indice</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .modulo-box {
@@ -88,18 +88,6 @@ foreach ($modulos_disponibles as $m) {
         <h4 class="mb-4 text-center">Selecciona un módulo</h4>
 
         <div class="row justify-content-center g-4">
-
-            <?php if (verModulo('ordenes_compra')): ?>
-                <div class="col-12 col-md-4">
-                    <div class="modulo-box">
-                        <a href="minipanel.php">
-                            <span class="modulo-icon">📦</span>
-                            Órdenes de Compra
-                        </a>
-                    </div>
-                </div>
-            <?php endif; ?>
-
             <?php if (verModulo('gastos')): ?>
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
@@ -166,17 +154,6 @@ foreach ($modulos_disponibles as $m) {
                 </div>
             <?php endif; ?>
 
-            <?php if (verModulo('kpis')): ?>
-                <div class="col-12 col-md-4">
-                    <div class="modulo-box">
-                        <a href="kpis_mantenimiento.php">
-                            <span class="modulo-icon">📊</span>
-                            KPIs
-                        </a>
-                    </div>
-                </div>
-            <?php endif; ?>
-
             <?php if (verModulo('configuracion')): ?>
                 <div class="col-12 col-md-4">
                     <div class="modulo-box">
@@ -200,7 +177,7 @@ foreach ($modulos_disponibles as $m) {
             <?php endif; ?>
 
             <!-- Nuevos accesos generales sin restricciones -->
-
+            <?php if (verModulo('usuarios')): ?>
             <!-- Recursos Humanos -->
             <div class="col-12 col-md-4">
                 <div class="modulo-box">
@@ -231,6 +208,16 @@ foreach ($modulos_disponibles as $m) {
                 </div>
             </div>
 
+            <!-- Control de Vehículos -->
+            <div class="col-12 col-md-4">
+                <div class="modulo-box">
+                    <a href="https://docs.google.com/spreadsheets/d/1vPr0WZilpdN_qcRTCknrTyHhjM45rKOZ_EwDWRdPJTM/edit?gid=1497749633#gid=1497749633" target="_blank">
+                        <span class="modulo-icon"><img src="https://elcorazondelcaribe.com/indice/uploads/imgs/control_vehiculo.jpeg" width="50px"></span>
+                        Control de Vehículos
+                    </a>
+                </div>
+            </div>
+                        <?php endif; ?>
             <?php if (!$puede_ver_algo): ?>
                 <div class="col-12">
                     <div class="alert alert-warning text-center">

@@ -11,11 +11,11 @@
         <h3 class="text-center mb-4">Iniciar Sesion</h3>
         <form action="login.php" method="POST">
             <div class="mb-3">
-                <label for="email" class="form-label">Correo Electrenico</label>
+                <label for="email" class="form-label">Correo </label>
                 <input type="email" class="form-control" id="email" name="email" required>
             </div>
             <div class="mb-3">
-                <label for="password" class="form-label">Contraseña</label>
+                <label for="password" class="form-label">Contrase帽a</label>
                 <input type="password" class="form-control" id="password" name="password" required>
             </div>
             <?php if (isset($_GET['error'])): ?>

@@ -52,7 +52,10 @@ $dir = $dir === 'ASC' ? 'ASC' : 'DESC';
 $sql = "SELECT 
     g.id, 
     g.folio, 
-    p.nombre AS proveedor, 
+    CASE 
+  WHEN g.nota_credito_id IS NOT NULL THEN u.nombre
+  ELSE p.nombre
+END AS proveedor, 
     g.monto, 
     g.fecha_pago, 
     un.nombre AS unidad, 
@@ -68,6 +71,9 @@ $sql = "SELECT
 FROM gastos g
 LEFT JOIN proveedores p ON g.proveedor_id = p.id
 LEFT JOIN unidades_negocio un ON g.unidad_negocio_id = un.id
+LEFT JOIN notas_credito nc ON g.nota_credito_id = nc.id
+LEFT JOIN usuarios u ON nc.usuario_responsable_id = u.id
+
 $where
 ORDER BY $columna_orden $dir";
 
@@ -131,7 +137,7 @@ $kpi_anio = $conn->query("SELECT SUM(monto) AS total FROM gastos WHERE YEAR(fech
 
 
     </div>
-    <form class="row g-2 mb-4" id="filtros" method="GET">
+    <form class="row g-2 mb-4" id="form-filtros" method="GET">
         <div class="col-md">
             <select name="proveedor" class="form-select select2" data-placeholder="Proveedor">
                 <option value="">Proveedor</option>
@@ -174,10 +180,7 @@ $kpi_anio = $conn->query("SELECT SUM(monto) AS total FROM gastos WHERE YEAR(fech
         </div>
         <div class="col-md">
             <button type="submit" class="btn btn-primary w-100">Filtrar</button>
-            <div class="col-md">
-                <a href="gastos.php" class="btn btn-outline-secondary w-100">Limpiar filtros</a>
-            </div>
-
+            <a href="gastos.php" class="btn btn-outline-secondary w-100">Limpiar filtros</a>
         </div>
     </form>
     <div class="mb-3 d-flex justify-content-between align-items-center">
@@ -272,7 +275,15 @@ foreach ($cols as $c => $label):
     </td>
 <?php endif; ?>
                 <td class="col-folio"><?php echo htmlspecialchars($g['folio']); ?></td>
-                <td class="col-proveedor"><?php echo htmlspecialchars($g['proveedor']); ?></td>
+                <td class="col-proveedor">
+                            <?php
+                                $mostrar = $g['proveedor'];
+                                if ($g['nota_credito_id']) {
+                                    $mostrar = '<span class="text-info">Usuario: ' . htmlspecialchars($mostrar) . '</span>';
+                                }
+                            echo $mostrar;
+                            ?>
+                        </td>
                 <td class="col-monto monto">$<?php echo number_format($g['monto'],2); ?></td>
                 <td class="col-abonado abono">$<?php echo number_format($g['abonado_total'] ?? 0, 2); ?></td>
                 <td class="col-saldo saldo">$<?php echo number_format($g['saldo'] ?? ($g['monto'] - ($g['abonado_total'] ?? 0)), 2); ?></td>
@@ -382,9 +393,26 @@ if (count($comps) === 1) {
             </tr>
             <?php endforeach; ?>
         </tbody>
+        
         <tfoot id="tfoot-dinamico"></tfoot>
+  </table>
+<div id="resumen-seleccionados" class="alert alert-light border-top border-dark fixed-bottom shadow-sm py-2 px-4 d-flex justify-content-between align-items-center d-none">
+  <div>
+    <strong>Totales Seleccionados:</strong>
+    Monto: <span id="sel-monto">$0.00</span> —
+    Abonado: <span id="sel-abono">$0.00</span> —
+    Saldo: <span id="sel-saldo">$0.00</span>
+  </div>
+  <div>
+    <button class="btn btn-sm btn-outline-danger me-2" id="btn-exportar-pdf">Exportar PDF</button>
+    <button class="btn btn-sm btn-outline-success" id="btn-exportar-csv">Exportar CSV</button>
+  </div>
+</div>
 
-    </table>
+  
+</div>
+
+
     </div>
 </div>
 
@@ -421,12 +449,59 @@ if (count($comps) === 1) {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 $(function(){
-    $('.select2').select2({width:'100%'});
-    $('#modalGasto').on('show.bs.modal', function(){
-        $('#contenidoGasto').load('modal_gasto.php?modal=1');
+  // Activar select2 en filtros visibles
+  $('.select2').select2({ width: '100%' });
+
+  // Modal: Nuevo Gasto
+  $('#modalGasto').on('show.bs.modal', function(){
+    $('#contenidoGasto').load('modal_gasto.php?modal=1', function(){
+      $('#contenidoGasto .select2').select2({
+        width: '100%',
+        dropdownParent: $('#modalGasto')
+      });
     });
+  });
+
+  // Modal: Nueva Orden
+  $('#modalOrden').on('show.bs.modal', function(){
+    const cont = $('#modalOrden .modal-content');
+    cont.html('Cargando...');
+    cont.load('modal_orden.php?modal=1', function(){
+      cont.find('.select2').select2({
+        width: '100%',
+        dropdownParent: $('#modalOrden')
+      });
+
+      // Mostrar u ocultar campos recurrentes
+      const tipoSelect = cont.find('[name="tipo_gasto"]');
+      const camposRecurrente = cont.find('#camposRecurrente');
+      function toggleCampos() {
+        camposRecurrente.toggle(tipoSelect.val() === 'Recurrente');
+      }
+      tipoSelect.on('change', toggleCampos);
+      toggleCampos();
+    });
+  });
+
+  // Modal: Editar Gasto
+  $('#modalEditarGasto').on('shown.bs.modal', function(){
+    $('#contenidoEditarGasto .select2').select2({
+      width: '100%',
+      dropdownParent: $('#modalEditarGasto')
+    });
+  });
+
+  // Modal: Editar Orden (si lo usas)
+  $('#modalEditarOrden').on('shown.bs.modal', function(){
+    $('#contenidoEditarOrden .select2').select2({
+      width: '100%',
+      dropdownParent: $('#modalEditarOrden')
+    });
+  });
 });
 </script>
+
+
 <script>
 document.addEventListener('DOMContentLoaded',function(){
   const KEY='gastos_columnas';
@@ -448,21 +523,36 @@ document.addEventListener('DOMContentLoaded',function(){
 });
 </script>
 <script>
-document.addEventListener('DOMContentLoaded',function(){
-    document.querySelectorAll('.quick-filter').forEach(btn=>{
-        btn.addEventListener('click',function(){
-            const form=document.getElementById('filtros');
-            if(form){
-                const est=this.dataset.estatus||'';
-                const ori=this.dataset.origen||'';
-                form.querySelector('[name="estatus"]').value=est;
-                form.querySelector('[name="origen"]').value=ori;
-                form.submit();
-            }
-        });
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.quick-filter').forEach(btn => {
+    btn.addEventListener('click', function () {
+      const form = document.getElementById('form-filtros');
+      if (!form) return;
+
+      // Limpiar todos los campos del formulario
+      form.querySelectorAll('select, input').forEach(el => {
+        el.value = '';
+      });
+
+      // Asignar solo estatus y origen
+      const est = this.dataset.estatus || '';
+      const ori = this.dataset.origen || '';
+      form.querySelector('[name="estatus"]').value = est;
+      form.querySelector('[name="origen"]').value = ori;
+
+      // Guardar en localStorage también
+      const filtros = {
+        estatus: est,
+        origen: ori
+      };
+      localStorage.setItem('filtros_gastos', JSON.stringify(filtros));
+
+      form.submit();
     });
+  });
 });
 </script>
+
 <script>
 document.addEventListener('click',function(e){
     if(e.target.classList.contains('pagar-btn')){
@@ -706,10 +796,64 @@ document.addEventListener('change', function(e) {
                 alert('Error al guardar: ' + res);
             }
         })
-        .catch(() => alert('Error en la conexiï¿½n'));
+        .catch(() => alert('Error en la conexión'));
     }
 });
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const KEY = 'filtros_gastos';
+  const form = document.getElementById('form-filtros');
+
+  function getURLParams() {
+    const params = new URLSearchParams(window.location.search);
+    let data = {};
+    let hasParams = false;
+
+    for (const param of ['proveedor', 'unidad', 'estatus', 'fecha_inicio', 'fecha_fin', 'origen']) {
+      const val = params.get(param);
+      if (val !== null) {
+        data[param] = val;
+        hasParams = true;
+      }
+    }
+
+    if (hasParams) {
+      localStorage.setItem(KEY, JSON.stringify(data)); // Guardar como filtro actual
+    }
+
+    return hasParams;
+  }
+
+  function restore() {
+    const data = JSON.parse(localStorage.getItem(KEY) || '{}');
+    form.querySelectorAll('select, input').forEach(el => {
+      if (data[el.name] !== undefined) el.value = data[el.name];
+    });
+  }
+
+  function save() {
+    const data = {};
+    form.querySelectorAll('select, input').forEach(el => {
+      data[el.name] = el.value;
+    });
+    localStorage.setItem(KEY, JSON.stringify(data));
+  }
+
+  // Limpiar localStorage si se visita con URL limpia (desde botón "Limpiar filtros")
+  if (window.location.search === '') {
+    localStorage.removeItem(KEY);
+  }
+
+  const urlTieneFiltros = getURLParams(); // También guarda si hay
+  restore();
+  form.querySelectorAll('select, input').forEach(el => el.addEventListener('change', save));
+});
+</script>
+
+<script src="includes/assets/js/gastos_sumatoria_seleccionados.js"></script>
+
 <!-- Modal KPIs -->
 <?php include 'includes/modals/modal_kpis_gastos.php'; ?>
 

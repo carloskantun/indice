@@ -81,19 +81,30 @@ $concepto     = $_POST['concepto'] ?? null;
 $origen       = $_POST['origen'] ?? 'Directo';
 $orden_folio  = $_POST['orden_folio'] ?? null;
 
-// Subir comprobante si aplica
-$archivo_comprobante = null;
-if (isset($_FILES['comprobante_gasto']) && is_uploaded_file($_FILES['comprobante_gasto']['tmp_name'])) {
-    $ext = strtolower(pathinfo($_FILES['comprobante_gasto']['name'], PATHINFO_EXTENSION));
-    $permitidos = ['jpg', 'jpeg', 'png', 'pdf'];
-    if (in_array($ext, $permitidos)) {
+// Subir múltiples comprobantes
+$comprobantes_guardados = [];
+
+if (isset($_FILES['comprobante']) && isset($_FILES['comprobante']['name']) && is_array($_FILES['comprobante']['name'])) {
+    foreach ($_FILES['comprobante']['name'] as $idx => $nombre_original) {
+        if (!is_uploaded_file($_FILES['comprobante']['tmp_name'][$idx])) continue;
+
+        $ext = strtolower(pathinfo($nombre_original, PATHINFO_EXTENSION));
+        $permitidos = ['jpg', 'jpeg', 'png', 'pdf'];
+        if (!in_array($ext, $permitidos)) continue;
+
         if (!is_dir('uploads/comprobantes')) mkdir('uploads/comprobantes', 0777, true);
         $nombre = uniqid('comp_') . '.' . $ext;
         $destino = 'uploads/comprobantes/' . $nombre;
-        move_uploaded_file($_FILES['comprobante_gasto']['tmp_name'], $destino);
-        $archivo_comprobante = $destino;
+
+        if (!move_uploaded_file($_FILES['comprobante']['tmp_name'][$idx], $destino)) continue;
+
+        $comprobantes_guardados[] = $destino;
     }
 }
+
+// Guardar el primer comprobante como principal si hay varios (o null si ninguno)
+$archivo_comprobante = $comprobantes_guardados[0] ?? null;
+
 
 // Validación básica
 if (!$proveedor_id || !$monto || !$fecha_pago || !$unidad_id) {

@@ -23,10 +23,12 @@ if(!$gasto){ echo '<div class="p-3">Registro no encontrado</div>'; exit; }
             <label class="form-label">Comentario</label>
             <textarea name="comentario" class="form-control" rows="3"></textarea>
         </div>
-        <div class="mb-3">
-            <label class="form-label">Comprobante</label>
-            <input type="file" name="comprobante" class="form-control" accept="image/jpeg,image/png,application/pdf">
-        </div>
+<!-- INPUT DE ARCHIVOS -->
+<div class="mb-3">
+  <label class="form-label">Comprobante</label>
+  <input type="file" name="comprobante[]" class="form-control" accept="image/jpeg,image/png,application/pdf" multiple>
+</div>
+
     </div>
     <div class="modal-footer">
         <button type="submit" class="btn btn-success">Guardar</button>
@@ -41,3 +43,35 @@ document.getElementById('formAbono').addEventListener('submit',function(e){
         .then(r=>{ if(r.trim()==='ok'){ alert('Abono registrado'); bootstrap.Modal.getInstance(document.getElementById('modalAbono')).hide(); location.reload(); } else { alert(r); } });
 });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const modal = document.querySelector('#formAbono')?.closest('.modal');
+  const input = document.querySelector('input[name="comprobante[]"]');
+
+  if (!modal || !input) return;
+
+  modal.addEventListener('dragover', function (e) {
+    e.preventDefault();
+    modal.classList.add('dragging');
+  });
+
+  modal.addEventListener('dragleave', function (e) {
+    e.preventDefault();
+    modal.classList.remove('dragging');
+  });
+
+  modal.addEventListener('drop', function (e) {
+    e.preventDefault();
+    modal.classList.remove('dragging');
+
+    const nuevosArchivos = e.dataTransfer.files;
+    if (!nuevosArchivos.length) return;
+
+    const dt = new DataTransfer();
+    for (let i = 0; i < input.files.length; i++) dt.items.add(input.files[i]);
+    for (let i = 0; i < nuevosArchivos.length; i++) dt.items.add(nuevosArchivos[i]);
+    input.files = dt.files;
+  });
+});
+</script>
+

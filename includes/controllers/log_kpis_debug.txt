@@ -1,0 +1,344 @@
+Array
+(
+    [gasto_total] => 1507128
+    [por_tipo] => Array
+        (
+            [0] => Array
+                (
+                    [tipo] => Sin tipo
+                    [total] => 20060
+                )
+
+            [1] => Array
+                (
+                    [tipo] => Recurrente
+                    [total] => 1310451
+                )
+
+            [2] => Array
+                (
+                    [tipo] => Unico
+                    [total] => 176617
+                )
+
+        )
+
+    [por_unidad] => Array
+        (
+            [0] => Array
+                (
+                    [unidad] => Cancun
+                    [total] => 993267
+                )
+
+            [1] => Array
+                (
+                    [unidad] => Guadalupe
+                    [total] => 93000
+                )
+
+            [2] => Array
+                (
+                    [unidad] => Nuevo Sur
+                    [total] => 223715
+                )
+
+            [3] => Array
+                (
+                    [unidad] => Playa Del Carmen
+                    [total] => 42238
+                )
+
+            [4] => Array
+                (
+                    [unidad] => Vergel
+                    [total] => 154908
+                )
+
+        )
+
+    [por_estatus] => Array
+        (
+            [0] => Array
+                (
+                    [estatus] => Pagado
+                    [total] => 1024515
+                )
+
+            [1] => Array
+                (
+                    [estatus] => Por pagar
+                    [total] => 415842
+                )
+
+            [2] => Array
+                (
+                    [estatus] => Vencido
+                    [total] => 66771
+                )
+
+        )
+
+    [por_proveedor] => Array
+        (
+            [0] => Array
+                (
+                    [proveedor] => ADELA MORADO
+                    [total] => 30000
+                )
+
+            [1] => Array
+                (
+                    [proveedor] => ANGEL MTY
+                    [total] => 16500
+                )
+
+            [2] => Array
+                (
+                    [proveedor] => Angelica Se
+                    [total] => 42957
+                )
+
+            [3] => Array
+                (
+                    [proveedor] => Ariel
+                    [total] => 8000
+                )
+
+            [4] => Array
+                (
+                    [proveedor] => Ayuntamiento Playa del Carmen
+                    [total] => 5000
+                )
+
+            [5] => Array
+                (
+                    [proveedor] => BANAMEX
+                    [total] => 17213
+                )
+
+            [6] => Array
+                (
+                    [proveedor] => BBVA
+                    [total] => 62538
+                )
+
+            [7] => Array
+                (
+                    [proveedor] => BMW Financial service
+                    [total] => 12798
+                )
+
+            [8] => Array
+                (
+                    [proveedor] => CESAR
+                    [total] => 38900
+                )
+
+            [9] => Array
+                (
+                    [proveedor] => CFE
+                    [total] => 20060
+                )
+
+            [10] => Array
+                (
+                    [proveedor] => Colibrí condominio
+                    [total] => 6000
+                )
+
+            [11] => Array
+                (
+                    [proveedor] => Condominio Las Cupulas
+                    [total] => 8304
+                )
+
+            [12] => Array
+                (
+                    [proveedor] => ELDA
+                    [total] => 23500
+                )
+
+            [13] => Array
+                (
+                    [proveedor] => Elizabeth
+                    [total] => 14000
+                )
+
+            [14] => Array
+                (
+                    [proveedor] => Flores
+                    [total] => 2200
+                )
+
+            [15] => Array
+                (
+                    [proveedor] => Gallagher
+                    [total] => 58500
+                )
+
+            [16] => Array
+                (
+                    [proveedor] => Gasolina
+                    [total] => 5000
+                )
+
+            [17] => Array
+                (
+                    [proveedor] => Genesis
+                    [total] => 62000
+                )
+
+            [18] => Array
+                (
+                    [proveedor] => GM Financial
+                    [total] => 19590
+                )
+
+            [19] => Array
+                (
+                    [proveedor] => Hugo
+                    [total] => 35000
+                )
+
+            [20] => Array
+                (
+                    [proveedor] => Junior lavanderia
+                    [total] => 25880
+                )
+
+            [21] => Array
+                (
+                    [proveedor] => La providente
+                    [total] => 20349
+                )
+
+            [22] => Array
+                (
+                    [proveedor] => Leonardo albañil
+                    [total] => 10000
+                )
+
+            [23] => Array
+                (
+                    [proveedor] => Luis
+                    [total] => 22000
+                )
+
+            [24] => Array
+                (
+                    [proveedor] => MARIA
+                    [total] => 20700
+                )
+
+            [25] => Array
+                (
+                    [proveedor] => Maria 310
+                    [total] => 9000
+                )
+
+            [26] => Array
+                (
+                    [proveedor] => Maru
+                    [total] => 23075
+                )
+
+            [27] => Array
+                (
+                    [proveedor] => Materiales Hidalgo
+                    [total] => 4075
+                )
+
+            [28] => Array
+                (
+                    [proveedor] => Nomina
+                    [total] => 235584
+                )
+
+            [29] => Array
+                (
+                    [proveedor] => Norberto Cozar
+                    [total] => 71766
+                )
+
+            [30] => Array
+                (
+                    [proveedor] => Nuevo Sur
+                    [total] => 209715
+                )
+
+            [31] => Array
+                (
+                    [proveedor] => OCEAM DREAM CONDOMINIO
+                    [total] => 5000
+                )
+
+            [32] => Array
+                (
+                    [proveedor] => Oficina
+                    [total] => 16132
+                )
+
+            [33] => Array
+                (
+                    [proveedor] => Pallares
+                    [total] => 18000
+                )
+
+            [34] => Array
+                (
+                    [proveedor] => Pricelabs
+                    [total] => 8157
+                )
+
+            [35] => Array
+                (
+                    [proveedor] => Roberto Yalmakan
+                    [total] => 14652
+                )
+
+            [36] => Array
+                (
+                    [proveedor] => SAMANO
+                    [total] => 112000
+                )
+
+            [37] => Array
+                (
+                    [proveedor] => Solymar
+                    [total] => 11403
+                )
+
+            [38] => Array
+                (
+                    [proveedor] => Takh condominio
+                    [total] => 7062
+                )
+
+            [39] => Array
+                (
+                    [proveedor] => Total Play
+                    [total] => 1518
+                )
+
+            [40] => Array
+                (
+                    [proveedor] => VERGEL
+                    [total] => 128000
+                )
+
+            [41] => Array
+                (
+                    [proveedor] => Virginia
+                    [total] => 45000
+                )
+
+        )
+
+    [abonos] => Array
+        (
+            [abonado] => 1078010
+            [saldo] => 429118
+        )
+
+)

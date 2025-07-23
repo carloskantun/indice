@@ -17,31 +17,36 @@ $conn->begin_transaction();
 try{
     $archivo = null;
     $ext = null;
-    if(isset($_FILES['comprobante']) && is_uploaded_file($_FILES['comprobante']['tmp_name'])){
-        $ext = strtolower(pathinfo($_FILES['comprobante']['name'], PATHINFO_EXTENSION));
-        $permitidos = ['jpg','jpeg','png','pdf'];
-        if(!in_array($ext,$permitidos)) throw new Exception('Tipo de archivo no permitido');
-        if(!is_dir('uploads/comprobantes')) mkdir('uploads/comprobantes',0777,true);
-        $nombre = uniqid('comp_').'.'.$ext;
-        $destino = 'uploads/comprobantes/'.$nombre;
-        if($ext==='png'){
-            $png = imagecreatefrompng($_FILES['comprobante']['tmp_name']);
-            $bg = imagecreatetruecolor(imagesx($png), imagesy($png));
-            $white = imagecolorallocate($bg, 255, 255, 255);
-            imagefilledrectangle($bg, 0, 0, imagesx($png), imagesy($png), $white);
-            imagecopy($bg, $png, 0, 0, 0, 0, imagesx($png), imagesy($png));
-            imagejpeg($bg, $destino, 60);
-            imagedestroy($png);
-            imagedestroy($bg);
-        }elseif($ext==='jpg' || $ext==='jpeg'){
-            $img = imagecreatefromjpeg($_FILES['comprobante']['tmp_name']);
-            imagejpeg($img,$destino,60);
-            imagedestroy($img);
-        }else{ // pdf
-            if(!move_uploaded_file($_FILES['comprobante']['tmp_name'],$destino)) throw new Exception('Error subiendo archivo');
-        }
-        $archivo = $destino;
+$archivos_guardados = [];
+
+if (isset($_FILES['comprobante']) && is_array($_FILES['comprobante']['name'])) {
+    foreach ($_FILES['comprobante']['name'] as $idx => $nombre_original) {
+        if (!is_uploaded_file($_FILES['comprobante']['tmp_name'][$idx])) continue;
+
+        $ext = strtolower(pathinfo($nombre_original, PATHINFO_EXTENSION));
+        $permitidos = ['jpg', 'jpeg', 'png', 'pdf'];
+        if (!in_array($ext, $permitidos)) continue;
+
+        if (!is_dir('uploads/comprobantes')) mkdir('uploads/comprobantes', 0777, true);
+        $nombre = uniqid('comp_') . '.' . $ext;
+        $destino = 'uploads/comprobantes/' . $nombre;
+
+        if (!move_uploaded_file($_FILES['comprobante']['tmp_name'][$idx], $destino)) continue;
+
+        $archivos_guardados[] = $destino;
+
+        // Registrar cada comprobante como un abono individual
+        $stmt = $conn->prepare("INSERT INTO abonos_gastos (gasto_id, monto, fecha, comentario, archivo_comprobante) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param('idsss', $gasto_id, $monto, $fecha, $comentario, $destino);
+        if (!$stmt->execute()) throw new Exception($stmt->error);
     }
+} else {
+    // Si no hay archivo, registrar un abono sin archivo
+    $stmt = $conn->prepare("INSERT INTO abonos_gastos (gasto_id, monto, fecha, comentario) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param('idss', $gasto_id, $monto, $fecha, $comentario);
+    if (!$stmt->execute()) throw new Exception($stmt->error);
+}
+
 
 
     $stmt = $conn->prepare("INSERT INTO abonos_gastos (gasto_id,monto,fecha,comentario,archivo_comprobante) VALUES (?,?,?,?,?)");

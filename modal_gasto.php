@@ -9,7 +9,7 @@
   <div class="modal-body">
     <div class="mb-3">
       <label class="form-label">Proveedor</label>
-      <select name="proveedor_id" class="form-select" required>
+      <select name="proveedor_id" class="form-select select2" required>
         <option value="">Seleccione proveedor</option>
         <?php
         $prov = $conn->query("SELECT id, nombre FROM proveedores ORDER BY nombre");
@@ -43,10 +43,11 @@
       </select>
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">Comprobante (PDF o imagen)</label>
-      <input type="file" name="comprobante_gasto" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
-    </div>
+    <!-- INPUT DE ARCHIVOS -->
+<div class="mb-3">
+  <label class="form-label">Comprobante (PDF o imagen)</label>
+  <input type="file" name="comprobante[]" class="form-control" accept=".pdf,.jpg,.jpeg,.png" multiple>
+</div>
 
     <input type="hidden" name="origen" value="Directo">
     <input type="hidden" name="tipo_gasto" value="Unico">
@@ -61,6 +62,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("formGasto");
   if (!form) return;
+
 
   form.addEventListener("submit", function (e) {
     e.preventDefault(); // Evita redirección
@@ -94,3 +96,35 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const modal = document.querySelector('#formGasto')?.closest('.modal');
+  const input = document.querySelector('input[name="comprobante[]"]');
+
+  if (!modal || !input) return;
+
+  modal.addEventListener('dragover', function (e) {
+    e.preventDefault();
+    modal.classList.add('dragging');
+  });
+
+  modal.addEventListener('dragleave', function (e) {
+    e.preventDefault();
+    modal.classList.remove('dragging');
+  });
+
+  modal.addEventListener('drop', function (e) {
+    e.preventDefault();
+    modal.classList.remove('dragging');
+
+    const nuevosArchivos = e.dataTransfer.files;
+    if (!nuevosArchivos.length) return;
+
+    const dt = new DataTransfer();
+    for (let i = 0; i < input.files.length; i++) dt.items.add(input.files[i]);
+    for (let i = 0; i < nuevosArchivos.length; i++) dt.items.add(nuevosArchivos[i]);
+    input.files = dt.files;
+  });
+});
+</script>
+
