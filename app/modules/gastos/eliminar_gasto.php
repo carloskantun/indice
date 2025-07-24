@@ -29,5 +29,10 @@ $conn->query("DELETE FROM abonos_gastos WHERE gasto_id = $id");
 // Eliminar gasto
 $conn->query("DELETE FROM gastos WHERE id = $id");
 
+if(isset($_GET['ajax'])){
+    echo 'ok';
+    exit;
+}
+
 header("Location: gastos.php");
 exit;
