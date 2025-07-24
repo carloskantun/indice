@@ -38,7 +38,9 @@ $kpis = include 'kpis_servicio_cliente_data_core.php';
   <div class="row g-4 mb-4">
     <?php
     function card($label, $valor, $color) {
-      echo "<div class='col-md-4'><div class='card-kpi text-$color'><h6>$label</h6><h3>$valor</h3></div></div>";
+      $label = htmlspecialchars($label, ENT_QUOTES, 'UTF-8');
+      $valor = htmlspecialchars((string)$valor, ENT_QUOTES, 'UTF-8');
+      echo "<div class='col-md-4'><div class='card-kpi text-$color'><h6>{$label}</h6><h3>{$valor}</h3></div></div>";
     }
     card('Solicitudes Totales', $kpis['total'], 'primary');
     card('En Espera', $kpis['pendientes'], 'secondary');

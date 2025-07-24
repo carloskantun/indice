@@ -19,14 +19,14 @@ if (empty($comprobantes)) {
 <div class="modal-body p-0">
     <div id="carouselComprobantes" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
-            <?php foreach ($comprobantes as $i => $ruta): 
+            <?php foreach ($comprobantes as $i => $ruta):
                 $is_pdf = preg_match('/\.pdf$/i', $ruta);
             ?>
             <div class="carousel-item <?php if($i === 0) echo 'active'; ?>">
                 <?php if ($is_pdf): ?>
-                    <iframe src="<?php echo htmlspecialchars($ruta); ?>" class="w-100" style="height:500px;border:none;"></iframe>
+                    <iframe src="<?php echo htmlspecialchars($ruta, ENT_QUOTES, 'UTF-8'); ?>" class="w-100" style="height:500px;border:none;"></iframe>
                 <?php else: ?>
-                    <img src="<?php echo htmlspecialchars($ruta); ?>" class="d-block w-100" style="max-height:500px;object-fit:contain;">
+                    <img src="<?php echo htmlspecialchars($ruta, ENT_QUOTES, 'UTF-8'); ?>" class="d-block w-100" style="max-height:500px;object-fit:contain;">
                 <?php endif; ?>
             </div>
             <?php endforeach; ?>
