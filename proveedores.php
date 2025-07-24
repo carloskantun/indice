@@ -99,31 +99,14 @@ if (isset($_GET['modal'])) {
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="modalAgregarProveedor" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="modalAgregarProveedor" data-modal-url="proveedores.php?modal=1" data-modal-content="#contenidoProveedor" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content" id="contenidoProveedor">Cargando...</div>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const modal = document.getElementById("modalAgregarProveedor");
-    modal.addEventListener("show.bs.modal", function () {
-        fetch("proveedores.php?modal=1")
-            .then(res => res.text())
-            .then(html => {
-                document.getElementById("contenidoProveedor").innerHTML = html;
-            })
-            .catch(() => {
-                document.getElementById("contenidoProveedor").innerHTML = "<p class='text-danger'>Error al cargar el formulario.</p>";
-            });
-    });
-
-    modal.addEventListener("hidden.bs.modal", function () {
-        document.getElementById("contenidoProveedor").innerHTML = "Cargando...";
-    });
-});
-</script>
+<script src="assets/js/core.js"></script>
+<script src="assets/js/modales.js"></script>
 </body>
 </html>
