@@ -1,18 +1,12 @@
 <?php
 include 'auth.php';
 verificar_rol('superadmin'); // Solo superadministradores pueden acceder
-include 'conexion.php'; // Ahora usa el archivo de conexión
+include 'conexion.php'; // Usa la conexión centralizada
 header('Content-Type: text/html; charset=utf-8');
 
 // Verificar si el usuario es superadmin
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'superadmin') {
     die("Acceso no autorizado.");
-}
-
-$conn = new mysqli($servername, $username, $password, $database);
-
-if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
 }
 
 // Obtener usuarios

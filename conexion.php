@@ -1,9 +1,22 @@
 <?php
+// Cargar variables de entorno desde .env si existe
+$envFile = __DIR__ . '/.env';
+if (file_exists($envFile)) {
+    foreach (file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+        $line = trim($line);
+        if ($line === '' || strpos($line, '#') === 0 || strpos($line, '=') === false) {
+            continue;
+        }
+        list($key, $value) = explode('=', $line, 2);
+        $_ENV[trim($key)] = trim($value);
+    }
+}
+
 //  Configuracion de la Base de Datos
-$servername = "localhost";
-$username   = "corazon_caribe";
-$password   = "Kantun.01*";
-$database   = "corazon_orderdecompras";
+$servername = $_ENV['DB_HOST'] ?? 'localhost';
+$username   = $_ENV['DB_USER'] ?? 'user';
+$password   = $_ENV['DB_PASSWORD'] ?? 'password';
+$database   = $_ENV['DB_NAME'] ?? 'database';
 
 // Crear conexion
 $conn = new mysqli($servername, $username, $password, $database);
