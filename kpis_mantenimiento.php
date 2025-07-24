@@ -1,6 +1,7 @@
 <?php
 include 'auth.php';
 include 'conexion.php';
+require_once 'app/components/FiltrosBase.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -28,40 +29,43 @@ include 'conexion.php';
   <h2 class="mb-4">📊 KPIs de Mantenimiento</h2>
 
   <!-- 🎛️ Filtros -->
-  <form id="formFiltros" class="row g-3 mb-4">
-    <div class="col-md-3">
-      <label for="fecha_inicio" class="form-label">Fecha Inicio</label>
-      <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio">
-    </div>
-    <div class="col-md-3">
-      <label for="fecha_fin" class="form-label">Fecha Fin</label>
-      <input type="date" class="form-control" id="fecha_fin" name="fecha_fin">
-    </div>
-    <div class="col-md-3">
-      <label for="alojamiento" class="form-label">Alojamiento</label>
-      <select class="form-select select2" id="alojamiento" name="alojamiento[]" multiple>
-        <?php
-        $res = $conn->query("SELECT id, nombre FROM alojamientos");
-        while ($row = $res->fetch_assoc()):
-        ?>
-          <option value="<?= $row['id'] ?>"><?= htmlspecialchars($row['nombre']) ?></option>
-        <?php endwhile; ?>
-      </select>
-    </div>
-    <div class="col-md-3">
-      <label for="unidad_negocio" class="form-label">Unidad de Negocio</label>
-      <select class="form-select select2" id="unidad_negocio" name="unidad_negocio[]" multiple>
-        <?php
-        $res = $conn->query("SELECT id, nombre FROM unidades_negocio");
-        while ($row = $res->fetch_assoc()):
-        ?>
-          <option value="<?= $row['id'] ?>"><?= htmlspecialchars($row['nombre']) ?></option>
-        <?php endwhile; ?>
-      </select>
-    </div>
+  <?php
+    $optsAloj = [];
+    $res = $conn->query("SELECT id, nombre FROM alojamientos");
+    while ($row = $res->fetch_assoc()) { $optsAloj[$row['id']] = $row['nombre']; }
+
+    $optsUnidades = [];
+    $res = $conn->query("SELECT id, nombre FROM unidades_negocio");
+    while ($row = $res->fetch_assoc()) { $optsUnidades[$row['id']] = $row['nombre']; }
+
+    $filtros = [
+      ['type' => 'date',   'name' => 'fecha_inicio',   'label' => 'Fecha Inicio', 'col' => 'col-md-3'],
+      ['type' => 'date',   'name' => 'fecha_fin',      'label' => 'Fecha Fin',    'col' => 'col-md-3'],
+      [
+        'type'  => 'select',
+        'name'  => 'alojamiento[]',
+        'id'    => 'alojamiento',
+        'label' => 'Alojamiento',
+        'class' => 'form-select select2',
+        'options' => $optsAloj,
+        'col'   => 'col-md-3'
+      ],
+      [
+        'type'  => 'select',
+        'name'  => 'unidad_negocio[]',
+        'id'    => 'unidad_negocio',
+        'label' => 'Unidad de Negocio',
+        'class' => 'form-select select2',
+        'options' => $optsUnidades,
+        'col'   => 'col-md-3'
+      ]
+    ];
+  ?>
+  <form id="formFiltros" class="row g-3 mb-4" data-endpoint="kpis_mantenimiento_data.php">
+    <?php echo FiltrosBase::render($filtros); ?>
     <div class="col-12 text-end">
       <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
-  <button type="button" id="btnImprimir" class="btn btn-dark">🖨️ Vista Imprimible</button>
+      <button type="button" id="btnImprimir" class="btn btn-dark">🖨️ Vista Imprimible</button>
     </div>
   </form>
 
@@ -124,15 +128,13 @@ include 'conexion.php';
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="includes/assets/js/filtros.js"></script>
 
 <script>
 $(function () {
   $(".select2").select2({ width: '100%' });
 
-  function cargarKPIs() {
-    const datos = $("#formFiltros").serialize();
-
-    $.getJSON("kpis_mantenimiento_data.php", datos, function (res) {
+  function renderKpis(res) {
       // KPIs cards
       $("#kpi-operativos").html(`
         ${crearCard('Total Reportes', res.total, 'primary')}
@@ -166,7 +168,6 @@ $(function () {
 
       // Gráficos
       actualizarGraficos(res);
-    });
   }
 
   function crearCard(titulo, valor, color) {
@@ -219,13 +220,8 @@ $(function () {
     });
   }
 
-  // Carga inicial
-  cargarKPIs();
-
-  $("#formFiltros").on("submit", function (e) {
-    e.preventDefault();
-    cargarKPIs();
-  });
+  const form = document.getElementById('formFiltros');
+  form.addEventListener('filtros:data', e => renderKpis(e.detail));
 });
 
 $("#btnImprimir").on("click", function () {
