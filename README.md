@@ -9,6 +9,7 @@ This project is a PHP based management system for purchase orders, maintenance r
 - `kpis_mantenimiento.php` and similar: KPI dashboards.
 - Newly added `minipanel_servicio_cliente.php` module replicates the maintenance workflow for **Tareas**.
 - `minipanel_transfers.php` module allows registering airport-hotel transfers.
+Core classes now reside in `/app/components` and module scripts live under `/app/modules/{name}`.
 
 ## Database
 The application expects a MySQL database. Connection credentials are read from environment variables. Copy `.env.example` to `.env` and set `DB_HOST`, `DB_USER`, `DB_PASSWORD` and `DB_NAME`.
@@ -16,7 +17,7 @@ Tables such as `ordenes_compra`, `ordenes_mantenimiento`, `ordenes_servicio_clie
 
 ## Usage
 1. Create a `.env` file with your database credentials.
-2. Access `index.php` to login.
+2. Access `login_form.php` to login or open `index.php?module=gastos` for the gastos module.
 3. Depending on user role, the main menu (`menu_principal.php`) provides access to modules like purchases, maintenance, customer service and KPIs.
 
 ## Modules

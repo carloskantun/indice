@@ -112,7 +112,7 @@
     const datos = new FormData(form);
     datos.append('ajax', '1');
 
-    fetch("guardar_gasto.php", {
+    fetch("app/modules/gastos/guardar_gasto.php", {
       method: "POST",
       body: datos
     })

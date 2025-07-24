@@ -23,11 +23,11 @@ if ($user = $result->fetch_assoc()) {
         header("Location: menu_principal.php");
         exit;
     } else {
-        header("Location: index.php?error=Credenciales incorrectas");
+        header("Location: login_form.php?error=Credenciales incorrectas");
         exit;
     }
 } else {
-    header("Location: index.php?error=Usuario no encontrado");
+    header("Location: login_form.php?error=Usuario no encontrado");
     exit;
 }
 ?>

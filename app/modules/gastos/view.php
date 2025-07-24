@@ -185,8 +185,8 @@ $kpi_anio = $conn->query("SELECT SUM(monto) AS total FROM gastos WHERE YEAR(fech
     </form>
     <div class="mb-3 d-flex justify-content-between align-items-center">
     <div>
-        <a href="exportar_gastos_pdf.php?<?php echo http_build_query($_GET); ?>" target="_blank" class="btn btn-outline-danger btn-sm">PDF</a>
-        <a href="exportar_gastos.php?<?php echo http_build_query($_GET); ?>" target="_blank" class="btn btn-outline-success btn-sm">CSV</a>
+        <a href="app/modules/gastos/exportar_gastos_pdf.php?<?php echo http_build_query($_GET); ?>" target="_blank" class="btn btn-outline-danger btn-sm">PDF</a>
+        <a href="app/modules/gastos/exportar_gastos.php?<?php echo http_build_query($_GET); ?>" target="_blank" class="btn btn-outline-success btn-sm">CSV</a>
     <button id="btnEliminarSeleccionados" class="btn btn-danger d-none">
         Eliminar seleccionados
     </button>
@@ -385,11 +385,11 @@ if (count($comps) === 1) {
 
     <?php if ($_SESSION['user_role'] === 'superadmin'): ?>
         <button class="btn btn-sm btn-outline-warning editar-gasto-btn" data-id="<?php echo $g['id']; ?>">Editar</button>
-        <a href="eliminar_gasto.php?id=<?php echo $g['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Â¿EstÃ¡s seguro de eliminar este gasto?')">Eliminar</a>
+        <a href="app/modules/gastos/eliminar_gasto.php?id=<?php echo $g['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Â¿EstÃ¡s seguro de eliminar este gasto?')">Eliminar</a>
     <?php endif; ?>
 </td>
 
-                <td class="col-pdf"><a class="btn btn-sm btn-outline-dark" target="_blank" href="generar_pdf_gasto.php?folio=<?php echo $g['folio']; ?>">PDF</a></td>
+                <td class="col-pdf"><a class="btn btn-sm btn-outline-dark" target="_blank" href="app/modules/gastos/generar_pdf_gasto.php?folio=<?php echo $g['folio']; ?>">PDF</a></td>
             </tr>
             <?php endforeach; ?>
         </tbody>
@@ -454,7 +454,7 @@ $(function(){
 
   // Modal: Nuevo Gasto
   $('#modalGasto').on('show.bs.modal', function(){
-    $('#contenidoGasto').load('modal_gasto.php?modal=1', function(){
+    $('#contenidoGasto').load('app/modules/gastos/modal_gasto.php?modal=1', function(){
       $('#contenidoGasto .select2').select2({
         width: '100%',
         dropdownParent: $('#modalGasto')
@@ -563,7 +563,7 @@ document.addEventListener('click',function(e){
         var myModal=new bootstrap.Modal(modal);
         myModal.show();
         // Cargar el contenido del formulario y ejecutar los scripts incluidos
-        $(cont).load('modal_abono.php?id='+id);
+        $(cont).load('app/modules/gastos/modal_abono.php?id='+id);
     }
 });
 
@@ -685,7 +685,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const params = new URLSearchParams();
         ids.forEach(id => params.append('ids[]', id));
 
-        fetch('eliminar_gastos_multiples.php', {
+        fetch('app/modules/gastos/eliminar_gastos_multiples.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -732,7 +732,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     const datos = new FormData(form);
 
-                    fetch("guardar_gasto.php", {
+                    fetch("app/modules/gastos/guardar_gasto.php", {
                         method: "POST",
                         body: datos
                     })
@@ -767,7 +767,7 @@ document.addEventListener("click", function (e) {
         const myModal = new bootstrap.Modal(modal);
         myModal.show();
 
-        fetch("modal_editar_gasto.php?id=" + id)
+        fetch("app/modules/gastos/modal_editar_gasto.php?id=" + id)
             .then(res => res.text())
             .then(html => {
                 cont.innerHTML = html;
@@ -785,7 +785,7 @@ document.addEventListener('change', function(e) {
         const id = e.target.dataset.id;
         const valor = e.target.value;
 
-        fetch('actualizar_campo_gasto.php', {
+        fetch('app/modules/gastos/actualizar_campo_gasto.php', {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             body: new URLSearchParams({ id, campo, valor })

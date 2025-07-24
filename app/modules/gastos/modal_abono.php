@@ -38,7 +38,7 @@ if(!$gasto){ echo '<div class="p-3">Registro no encontrado</div>'; exit; }
 document.getElementById('formAbono').addEventListener('submit',function(e){
     e.preventDefault();
     var fd=new FormData(this);
-    fetch('guardar_abono_gasto.php',{method:'POST',body:fd})
+    fetch('app/modules/gastos/guardar_abono_gasto.php',{method:'POST',body:fd})
         .then(r=>r.text())
         .then(r=>{ if(r.trim()==='ok'){ alert('Abono registrado'); bootstrap.Modal.getInstance(document.getElementById('modalAbono')).hide(); location.reload(); } else { alert(r); } });
 });

@@ -10,7 +10,7 @@ if (!$gasto) {
 }
 ?>
 
-<form id="formEditarGasto" action="actualizar_gasto.php" method="POST">
+<form id="formEditarGasto" action="app/modules/gastos/actualizar_gasto.php" method="POST">
   <input type="hidden" name="id" value="<?= $gasto['id'] ?>">
   <div class="modal-header">
     <h5 class="modal-title">Editar Gasto</h5>

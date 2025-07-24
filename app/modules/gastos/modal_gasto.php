@@ -1,6 +1,6 @@
 <?php include 'conexion.php'; ?>
 
-<form id="formGasto" action="guardar_gasto.php" method="POST" enctype="multipart/form-data">
+<form id="formGasto" action="app/modules/gastos/guardar_gasto.php" method="POST" enctype="multipart/form-data">
   <div class="modal-header">
     <h5 class="modal-title">Registrar Gasto</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
