@@ -67,7 +67,7 @@ $ordenes_por_tipo_pago = $conn->query("SELECT tipo_pago, SUM(monto) AS total FRO
         new Chart(document.getElementById('chartEstatus').getContext('2d'), {
             type: 'bar',
             data: { 
-                labels: [<?php while ($row = $ordenes_por_estatus->fetch_assoc()) echo "'".$row['estatus_pago']."',"; ?>], 
+                labels: [<?php while ($row = $ordenes_por_estatus->fetch_assoc()) echo "'".htmlspecialchars($row['estatus_pago'], ENT_QUOTES, 'UTF-8')."',"; ?>],
                 datasets: [{
                     label: 'Monto ($)',
                     data: [<?php $ordenes_por_estatus->data_seek(0); while ($row = $ordenes_por_estatus->fetch_assoc()) echo $row['total'].","; ?>],
@@ -79,7 +79,7 @@ $ordenes_por_tipo_pago = $conn->query("SELECT tipo_pago, SUM(monto) AS total FRO
         new Chart(document.getElementById('chartTipoPago').getContext('2d'), {
             type: 'pie',
             data: { 
-                labels: [<?php while ($row = $ordenes_por_tipo_pago->fetch_assoc()) echo "'".$row['tipo_pago']."',"; ?>], 
+                labels: [<?php while ($row = $ordenes_por_tipo_pago->fetch_assoc()) echo "'".htmlspecialchars($row['tipo_pago'], ENT_QUOTES, 'UTF-8')."',"; ?>],
                 datasets: [{
                     data: [<?php $ordenes_por_tipo_pago->data_seek(0); while ($row = $ordenes_por_tipo_pago->fetch_assoc()) echo $row['total'].","; ?>],
                     backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']

@@ -13,10 +13,10 @@ class PanelResumen {
     }
 
     public function render(): void {
-        echo '<h2>'.htmlspecialchars($this->title)."</h2>\n";
+        echo '<h2>'.htmlspecialchars($this->title, ENT_QUOTES, 'UTF-8')."</h2>\n";
         echo '<div class="row mb-3">';
         foreach ($this->kpis as $label => $value) {
-            echo '<div class="col"><strong>'.htmlspecialchars($label).':</strong> '.htmlspecialchars((string)$value).'</div>';
+            echo '<div class="col"><strong>'.htmlspecialchars($label, ENT_QUOTES, 'UTF-8').':</strong> '.htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8').'</div>';
         }
         echo '</div>';
 
@@ -24,13 +24,13 @@ class PanelResumen {
         if (!empty($this->data)) {
             echo '<thead><tr>'; 
             foreach (array_keys($this->data[0]) as $col) {
-                echo '<th>'.htmlspecialchars($col).'</th>';
+                echo '<th>'.htmlspecialchars($col, ENT_QUOTES, 'UTF-8').'</th>';
             }
             echo '</tr></thead><tbody>';
             foreach ($this->data as $row) {
                 echo '<tr>'; 
                 foreach ($row as $cell) {
-                    echo '<td>'.htmlspecialchars((string)$cell).'</td>';
+                    echo '<td>'.htmlspecialchars((string)$cell, ENT_QUOTES, 'UTF-8').'</td>';
                 }
                 echo '</tr>';
             }

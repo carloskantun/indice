@@ -11,7 +11,7 @@ if (!$orden) {
 ?>
 
 <form id="formEditarOrden">
-  <input type="hidden" name="id" value="<?= $orden['id'] ?>">
+  <input type="hidden" name="id" value="<?= htmlspecialchars($orden['id'], ENT_QUOTES, 'UTF-8') ?>">
   <div class="modal-header">
     <h5 class="modal-title">Editar Orden de Compra</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -35,12 +35,12 @@ if (!$orden) {
 
     <div class="mb-3">
       <label class="form-label">Monto</label>
-      <input type="number" name="monto" class="form-control" value="<?= $orden['monto'] ?>" required min="0" step="0.01">
+      <input type="number" name="monto" class="form-control" value="<?= htmlspecialchars($orden['monto'], ENT_QUOTES, 'UTF-8') ?>" required min="0" step="0.01">
     </div>
 
     <div class="mb-3">
       <label class="form-label">Fecha de Pago</label>
-      <input type="date" name="fecha_pago" class="form-control" value="<?= $orden['fecha_pago'] ?>" required>
+      <input type="date" name="fecha_pago" class="form-control" value="<?= htmlspecialchars($orden['fecha_pago'], ENT_QUOTES, 'UTF-8') ?>" required>
     </div>
 
     <div class="mb-3">
