@@ -3,21 +3,40 @@ include 'auth.php';
 include 'conexion.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $folio = $conn->real_escape_string($_POST['orden_id'] ?? '');
-    $delegado_id = $conn->real_escape_string($_POST['usuario_delegado_id'] ?? '');
+    $folio = $_POST['orden_id'] ?? '';
+    $delegado_id = $_POST['usuario_delegado_id'] ?? '';
 
     if (!$folio) {
         echo "error";
         exit;
     }
 
-    $campo = $delegado_id !== '' ? "'$delegado_id'" : "NULL";
-    $query = "UPDATE ordenes_servicio_cliente SET usuario_delegado_id = $campo WHERE folio = '$folio'";
-    
-    if ($conn->query($query)) {
-        echo "ok";
+    if ($delegado_id !== '') {
+        $sql = "UPDATE ordenes_servicio_cliente SET usuario_delegado_id = ? WHERE folio = ?";
+        $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            log_error('Error al preparar consulta en actualizar_delegado_servicio_cliente: ' . $conn->error);
+            echo 'error';
+            exit;
+        }
+        $stmt->bind_param('is', $delegado_id, $folio);
     } else {
-        echo "error";
+        $sql = "UPDATE ordenes_servicio_cliente SET usuario_delegado_id = NULL WHERE folio = ?";
+        $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            log_error('Error al preparar consulta en actualizar_delegado_servicio_cliente: ' . $conn->error);
+            echo 'error';
+            exit;
+        }
+        $stmt->bind_param('s', $folio);
     }
+
+    if ($stmt->execute()) {
+        echo 'ok';
+    } else {
+        log_error('Error al ejecutar consulta en actualizar_delegado_servicio_cliente: ' . $stmt->error);
+        echo 'error';
+    }
+    $stmt->close();
 }
 ?>
