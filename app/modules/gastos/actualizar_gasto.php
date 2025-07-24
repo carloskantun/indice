@@ -9,4 +9,13 @@ if ($_SESSION['user_role'] !== 'superadmin') {
 }
 
 $controller = new GastosController($conn);
-echo $controller->actualizar($_POST);
+$result = $controller->actualizar($_POST);
+if(isset($_GET['ajax']) || isset($_POST['ajax'])){
+    echo $result;
+}else{
+    if($result === 'ok'){
+        header('Location: index.php?module=gastos');
+    }else{
+        echo $result;
+    }
+}

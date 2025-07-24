@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const datos = new FormData(form);
 
-    fetch(form.action, {
+    fetch(form.action + '?ajax=1', {
       method: form.method,
       body: datos
     })
@@ -87,8 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const modal = bootstrap.Modal.getInstance(form.closest(".modal"));
         if (modal) modal.hide();
 
-        const queryString = window.location.search;
-        window.location.href = "gastos.php" + queryString;
+        if(window.refreshModule) window.refreshModule();
       } else {
         alert("❌ Error: " + respuesta);
       }
