@@ -71,9 +71,7 @@ class IncludeModal extends ModalBase {
     }
 }
 
-$modalNuevo  = new IncludeModal('modalGasto', __DIR__.'/modal_gasto.php');
 $modalOrden  = new IncludeModal('modalOrden', __DIR__.'/../../modal_orden.php');
-$modalEditar = new IncludeModal('modalEditarGasto', __DIR__.'/modal_editar_gasto.php');
 $modalAbono  = new IncludeModal('modalAbono', __DIR__.'/modal_abono.php');
 $modalComp   = new IncludeModal('modalComprobantes', __DIR__.'/../../modal_comprobantes.php');
 $modalKpis   = new IncludeModal('modalKpisGastos', __DIR__.'/../../includes/modals/modal_kpis_gastos.php');
@@ -89,6 +87,7 @@ $modalKpis   = new IncludeModal('modalKpisGastos', __DIR__.'/../../includes/moda
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/modales.js"></script>
 </head>
 <body class="bg-light">
 <?php endif; ?>
@@ -196,10 +195,14 @@ $modalKpis   = new IncludeModal('modalKpisGastos', __DIR__.'/../../includes/moda
     </table>
     </div>
 </div>
+<div class="modal fade" id="modalGasto" data-modal-url="app/modules/gastos/modal_gasto.php?ajax=1" tabindex="-1">
+  <div class="modal-dialog"><div class="modal-content">Cargando...</div></div>
+</div>
+<div class="modal fade" id="modalEditarGasto" tabindex="-1">
+  <div class="modal-dialog"><div class="modal-content">Cargando...</div></div>
+</div>
 <?php
-$modalNuevo->show();
 $modalOrden->show();
-$modalEditar->show();
 $modalAbono->show();
 $modalComp->show();
 $modalKpis->show();
@@ -208,14 +211,12 @@ $modalKpis->show();
 document.addEventListener('DOMContentLoaded', () => {
     $('.select2').select2({width:'100%'});
 });
+const modalEditar = document.getElementById('modalEditarGasto');
 document.querySelectorAll('.edit-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         const id = btn.dataset.id;
-        fetch('app/modules/gastos/modal_editar_gasto.php?id=' + id + '&ajax=1')
-            .then(r => r.text())
-            .then(html => {
-                document.querySelector('#modalEditarGasto .modal-content').innerHTML = html;
-            });
+        modalEditar.setAttribute('data-modal-url', 'app/modules/gastos/modal_editar_gasto.php?id=' + id + '&ajax=1');
+        bootstrap.Modal.getOrCreateInstance(modalEditar).show();
     });
 });
 
