@@ -1,128 +1,74 @@
-<?php include 'conexion.php'; ?>
+<?php
+include 'conexion.php';
+require_once __DIR__.'/../../components/FormularioBase.php';
 
+$optsProv = [];
+$res = $conn->query("SELECT id,nombre FROM proveedores ORDER BY nombre");
+while($row = $res->fetch_assoc()) $optsProv[$row['id']] = $row['nombre'];
+
+$optsUnidades = [];
+$res = $conn->query("SELECT id,nombre FROM unidades_negocio ORDER BY nombre");
+while($row = $res->fetch_assoc()) $optsUnidades[$row['id']] = $row['nombre'];
+
+$campos = [
+    ['type'=>'select','name'=>'proveedor_id','label'=>'Proveedor','options'=>$optsProv,'required'=>true,'class'=>'form-select select2'],
+    ['type'=>'number','name'=>'monto','label'=>'Monto','required'=>true,'attrs'=>'min="0" step="0.01"'],
+    ['type'=>'date','name'=>'fecha_pago','label'=>'Fecha de Pago','required'=>true],
+    ['type'=>'select','name'=>'unidad_negocio_id','label'=>'Unidad de Negocio','options'=>$optsUnidades,'required'=>true,'class'=>'form-select select2'],
+    ['type'=>'file','name'=>'comprobante[]','label'=>'Comprobante (PDF o imagen)','attrs'=>'accept=".pdf,.jpg,.jpeg,.png" multiple']
+];
+?>
 <form id="formGasto" action="app/modules/gastos/guardar_gasto.php" method="POST" enctype="multipart/form-data">
   <div class="modal-header">
     <h5 class="modal-title">Registrar Gasto</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
   </div>
-
   <div class="modal-body">
-    <div class="mb-3">
-      <label class="form-label">Proveedor</label>
-      <select name="proveedor_id" class="form-select select2" required>
-        <option value="">Seleccione proveedor</option>
-        <?php
-        $prov = $conn->query("SELECT id, nombre FROM proveedores ORDER BY nombre");
-        while ($p = $prov->fetch_assoc()):
-        ?>
-          <option value="<?= $p['id'] ?>"><?= htmlspecialchars($p['nombre']) ?></option>
-        <?php endwhile; ?>
-      </select>
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label">Monto</label>
-      <input type="number" name="monto" class="form-control" required min="0" step="0.01">
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label">Fecha de Pago</label>
-      <input type="date" name="fecha_pago" class="form-control" required>
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label">Unidad de Negocio</label>
-      <select name="unidad_negocio_id" class="form-select" required>
-        <option value="">Seleccione unidad</option>
-        <?php
-        $unidades = $conn->query("SELECT id, nombre FROM unidades_negocio ORDER BY nombre");
-        while ($u = $unidades->fetch_assoc()):
-        ?>
-          <option value="<?= $u['id'] ?>"><?= htmlspecialchars($u['nombre']) ?></option>
-        <?php endwhile; ?>
-      </select>
-    </div>
-
-    <!-- INPUT DE ARCHIVOS -->
-<div class="mb-3">
-  <label class="form-label">Comprobante (PDF o imagen)</label>
-  <input type="file" name="comprobante[]" class="form-control" accept=".pdf,.jpg,.jpeg,.png" multiple>
-</div>
-
+    <?= FormularioBase::render($campos) ?>
     <input type="hidden" name="origen" value="Directo">
     <input type="hidden" name="tipo_gasto" value="Unico">
   </div>
-
   <div class="modal-footer">
-    <button type="submit" class="btn btn-success">Guardar Gasto</button>
+    <button type="submit" class="btn btn-success w-100">Guardar Gasto</button>
   </div>
 </form>
-
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const form = document.getElementById("formGasto");
-  if (!form) return;
+$(function(){
+  const modal = $('#modalGasto');
+  $('.select2').select2({width:'100%', dropdownParent: modal});
 
+  $('#formGasto').on('submit', function(e){
+    e.preventDefault();
+    const datos = new FormData(this);
+    fetch(this.action + '?ajax=1', { method: this.method, body: datos })
+      .then(r=>r.text())
+      .then(t=>{
+        if(t.trim()==='ok'){
+          alert('✅ Gasto guardado correctamente');
+          bootstrap.Modal.getInstance(modal[0]).hide();
+          if(window.refreshModule) window.refreshModule();
+        }else{
+          alert('❌ Error: '+t);
+          console.error(t);
+        }
+      })
+      .catch(err=>{ alert('❌ Error de conexión'); console.error(err); });
+  });
 
-  form.addEventListener("submit", function (e) {
-    e.preventDefault(); // Evita redirección
-
-    const datos = new FormData(form);
-
-    fetch(form.action + '?ajax=1', {
-      method: form.method,
-      body: datos
-    })
-    .then(res => res.text())
-    .then(respuesta => {
-      if (respuesta.trim() === "ok") {
-        alert("✅ Gasto guardado correctamente");
-        const modal = bootstrap.Modal.getInstance(form.closest(".modal"));
-        if (modal) modal.hide();
-
-        if(window.refreshModule) window.refreshModule();
-
-      } else {
-        alert("❌ Error: " + respuesta);
-        console.error("Respuesta del servidor:", respuesta);
-      }
-    })
-    .catch(err => {
-      alert("❌ Error de conexión con el servidor.");
-      console.error(err);
+  const input = modal.find('input[name="comprobante[]"]')[0];
+  if(input){
+    modal.on('dragover', e=>{ e.preventDefault(); modal.addClass('dragging'); });
+    modal.on('dragleave', e=>{ e.preventDefault(); modal.removeClass('dragging'); });
+    modal.on('drop', e=>{
+      e.preventDefault();
+      modal.removeClass('dragging');
+      const files = e.originalEvent.dataTransfer.files;
+      if(!files.length) return;
+      const dt = new DataTransfer();
+      for(let i=0;i<input.files.length;i++) dt.items.add(input.files[i]);
+      for(let i=0;i<files.length;i++) dt.items.add(files[i]);
+      input.files = dt.files;
     });
-  });
+  }
 });
 </script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  const modal = document.querySelector('#formGasto')?.closest('.modal');
-  const input = document.querySelector('input[name="comprobante[]"]');
-
-  if (!modal || !input) return;
-
-  modal.addEventListener('dragover', function (e) {
-    e.preventDefault();
-    modal.classList.add('dragging');
-  });
-
-  modal.addEventListener('dragleave', function (e) {
-    e.preventDefault();
-    modal.classList.remove('dragging');
-  });
-
-  modal.addEventListener('drop', function (e) {
-    e.preventDefault();
-    modal.classList.remove('dragging');
-
-    const nuevosArchivos = e.dataTransfer.files;
-    if (!nuevosArchivos.length) return;
-
-    const dt = new DataTransfer();
-    for (let i = 0; i < input.files.length; i++) dt.items.add(input.files[i]);
-    for (let i = 0; i < nuevosArchivos.length; i++) dt.items.add(nuevosArchivos[i]);
-    input.files = dt.files;
-  });
-});
-</script>
-

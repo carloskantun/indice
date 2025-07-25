@@ -25,6 +25,8 @@ class FormularioBase {
             $required   = !empty($field['required']) ? 'required' : '';
             $validation = $field['validation'] ?? '';
             $id         = $field['id'] ?? $name;
+            $class      = $field['class'] ?? ($type === 'select' ? 'form-select' : 'form-control');
+            $attrs      = $field['attrs'] ?? '';
 
             $html .= "<div class=\"mb-3\">";
             if ($label) {
@@ -33,7 +35,7 @@ class FormularioBase {
 
             switch ($type) {
                 case 'select':
-                    $html .= "<select name=\"{$name}\" id=\"{$id}\" class=\"form-select\" {$required}>";
+                    $html .= "<select name=\"{$name}\" id=\"{$id}\" class=\"{$class}\" {$required} {$attrs}>";
                     $html .= '<option value="">Seleccionar</option>';
                     foreach ($options as $optValue => $optLabel) {
                         $selected = ((string)$optValue === (string)$value) ? 'selected' : '';
@@ -46,12 +48,12 @@ class FormularioBase {
 
                 case 'textarea':
                     $valEsc = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
-                    $html .= "<textarea name=\"{$name}\" id=\"{$id}\" class=\"form-control\" {$required}>{$valEsc}</textarea>";
+                    $html .= "<textarea name=\"{$name}\" id=\"{$id}\" class=\"{$class}\" {$required} {$attrs}>{$valEsc}</textarea>";
                     break;
 
                 default:
                     $valEsc = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
-                    $html .= "<input type=\"{$type}\" name=\"{$name}\" id=\"{$id}\" class=\"form-control\" value=\"{$valEsc}\" {$required}>";
+                    $html .= "<input type=\"{$type}\" name=\"{$name}\" id=\"{$id}\" class=\"{$class}\" value=\"{$valEsc}\" {$required} {$attrs}>";
                     break;
             }
 
