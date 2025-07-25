@@ -24,7 +24,28 @@ class GastosController {
         $map = ['folio'=>'g.folio','proveedor'=>'p.nombre','monto'=>'g.monto','fecha_pago'=>'g.fecha_pago'];
         $col  = $map[$orden] ?? 'g.fecha_pago';
         $dir  = strtoupper($dir)==='ASC'?'ASC':'DESC';
-        $sql = "SELECT g.id,g.folio,p.nombre AS proveedor,g.monto,g.fecha_pago,g.estatus FROM gastos g LEFT JOIN proveedores p ON g.proveedor_id=p.id $where ORDER BY $col $dir";
+        $sql = "SELECT
+                g.id,
+                g.folio,
+                p.nombre AS proveedor,
+                g.monto,
+                g.fecha_pago,
+                un.nombre AS unidad,
+                g.tipo_gasto,
+                g.tipo_compra,
+                g.medio_pago,
+                g.cuenta_bancaria,
+                g.concepto,
+                g.estatus,
+                g.origen,
+                (SELECT SUM(a.monto) FROM abonos_gastos a WHERE a.gasto_id = g.id) AS abonado_total,
+                (g.monto - IFNULL((SELECT SUM(a.monto) FROM abonos_gastos a WHERE a.gasto_id = g.id),0)) AS saldo,
+                (SELECT GROUP_CONCAT(a.archivo_comprobante SEPARATOR ';') FROM abonos_gastos a WHERE a.gasto_id = g.id AND a.archivo_comprobante IS NOT NULL) AS archivo_comprobante
+            FROM gastos g
+            LEFT JOIN proveedores p ON g.proveedor_id=p.id
+            LEFT JOIN unidades_negocio un ON g.unidad_negocio_id=un.id
+            $where
+            ORDER BY $col $dir";
         $res = $this->db->query($sql);
         return $res? $res->fetch_all(MYSQLI_ASSOC):[];
     }
