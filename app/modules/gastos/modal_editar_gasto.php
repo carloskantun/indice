@@ -18,11 +18,11 @@ $res = $conn->query("SELECT id,nombre FROM unidades_negocio ORDER BY nombre");
 while($row = $res->fetch_assoc()) $optsUnidades[$row['id']] = $row['nombre'];
 
 $campos = [
-    ['type'=>'hidden','name'=>'id','default'=>$gasto['id']],
-    ['type'=>'select','name'=>'proveedor_id','label'=>'Proveedor','options'=>$optsProv,'default'=>$gasto['proveedor_id'],'required'=>true,'class'=>'form-select select2'],
-    ['type'=>'number','name'=>'monto','label'=>'Monto','default'=>$gasto['monto'],'required'=>true,'attrs'=>'min="0" step="0.01"'],
-    ['type'=>'date','name'=>'fecha_pago','label'=>'Fecha de Pago','default'=>$gasto['fecha_pago'],'required'=>true],
-    ['type'=>'select','name'=>'unidad_negocio_id','label'=>'Unidad de Negocio','options'=>$optsUnidades,'default'=>$gasto['unidad_negocio_id'],'required'=>true,'class'=>'form-select select2']
+    ['type'=>'hidden','name'=>'id'],
+    ['type'=>'select','name'=>'proveedor_id','label'=>'Proveedor','options'=>$optsProv,'required'=>true,'class'=>'form-select select2'],
+    ['type'=>'number','name'=>'monto','label'=>'Monto','required'=>true,'attrs'=>'min="0" step="0.01"'],
+    ['type'=>'date','name'=>'fecha_pago','label'=>'Fecha de Pago','required'=>true],
+    ['type'=>'select','name'=>'unidad_negocio_id','label'=>'Unidad de Negocio','options'=>$optsUnidades,'required'=>true,'class'=>'form-select select2']
 ];
 ?>
 <form id="formEditarGasto" action="app/modules/gastos/actualizar_gasto.php" method="POST">
@@ -31,7 +31,7 @@ $campos = [
     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
   </div>
   <div class="modal-body">
-    <?= FormularioBase::render($campos) ?>
+    <?= FormularioBase::render($campos, $gasto) ?>
     <input type="hidden" name="origen" value="Directo">
     <input type="hidden" name="tipo_gasto" value="Unico">
   </div>
