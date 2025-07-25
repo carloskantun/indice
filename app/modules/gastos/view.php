@@ -23,6 +23,7 @@ $orden = $_GET['orden'] ?? 'fecha_pago';
 $dir   = $_GET['dir']   ?? 'DESC';
 $gastos = $controller->listar($filtros, $orden, $dir);
 $kpis   = $controller->getKpis();
+$canEdit = isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'superadmin';
 
 // Opciones para filtros
 $optsProv = [];
@@ -161,26 +162,58 @@ $modalKpis   = new IncludeModal('modalKpisGastos', __DIR__.'/../../includes/moda
                 <td><?= htmlspecialchars($g['folio']) ?></td>
                 <td><?= htmlspecialchars($g['proveedor']) ?></td>
                 <td class="col-monto">$<?= number_format($g['monto'],2) ?></td>
-                <td class="col-abonado">$<?= number_format($g['abonado_total'] ?? 0,2) ?></td>
-                <td class="col-saldo">$<?= number_format($g['saldo'] ?? 0,2) ?></td>
+                <td class="col-abonado">
+                    <?php if($canEdit): ?>
+                        <input type="number" step="0.01" class="form-control form-control-sm campo-update" data-id="<?= $g['id'] ?>" data-campo="abonado_total" value="<?= $g['abonado_total'] ?>">
+                    <?php else: ?>
+                        $<?= number_format($g['abonado_total'] ?? 0,2) ?>
+                    <?php endif; ?>
+                </td>
+                <td class="col-saldo">
+                    <?php if($canEdit): ?>
+                        <input type="number" step="0.01" class="form-control form-control-sm campo-update" data-id="<?= $g['id'] ?>" data-campo="saldo" value="<?= $g['saldo'] ?>">
+                    <?php else: ?>
+                        $<?= number_format($g['saldo'] ?? 0,2) ?>
+                    <?php endif; ?>
+                </td>
                 <td><?= htmlspecialchars($g['fecha_pago']) ?></td>
                 <td><?= htmlspecialchars($g['unidad']) ?></td>
                 <td><?= htmlspecialchars($g['tipo_gasto']) ?></td>
                 <td><?= htmlspecialchars($g['tipo_compra']) ?></td>
                 <td><?= htmlspecialchars($g['medio_pago']) ?></td>
-                <td><input type="text" class="form-control form-control-sm campo-update" data-id="<?= $g['id'] ?>" data-campo="cuenta_bancaria" value="<?= htmlspecialchars($g['cuenta_bancaria']) ?>"></td>
-                <td><input type="text" class="form-control form-control-sm campo-update" data-id="<?= $g['id'] ?>" data-campo="concepto" value="<?= htmlspecialchars($g['concepto']) ?>"></td>
                 <td>
-                    <select class="form-select form-select-sm campo-update" data-id="<?= $g['id'] ?>" data-campo="estatus">
-                        <?php foreach(['Pagado','Pago parcial','Vencido','Por pagar'] as $op): ?>
-                            <option value="<?= $op ?>" <?php if($op==$g['estatus']) echo 'selected'; ?>><?= $op ?></option>
-                        <?php endforeach; ?>
-                    </select>
+                    <?php if($canEdit): ?>
+                        <input type="text" class="form-control form-control-sm campo-update" data-id="<?= $g['id'] ?>" data-campo="cuenta_bancaria" value="<?= htmlspecialchars($g['cuenta_bancaria']) ?>">
+                    <?php else: ?>
+                        <?= htmlspecialchars($g['cuenta_bancaria']) ?>
+                    <?php endif; ?>
+                </td>
+                <td>
+                    <?php if($canEdit): ?>
+                        <input type="text" class="form-control form-control-sm campo-update" data-id="<?= $g['id'] ?>" data-campo="concepto" value="<?= htmlspecialchars($g['concepto']) ?>">
+                    <?php else: ?>
+                        <?= htmlspecialchars($g['concepto']) ?>
+                    <?php endif; ?>
+                </td>
+                <td>
+                    <?php if($canEdit): ?>
+                        <select class="form-select form-select-sm campo-update" data-id="<?= $g['id'] ?>" data-campo="estatus">
+                            <?php foreach(['Pagado','Pago parcial','Vencido','Por pagar'] as $op): ?>
+                                <option value="<?= $op ?>" <?php if($op==$g['estatus']) echo 'selected'; ?>><?= $op ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    <?php else: ?>
+                        <?= htmlspecialchars($g['estatus']) ?>
+                    <?php endif; ?>
                 </td>
                 <td><?= htmlspecialchars($g['origen']) ?></td>
                 <td>
-                    <?php if(!empty($g['archivo_comprobante'])): ?>
-                        <button class="btn btn-sm btn-outline-secondary comprobantes-btn" data-id="<?= $g['id'] ?>">Ver</button>
+                    <?php if($canEdit): ?>
+                        <input type="text" class="form-control form-control-sm campo-update" data-id="<?= $g['id'] ?>" data-campo="recibo" value="<?= htmlspecialchars($g['archivo_comprobante']) ?>">
+                    <?php else: ?>
+                        <?php if(!empty($g['archivo_comprobante'])): ?>
+                            <button class="btn btn-sm btn-outline-secondary comprobantes-btn" data-id="<?= $g['id'] ?>">Ver</button>
+                        <?php endif; ?>
                     <?php endif; ?>
                 </td>
                 <td>
@@ -252,16 +285,35 @@ document.querySelectorAll('.delete-btn').forEach(btn => {
     });
 });
 
+function actualizarCampo(el){
+    const id = el.dataset.id;
+    const campo = el.dataset.campo;
+    const valor = el.value;
+    fetch('app/modules/gastos/actualizar_campo_gasto.php', {
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body:new URLSearchParams({id, campo, valor})
+    })
+    .then(r=>r.text())
+    .then(t=>{
+        if(t.trim()==='ok'){
+            el.classList.add('bg-success');
+            setTimeout(()=>el.classList.remove('bg-success'),800);
+        }else{
+            el.classList.add('bg-danger');
+            alert('Error al actualizar');
+            setTimeout(()=>el.classList.remove('bg-danger'),800);
+        }
+    })
+    .catch(()=>{
+        el.classList.add('bg-danger');
+        alert('Error al actualizar');
+        setTimeout(()=>el.classList.remove('bg-danger'),800);
+    });
+}
 document.querySelectorAll('.campo-update').forEach(el => {
-    el.addEventListener('change', () => {
-        const id = el.dataset.id;
-        const campo = el.dataset.campo;
-        const valor = el.value;
-        fetch('app/modules/gastos/actualizar_campo_gasto.php', {
-            method:'POST',
-            headers:{'Content-Type':'application/x-www-form-urlencoded'},
-            body:new URLSearchParams({id, campo, valor})
-        }).then(r=>r.text()).then(t=>{ if(t.trim()!=='ok') alert('Error al actualizar'); });
+    ['change','blur'].forEach(ev=>{
+        el.addEventListener(ev, () => actualizarCampo(el));
     });
 });
 
