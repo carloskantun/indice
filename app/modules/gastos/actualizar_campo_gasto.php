@@ -14,7 +14,7 @@ $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
 $campo = $_POST['campo'] ?? '';
 $valor = $_POST['valor'] ?? '';
 
-$campos_permitidos = ['medio_pago', 'cuenta_bancaria', 'concepto', 'tipo_compra', 'estatus'];
+$campos_permitidos = ['medio_pago', 'cuenta_bancaria', 'concepto', 'tipo_compra', 'estatus', 'abonado_total', 'saldo', 'recibo'];
 
 if (!$id || !in_array($campo, $campos_permitidos)) {
     http_response_code(400);
